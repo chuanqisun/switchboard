@@ -1,0 +1,16 @@
+{
+  "name": "switchboard",
+  "version": "0.0.1",
+  "description": "Instanly launch multiple Dynamics demo environments",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": "https://github.com/chuanqisun/switchboard",
+  "keywords": [],
+  "author": "Chuanqi Sun",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^4.1.4"
+  }
+}
