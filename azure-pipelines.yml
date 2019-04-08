@@ -7,7 +7,7 @@ trigger:
 - master
 
 pool:
-  vmImage: 'Ubuntu-16.04'
+  vmImage: 'macOS-10.13'
 
 steps:
 - task: NodeTool@0
@@ -17,5 +17,6 @@ steps:
 
 - script: |
     npm install
-    npm run build:win
+    npm run build:osx
+    npm run pack:osx
   displayName: 'npm install and build'
