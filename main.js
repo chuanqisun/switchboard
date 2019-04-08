@@ -9,9 +9,9 @@ function createWindow () {
   let display = screen.getPrimaryDisplay();
   let width = display.bounds.width;
   mainWindow = new BrowserWindow({
-    width: 360,
+    width: 420,
     height: 800,
-    x: width - 376,
+    x: width - 436,
     y: 16,
     frame: false,
     webPreferences: {

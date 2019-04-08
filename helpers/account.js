@@ -66,9 +66,9 @@ async function signIn(parentWindow) {
     const tempWindow = new BrowserWindow({
       parent: parentWindow,
       modal: true,
-      width: 376,
+      width: 436,
       height: 808,
-      x: width - 384,
+      x: width - 444,
       y: 16,
     });
 
