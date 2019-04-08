@@ -20,11 +20,11 @@
 
     <main class="main body--flex-middle">
       <div id="sign-in-container" class="sign-in-container main__pre-sign-in-container">
-        <button class="button button--primary button--extra-wide" id="sign-in">Sign in</button>
+        <button class="button button--primary button--extra-wide button--sign-in" id="sign-in">Sign in</button>
       </div>
 
       <div class="environment-grid" id="environments"></div>
-      <button class="button button--primary button--destructive button--extra-wide main__sign-out-button" id="sign-out">Sign out</button>
+      <button class="button button--primary button--destructive button--extra-wide button--sign-out" id="sign-out">Sign out</button>
     </main>
 
     <script>
@@ -56,11 +56,12 @@
         background-color: #0078d4;
         background: linear-gradient(#0084E9 0%, #0069B9 100%) no-repeat 50% 50% / 100% 100%;
         background-size: 100% 100%; 
+        overflow: hidden;
       }
 
       body.pre-sign-in {
         background: url("assets/sitting-3.svg") bottom right no-repeat, linear-gradient(#0084E9 0%, #0069B9 100%) no-repeat 50% 50% / 100% 100%;
-        background-size: 50%, 100% 100%;
+        background-size: 65%, 100% 100%;
       }
 
       body.post-sign-in {
@@ -227,15 +228,36 @@
         flex: 1 0 auto;
       }
 
-      .main__sign-out-button {
+      .button--sign-in {
+        animation: button-enter 400ms 200ms;
+        animation-fill-mode: both;
+        will-change: transform, opacity;
+      }
+
+      .button--sign-out {
         display: none;
-        margin: 4rem auto 1rem auto;
+        margin: 4rem auto 0 auto;
         flex: 0 0 auto;
       }
 
-      .post-sign-in .main__sign-out-button {
+      .post-sign-in.environment-available .button--sign-out {
         display: initial;
+
+        animation: button-enter 400ms 1000ms;
+        animation-fill-mode: both;
+        will-change: transform, opacity;
       }
+
+      @keyframes button-enter {
+        0% {
+          transform: translateY(16px);
+          opacity: 0;
+        }
+        100% {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }  
 
       .environment-grid {
         display: grid;
@@ -248,6 +270,30 @@
         border-radius: 4px;
         padding: 1rem;
         box-shadow: 0 3.2px 7.2px 0 rgba(0,0,0,.132), 0 0.6px 1.8px 0 rgba(0,0,0,.108);
+
+        animation: card-enter 400ms;
+        animation-fill-mode: both;
+        will-change: transform, opacity;
+      }
+
+      .card:nth-child(2) { animation-delay: 100ms; }
+      .card:nth-child(3) { animation-delay: 200ms; }
+      .card:nth-child(4) { animation-delay: 300ms; }
+      .card:nth-child(5) { animation-delay: 400ms; }
+      .card:nth-child(6) { animation-delay: 500ms; }
+      .card:nth-child(7) { animation-delay: 600ms; }
+      .card:nth-child(8) { animation-delay: 700ms; }
+      .card:nth-child(9) { animation-delay: 800ms; }
+
+      @keyframes card-enter {
+        0% {
+          transform: translateX(-64px);
+          opacity: 0;
+        }
+        100% {
+          transform: translateX(0);
+          opacity: 1;
+        }
       }
 
       .card__actions {

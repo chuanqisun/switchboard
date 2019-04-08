@@ -27,6 +27,7 @@ ipcRenderer.once('onSignInStatusUpdate', (event, isSignedIn) => {
 });
 
 ipcRenderer.once('onEnvironmentsAvailable', (event, environments) => {
+  body.classList.add('environment-available');
   environmentList.innerHTML = renderEnvironments(environments);
 });
 
