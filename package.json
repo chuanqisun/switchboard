@@ -5,8 +5,8 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "build:osx": "electron-packager . --out=.temp --platform=darwin --arch=x64 --icon=build/icon.icns",
     "build:win": "electron-packager . --out=.temp --icon=build/icon.ico",
+    "build:osx": "electron-packager . --out=.temp --platform=darwin --arch=x64 --icon=build/icon.icns",
     "pack:win": "electron-installer-windows --config win-installer-config.json",
     "pack:osx": "electron-installer-dmg .temp/switchboard-darwin-x64/switchboard.app switchboard --out=.dist --icon=build/icon.icns"
   },
