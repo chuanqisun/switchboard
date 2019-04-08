@@ -5,8 +5,10 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
+    "build:osx": "electron-packager . --out=.temp --platform=darwin --arch=x64 --icon=build/icon.icns",
     "build:win": "electron-packager . --out=.temp --icon=build/icon.ico",
-    "pack:win": "electron-installer-windows --config win-installer-config.json"
+    "pack:win": "electron-installer-windows --config win-installer-config.json",
+    "pack:osx": "electron-installer-dmg .temp/switchboard-darwin-x64/switchboard.app Switchboard --out=.dist --icon=build/icon.icns"
   },
   "repository": "https://github.com/chuanqisun/switchboard",
   "keywords": [],
@@ -14,6 +16,7 @@
   "license": "MIT",
   "devDependencies": {
     "electron": "^4.1.4",
+    "electron-installer-dmg": "^2.0.0",
     "electron-installer-windows": "^1.1.1",
     "electron-packager": "^13.1.1"
   },
