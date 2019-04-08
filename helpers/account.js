@@ -56,15 +56,23 @@ async function signOut() {
   });
 }
 
-async function signIn() {
+async function signIn(parentWindow) {
   return new Promise((resolve, reject) => {
     console.log('[acount] sign in: start');
+    const {screen} = require('electron');
+    let display = screen.getPrimaryDisplay();
+    let width = display.bounds.width;
 
     const tempWindow = new BrowserWindow({
-      width: 800,
-      height: 600,
-      show: true,
+      parent: parentWindow,
+      modal: true,
+      width: 376,
+      height: 808,
+      x: width - 384,
+      y: 16,
     });
+
+    tempWindow.setMenu(null);
     
     tempWindow.loadURL(environmentDataFileLocation);
 
@@ -72,7 +80,6 @@ async function signIn() {
       const url = tempWindow.webContents.getURL()
       if (url.indexOf(signInBlockerUrlPrefix) === 0) {
         console.log('[acount] sign in: SSO page displayed');
-        tempWindow.show();
       }
       
       if (url.indexOf(signInSuccessUrlPrefix) === 0) {
