@@ -4,14 +4,18 @@
   "description": "Instanly launch multiple Dynamics demo environments",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "build:win": "electron-packager . --out=.temp --icon=build/icon.ico",
+    "pack:win": "electron-installer-windows --config win-installer-config.json"
   },
   "repository": "https://github.com/chuanqisun/switchboard",
   "keywords": [],
   "author": "Chuanqi Sun",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^4.1.4"
+    "electron": "^4.1.4",
+    "electron-installer-windows": "^1.1.1",
+    "electron-packager": "^13.1.1"
   },
   "dependencies": {
     "chromedriver": "^2.46.0",
