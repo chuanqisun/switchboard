@@ -3,6 +3,5 @@
   "dest": ".dist",
   "icon": "build/icon.ico",
   "animation": "build/installer.gif",
-  "noMsi": true,
   "certificateFile": "build/switchboard-cert.pfx"
 }
