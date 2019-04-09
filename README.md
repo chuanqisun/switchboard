@@ -1,3 +1,0 @@
-# switchboard
-
-![Screenshot](screenshot.png)
