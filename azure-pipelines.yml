@@ -6,22 +6,41 @@
 trigger:
 - master
 
-pool:
-  vmImage: 'macOS-10.13'
+jobs:
+- job: osx-build
+  pool:
+    vmImage: 'macOS-10.13'
 
-steps:
-- task: NodeTool@0
-  inputs:
-    versionSpec: '10.x'
-  displayName: 'Install Node.js'
-- task: PublishBuildArtifacts@1
-  inputs:
-    ArtifactName: 'drop-osx'
-    publishLocation: 'Container'
-    PathtoPublish: '$(System.DefaultWorkingDirectory)'
+  steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '10.x'
+    displayName: 'Install Node.js'
+  - script: |
+      npm install
+      npm run build:osx
+      npm run pack:osx
+    displayName: 'npm install and build'
+  - task: PublishPipelineArtifact@0
+    inputs:
+      artifactName: 'drop-osx'
+      targetPath: .dist
 
-- script: |
-    npm install
-    npm run build:osx
-    npm run pack:osx
-  displayName: 'npm install and build'
+- job: win-build
+  pool:
+    vmImage: 'windows-2019'
+
+  steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '10.x'
+    displayName: 'Install Node.js'
+  - script: |
+      npm install
+      npm run build:win
+      npm run pack:win
+    displayName: 'npm install and build'
+  - task: PublishPipelineArtifact@0
+    inputs:
+      artifactName: 'drop-win'
+      targetPath: .dist

@@ -5,7 +5,7 @@ const signInSuccessUrlPrefix = 'https://microsoft.sharepoint.com';
 
 async function checkSignInStatus() {
   return new Promise((resolve, reject) => {
-    console.log('[acount] check login status: start');
+    console.log('[account] check login status: start');
     const tempWindow = new BrowserWindow({
       width: 800,
       height: 600,
@@ -19,13 +19,13 @@ async function checkSignInStatus() {
       if (url.indexOf(signInBlockerUrlPrefix) === 0) {
         tempWindow.destroy();
         resolve(false);
-        console.log('[acount] check sign in status: not signed in');
+        console.log('[account] check sign in status: not signed in');
       }
       
       if (url.indexOf(signInSuccessUrlPrefix) === 0) {
         tempWindow.destroy();
         resolve(true);
-        console.log('[acount] check sign in status: signed in');
+        console.log('[account] check sign in status: signed in');
       }
     });
   });
@@ -33,7 +33,7 @@ async function checkSignInStatus() {
 
 async function signOut() {
   return new Promise((resolve, reject) => {
-    console.log('[acount] sign out: start');
+    console.log('[account] sign out: start');
 
     const tempWindow = new BrowserWindow({
       width: 800,
@@ -49,7 +49,7 @@ async function signOut() {
         tempWindow.webContents.session.clearHostResolverCache();
         tempWindow.webContents.session.clearAuthCache({type: 'password'});
         tempWindow.webContents.session.clearAuthCache({type: 'clientCertificate'});
-        console.log('[acount] sign out: success. all data cleared');
+        console.log('[account] sign out: success. all data cleared');
         tempWindow.destroy();
         resolve();
     });
@@ -58,7 +58,7 @@ async function signOut() {
 
 async function signIn(parentWindow) {
   return new Promise((resolve, reject) => {
-    console.log('[acount] sign in: start');
+    console.log('[account] sign in: start');
     const {screen} = require('electron');
     let display = screen.getPrimaryDisplay();
     let width = display.bounds.width;
@@ -79,11 +79,11 @@ async function signIn(parentWindow) {
     tempWindow.webContents.on('dom-ready', () => {
       const url = tempWindow.webContents.getURL()
       if (url.indexOf(signInBlockerUrlPrefix) === 0) {
-        console.log('[acount] sign in: SSO page displayed');
+        console.log('[account] sign in: SSO page displayed');
       }
       
       if (url.indexOf(signInSuccessUrlPrefix) === 0) {
-        console.log('[acount] sign in: success. Close window');
+        console.log('[account] sign in: success. Close window');
         tempWindow.webContents.session.flushStorageData();
         tempWindow.destroy();
         resolve();
