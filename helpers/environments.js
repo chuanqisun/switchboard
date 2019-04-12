@@ -15,7 +15,12 @@ async function getEnvironments() {
     tempWindow.webContents.on('dom-ready', () => {
       tempWindow.webContents.executeJavaScript(`document.querySelector('pre').innerText`, undefined, result => {
         tempWindow.destroy();
-        resolve(JSON.parse(result));
+        try {
+          resolve(JSON.parse(result));
+        } catch (e) {
+          console.error(e);
+          reject();
+        }
         console.log('[environment] get environment: json fetched');
       })
     });

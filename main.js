@@ -1,4 +1,4 @@
-const {app, BrowserWindow, ipcMain} = require('electron')
+const {app, BrowserWindow, ipcMain, globalShortcut} = require('electron')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -37,6 +37,10 @@ app.on('activate', function () {
 })
 
 // Custom logic
+app.on('ready', () => {
+  globalShortcut.register('CommandOrControl+R', signOut);
+});
+
 ipcMain.on('getSignInStatus', async (event) => {
   const { checkSignInStatus } = require('./helpers/account');
   const isSignedIn = await checkSignInStatus();
@@ -57,11 +61,7 @@ ipcMain.on('trySignIn', async (event) => {
   mainWindow.reload();
 });
 
-ipcMain.on('trySignOut', async (event) => {
-  const { signOut } = require('./helpers/account');
-  await signOut();
-  mainWindow.reload();
-});
+ipcMain.on('trySignOut', signOut);
 
 ipcMain.on('getEnvironments', async (event) => {
   const { getEnvironments } = require('./helpers/environments');
@@ -69,3 +69,8 @@ ipcMain.on('getEnvironments', async (event) => {
   event.sender.send('onEnvironmentsAvailable', environments);
 });
 
+async function signOut() {
+  const { signOut } = require('./helpers/account');
+  await signOut();
+  mainWindow.reload();
+}
