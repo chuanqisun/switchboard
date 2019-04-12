@@ -19,7 +19,7 @@ async function getEnvironments() {
           resolve(JSON.parse(result));
         } catch (e) {
           console.error(e);
-          reject();
+          resolve({});
         }
         console.log('[environment] get environment: json fetched');
       })
