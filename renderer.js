@@ -1,4 +1,5 @@
 const {ipcRenderer} = require('electron')
+const systemConfig = require('./system-config');
 
 // Webdriver
 /* require this up front or the 1st launch will be laggy */
@@ -76,7 +77,10 @@ async function handleEnvironmentActions(event) {
     event.target.classList.add('button--launching');
   },50);
 
-  const {url, username, password} = targetButton.dataset;
+  let {url, username, password} = targetButton.dataset;
+  if (event.shiftKey) {
+    url = systemConfig.trialAdminPortalUrl;
+  }
 
   let driver = await ChromeBuilder.build();
   await driver.get(url);
