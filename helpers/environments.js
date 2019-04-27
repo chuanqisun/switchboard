@@ -1,5 +1,5 @@
 const {BrowserWindow} = require('electron')
-const environmentDataFileLocation = 'https://microsoft.sharepoint.com/teams/Live.Drive.Repeat2/Shared%20Documents/General/Environments/environments.txt';
+const systemConfig = require('../system-config');
 
 async function getEnvironments() {
   return new Promise((resolve, reject) => {
@@ -10,7 +10,7 @@ async function getEnvironments() {
       show: false,
     });
     
-    tempWindow.loadURL(environmentDataFileLocation);
+    tempWindow.loadURL(systemConfig.discoverEnvironmentsEndpoint);
 
     tempWindow.webContents.on('dom-ready', () => {
       tempWindow.webContents.executeJavaScript(`document.querySelector('pre').innerText`, undefined, result => {
