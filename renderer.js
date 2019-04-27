@@ -1,4 +1,10 @@
-const {ipcRenderer, remote} = require('electron')
+const {ipcRenderer} = require('electron')
+
+// Webdriver
+/* require this up front or the 1st launch will be laggy */
+require('chromedriver');
+const {Builder, By, Key, until} = require('selenium-webdriver');
+const ChromeBuilder = new Builder().forBrowser('chrome');
 
 // DOM elements
 const body = document.querySelector('body');
@@ -72,9 +78,7 @@ async function handleEnvironmentActions(event) {
 
   const {url, username, password} = targetButton.dataset;
 
-  require('chromedriver');
-  const {Builder, By, Key, until} = require('selenium-webdriver');
-  let driver = await new Builder().forBrowser('chrome').build();
+  let driver = await ChromeBuilder.build();
   await driver.get(url);
   await driver.wait(until.elementLocated(By.name('loginfmt')));
   await driver.findElement(By.name('loginfmt')).sendKeys(username, Key.RETURN);
