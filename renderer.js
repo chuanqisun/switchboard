@@ -47,7 +47,14 @@ ipcRenderer.send('getSignInStatus');
 function renderEnvironments(environments) {
   return `${environments.map(app => `
   <div class="card">
-    <h1 class="card__title">${app.appName}</h1>
+    <div class="card__header">
+      <h1 class="card__title">${app.appName}</h1>
+      <button class="button button--pin" data-id="${app.appName}">
+        <svg class="star" width="16" height="15">
+          <use xlink:href="#svg-star" />
+        </svg>     
+      </button>
+    </div>
     <div class="card__actions">
       ${app.instances.map(instance => `
       <button
