@@ -29,34 +29,42 @@ ipcRenderer.once('onSignInStatusUpdate', (event, isSignedIn) => {
     body.classList.add('post-sign-in');
     ipcRenderer.send('getEnvironments');
   } else {
-    body.classList.add('pre-sign-in')
+    body.classList.add('pre-sign-in');
   }
 });
 
-ipcRenderer.once('onEnvironmentsAvailable', (event, environments) => {
+ipcRenderer.once('onEnvironmentsAvailable', (event, {environments, userSettings}) => {
   body.classList.add('environment-available');
-  environmentList.innerHTML = renderEnvironments(environments);
+  environmentList.innerHTML = renderEnvironments(environments, userSettings);
 });
-
-
 
 // Init
 ipcRenderer.send('getSignInStatus');
 
 // Render functions
-function renderEnvironments(environments) {
-  return `${environments.map(app => `
+function renderEnvironments(environments, userSettings) {
+  const favoriteEnvironments = environments.filter(environment => userSettings.favorites.includes(environment.appName));
+  const otherEnvironments = environments.filter(environment => !userSettings.favorites.includes(environment.appName));
+
+  return `
+  ${favoriteEnvironments.map(environment => renderEnvironment(environment, true)).join('')}
+  ${otherEnvironments.map(environment => renderEnvironment(environment, false)).join('')}
+  `.trim();
+}
+
+function renderEnvironment(environment, isFavorite) {
+  return `
   <div class="card">
     <div class="card__header">
-      <h1 class="card__title">${app.appName}</h1>
-      <button class="button button--pin" data-id="${app.appName}">
+      <h1 class="card__title">${environment.appName}</h1>
+      <button class="button button--pin${isFavorite ? ' button--pinned' : ''}" data-id="${environment.appName}">
         <svg class="star" width="16" height="15">
           <use xlink:href="#svg-star" />
         </svg>     
       </button>
     </div>
     <div class="card__actions">
-      ${app.instances.map(instance => `
+      ${environment.instances.map(instance => `
       <button
         class="button button--primary button--launch"
         data-type=${instance.type}
@@ -67,7 +75,7 @@ function renderEnvironments(environments) {
       `.trim()).join('')}
     </div>
   </div>
-  `.trim()).join('')}`;
+  `.trim();
 }
 
 // Event handler functions
