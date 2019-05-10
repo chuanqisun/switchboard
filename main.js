@@ -1,5 +1,4 @@
 const {app, BrowserWindow, ipcMain, globalShortcut} = require('electron')
-const { ensureUserSettings } = require('./helpers/user-settings');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -65,11 +64,10 @@ ipcMain.on('trySignIn', async (event) => {
 ipcMain.on('trySignOut', signOut);
 
 ipcMain.on('getEnvironments', async (event) => {
-  const userSettings = ensureUserSettings();
-
+  const { ensureUserSettings } = require('./helpers/user-settings');
   const { getEnvironments } = require('./helpers/environments');
-  const environments = await getEnvironments();
-
+  const [userSettings, environments] = await Promise.all([ensureUserSettings(), getEnvironments()]);
+  
   event.sender.send('onEnvironmentsAvailable', {environments, userSettings});
 });
 
