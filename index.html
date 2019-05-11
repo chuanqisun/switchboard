@@ -28,6 +28,13 @@
         <button class="button button--primary button--extra-wide button--sign-in" id="sign-in">Sign in</button>
       </div>
 
+      <div class="toolbar">
+        <div class="tabs">
+          <button id="tab-favorites" class="button button--tab button--tab-selected">Favorites</button>
+          <button id="tab-all" class="button button--tab">All</button>
+        </div>
+      </div>
+
       <div class="environment-grid" id="environments"></div>
       <button class="button button--primary button--destructive button--extra-wide button--sign-out" id="sign-out">Sign out</button>
     </main>
@@ -39,6 +46,8 @@
     <style>
       :root {
         --color-primary: #0078d4;
+        --color-primary-light: #0084E9;
+        --color-primary-dark: #0069B9;
         --color-destructive: #d4002e;
         --color-yellow: #e0bf03;
         --color-purple: #5100d4;
@@ -47,6 +56,7 @@
         --shadow-1: 0 1.6px 3.6px 0 rgba(0,0,0,.132), 0 0.3px 0.9px 0 rgba(0,0,0,.108);
         --shadow-2: 0 3.2px 7.2px 0 rgba(0,0,0,.132), 0 0.6px 1.8px 0 rgba(0,0,0,.108);
         --shadow-3: 0 6.4px 14.4px 0 rgba(0,0,0,.132), 0 1.2px 3.6px 0 rgba(0,0,0,.108);
+        --gradient-app-background: linear-gradient(var(--color-primary-light) 0%, var(--color-primary-dark) 100%) no-repeat 50% 50% / 100% 100%;
       }
 
       .js-focus-visible :focus:not(.focus-visible) {
@@ -77,19 +87,14 @@
         display: flex;
         flex-direction: column;
         background-color: var(--color-primary);
-        background: linear-gradient(#0084E9 0%, #0069B9 100%) no-repeat 50% 50% / 100% 100%;
+        background: var(--gradient-app-background);
         background-size: 100% 100%; 
         overflow: hidden;
       }
 
       body.pre-sign-in {
-        background: url("assets/sitting-3.svg") bottom right no-repeat, linear-gradient(#0084E9 0%, #0069B9 100%) no-repeat 50% 50% / 100% 100%;
+        background: url("assets/sitting-3.svg") bottom right no-repeat, var(--gradient-app-background);
         background-size: 65%, 100% 100%;
-      }
-
-      body.post-sign-in {
-        background: linear-gradient(#0084E9 0%, #0069B9 100%) no-repeat 50% 50% / 100% 100%;
-        background-size: 100% 100%; 
       }
 
       .body--fixed-top {
@@ -125,6 +130,17 @@
 
       .header__actions {
         display: flex;
+      }
+
+      .toolbar {
+        display: flex;
+      }
+
+      .tabs {
+        background-color: var(--color-primary-dark);
+        height: 2rem;
+        border-radius: 1rem;
+        box-shadow: inset var(--shadow-2);
       }
 
       button {
@@ -178,6 +194,23 @@
       .button--extra-wide {
         width: 100%;
         max-width: 24rem;
+      }
+
+      .button--tab {
+        background-color: transparent;
+        border: none;
+        height: 2rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: white;
+        border-radius: 1rem;
+        padding: 0 1rem;
+      }
+
+      .button--tab-selected {
+        color: var(--color-primary);
+        background-color: white;
+        box-shadow: var(--shadow-2);
       }
 
       .button--pin {

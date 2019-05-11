@@ -14,6 +14,9 @@ const signOutButton = document.querySelector('#sign-out');
 const minimizeButton = document.querySelector('#minimize');
 const closeButton = document.querySelector('#close');
 const environmentList = document.querySelector('#environments');
+const tabFavorites = document.querySelector('#tab-favorites');
+const tabAll = document.querySelector('#tab-all');
+
 
 // Handle DOM events
 signInButton.onclick = () => ipcRenderer.send('trySignIn');
@@ -21,6 +24,8 @@ signOutButton.onclick = () => ipcRenderer.send('trySignOut');
 minimizeButton.onclick = () => ipcRenderer.send('tryMinimize');
 closeButton.onclick = () => ipcRenderer.send('tryClose');
 environmentList.onclick = (event) => handleEnvironmentActions(event);
+tabFavorites.onclick = () => handleSwitchToTabFavorites();
+tabAll.onclick = () => handleSwitchToTabAll();
 
 
 // Handle IPC events
@@ -105,4 +110,14 @@ async function handleEnvironmentActions(event) {
   await driver.findElement(By.name('passwd')).sendKeys(password, Key.RETURN);
   await driver.wait(until.elementLocated(By.id('KmsiCheckboxField')));
   await driver.findElement(By.id('idSIButton9')).click();
+}
+
+function handleSwitchToTabFavorites() {
+  tabFavorites.classList.add('button--tab-selected');
+  tabAll.classList.remove('button--tab-selected');
+}
+
+function handleSwitchToTabAll() {
+  tabAll.classList.add('button--tab-selected');
+  tabFavorites.classList.remove('button--tab-selected');
 }
