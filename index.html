@@ -28,15 +28,17 @@
         <button class="button button--primary button--extra-wide button--sign-in" id="sign-in">Sign in</button>
       </div>
 
-      <div class="toolbar">
+      <div id="toolbar" class="toolbar">
         <div class="tabs">
           <button id="tab-favorites" class="button button--tab button--tab-selected">Favorites</button>
           <button id="tab-all" class="button button--tab">All</button>
         </div>
+        <button class="button button--primary button--destructive button--sign-out" id="sign-out">Sign out</button>
       </div>
-
-      <div class="environment-grid" id="environments"></div>
-      <button class="button button--primary button--destructive button--extra-wide button--sign-out" id="sign-out">Sign out</button>
+      <div id="scroll-area" class="scroll-area">
+        <div class="scroll-sentinel" id="scroll-sentinel"></div>
+        <div class="environment-grid" id="environments"></div>
+      </div>
     </main>
 
     <script>
@@ -56,7 +58,13 @@
         --shadow-1: 0 1.6px 3.6px 0 rgba(0,0,0,.132), 0 0.3px 0.9px 0 rgba(0,0,0,.108);
         --shadow-2: 0 3.2px 7.2px 0 rgba(0,0,0,.132), 0 0.6px 1.8px 0 rgba(0,0,0,.108);
         --shadow-3: 0 6.4px 14.4px 0 rgba(0,0,0,.132), 0 1.2px 3.6px 0 rgba(0,0,0,.108);
-        --gradient-app-background: linear-gradient(var(--color-primary-light) 0%, var(--color-primary-dark) 100%) no-repeat 50% 50% / 100% 100%;
+        --gradient-app-background: linear-gradient(var(--color-primary-light) 0%, var(--color-primary-dark) 100%) 100% 100%;
+        --gradient-app-toolbar: linear-gradient(var(--color-primary-light) 0%, var(--color-primary-light) 100%) 100% 100%;
+        --app-header-height: 1.75rem;
+        --app-toolbar-height: 4rem;
+        --app-background-offset-post-signin: var(--app-header-height) + var(--app-toolbar-height);
+        --z-app-header: 2;
+        --z-toolbar: 1;
       }
 
       .js-focus-visible :focus:not(.focus-visible) {
@@ -86,9 +94,10 @@
         height: 100%;
         display: flex;
         flex-direction: column;
-        background-color: var(--color-primary);
-        background: var(--gradient-app-background);
-        background-size: 100% 100%; 
+        background: var(--gradient-app-toolbar), var(--gradient-app-background);
+        background-size: 100% calc(var(--app-background-offset-post-signin)), 100% calc(100% - var(--app-header-height) - var(--app-toolbar-height)); 
+        background-position: top left, top calc(var(--app-header-height) + var(--app-toolbar-height)) left;
+        background-repeat: no-repeat, no-repeat;
         overflow: hidden;
       }
 
@@ -103,7 +112,6 @@
 
       .body--flex-middle {
         flex: 1 1 auto;
-        overflow: auto;
       }
 
       * {
@@ -111,7 +119,7 @@
       }
 
       .header {
-        height: 1.75rem;
+        height: var(--app-header-height);
         padding: 0 0 0 1rem;
         -webkit-app-region: drag;
         display: flex;
@@ -120,6 +128,8 @@
         background-color: #323130;
         color: white;
         transition: background-color 250ms;
+        position: relative;
+        z-index: var(--z-app-header);
       }
 
       .header__title {
@@ -133,10 +143,22 @@
       }
 
       .toolbar {
-        display: flex;
+        display: none;
+        flex: 0 0 auto;
+        height: var(--app-toolbar-height);
+        align-items: center;
+        padding: 0 1rem;
+        background: var(--gradient-app-toolbar);
+        position: relative;
+        z-index: var(--z-toolbar);
+      }
+
+      .toolbar--with-scroll {
+        box-shadow: var(--shadow-3);
       }
 
       .tabs {
+        flex: 0 0 auto;
         background-color: var(--color-primary-dark);
         height: 2rem;
         border-radius: 1rem;
@@ -262,21 +284,6 @@
         will-change: transform, opacity;
       }
 
-      @keyframes launch {
-        0% {
-          transform: translateX(-100%);
-          opacity: 1;
-        }
-        40% {
-          transform: translateX(0);
-          opacity: 1;
-        }
-        100% {
-          transform: translateX(0);
-          opacity: 0;
-        }
-      }
-
       .sign-in-container {
         display: none;
         height: 100%;
@@ -291,7 +298,6 @@
       .main {
         display: flex;
         flex-direction: column;
-        padding: 1rem 1rem;
       }
 
       .main__pre-sign-in-container {
@@ -304,35 +310,36 @@
         will-change: transform, opacity;
       }
 
+
       .button--sign-out {
-        display: none;
-        margin: 4rem auto 0 auto;
+        margin: 0 0 0 auto;
         flex: 0 0 auto;
       }
 
-      .post-sign-in.environment-available .button--sign-out {
-        display: initial;
+      .post-sign-in.environment-available .toolbar{
+        display: flex;
 
-        animation: button-enter 400ms 1000ms;
+        animation: toolbar-enter 400ms;
         animation-fill-mode: both;
         will-change: transform, opacity;
       }
 
-      @keyframes button-enter {
-        0% {
-          transform: translateY(16px);
-          opacity: 0;
-        }
-        100% {
-          transform: translateX(0);
-          opacity: 1;
-        }
-      }  
+      .scroll-area {
+        overflow: auto;
+        flex: 0 1 auto;
+        display: flex;
+        flex-direction: column; 
+      }
+
+      .scroll-sentinel {
+        flex: 0 0 0px;
+      }
 
       .environment-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
         grid-gap: 1rem;
+        padding: 0 1rem;
       }
 
       .card {
@@ -341,30 +348,20 @@
         padding: 1rem;
         box-shadow: var(--shadow-2);
 
-        animation: card-enter 400ms;
+        animation: card-enter 400ms 400ms;
         animation-fill-mode: both;
         will-change: transform, opacity;
       }
 
-      .card:nth-child(2) { animation-delay: 100ms; }
-      .card:nth-child(3) { animation-delay: 200ms; }
-      .card:nth-child(4) { animation-delay: 300ms; }
-      .card:nth-child(5) { animation-delay: 400ms; }
-      .card:nth-child(6) { animation-delay: 500ms; }
-      .card:nth-child(7) { animation-delay: 600ms; }
-      .card:nth-child(8) { animation-delay: 700ms; }
-      .card:nth-child(9) { animation-delay: 800ms; }
+      .card:nth-child(2) { animation-delay: 500ms; }
+      .card:nth-child(3) { animation-delay: 600ms; }
+      .card:nth-child(4) { animation-delay: 700ms; }
+      .card:nth-child(5) { animation-delay: 800ms; }
+      .card:nth-child(6) { animation-delay: 900ms; }
+      .card:nth-child(7) { animation-delay: 1000ms; }
+      .card:nth-child(8) { animation-delay: 1100ms; }
+      .card:nth-child(9) { animation-delay: 1200ms; }
 
-      @keyframes card-enter {
-        0% {
-          transform: translateX(-64px);
-          opacity: 0;
-        }
-        100% {
-          transform: translateX(0);
-          opacity: 1;
-        }
-      }
 
       .card__actions {
         display: grid;
@@ -383,6 +380,56 @@
         font-size: 1.5rem;
         margin: 0;
         font-weight: 600;
+      }
+
+
+      @keyframes card-enter {
+        0% {
+          transform: translateX(-64px);
+          opacity: 0;
+        }
+        100% {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+
+      @keyframes button-enter {
+        0% {
+          transform: translateY(16px);
+          opacity: 0;
+        }
+        100% {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+
+      @keyframes toolbar-enter {
+        0% {
+          transform: translateY(-16px);
+          opacity: 0;
+        }
+        100% {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+
+
+      @keyframes launch {
+        0% {
+          transform: translateX(-100%);
+          opacity: 1;
+        }
+        40% {
+          transform: translateX(0);
+          opacity: 1;
+        }
+        100% {
+          transform: translateX(0);
+          opacity: 0;
+        }
       }
 
     </style>

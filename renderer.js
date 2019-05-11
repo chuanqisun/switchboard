@@ -16,7 +16,8 @@ const closeButton = document.querySelector('#close');
 const environmentList = document.querySelector('#environments');
 const tabFavorites = document.querySelector('#tab-favorites');
 const tabAll = document.querySelector('#tab-all');
-
+const toolbar = document.querySelector('#toolbar');
+const scrollArea = document.querySelector('#scroll-area');
 
 // Handle DOM events
 signInButton.onclick = () => ipcRenderer.send('trySignIn');
@@ -41,6 +42,9 @@ ipcRenderer.once('onSignInStatusUpdate', (event, isSignedIn) => {
 ipcRenderer.once('onEnvironmentsAvailable', (event, {environments, userSettings}) => {
   body.classList.add('environment-available');
   environmentList.innerHTML = renderEnvironments(environments, userSettings);
+
+  
+  createObserver();
 });
 
 // Init
@@ -49,11 +53,10 @@ ipcRenderer.send('getSignInStatus');
 // Render functions
 function renderEnvironments(environments, userSettings) {
   const favoriteEnvironments = environments.filter(environment => userSettings.favorites.includes(environment.appName));
-  const otherEnvironments = environments.filter(environment => !userSettings.favorites.includes(environment.appName));
 
   return `
   ${favoriteEnvironments.map(environment => renderEnvironment(environment, true)).join('')}
-  ${otherEnvironments.map(environment => renderEnvironment(environment, false)).join('')}
+  ${environments.map(environment => renderEnvironment(environment, false)).join('')}
   `.trim();
 }
 
@@ -120,4 +123,24 @@ function handleSwitchToTabFavorites() {
 function handleSwitchToTabAll() {
   tabAll.classList.add('button--tab-selected');
   tabFavorites.classList.remove('button--tab-selected');
+}
+
+function createObserver() {
+  var observer;
+
+  var options = {
+    root: scrollArea,
+    rootMargin: "0px",
+    threshold: 0,
+  };
+
+  observer = new IntersectionObserver(e => {
+    if (e[0].isIntersecting) {
+      toolbar.classList.remove('toolbar--with-scroll');
+    } else {
+      toolbar.classList.add('toolbar--with-scroll');
+    }
+  }, options);
+
+  observer.observe(document.getElementById('scroll-sentinel'));
 }
