@@ -19,6 +19,7 @@ const viewToggle = document.getElementById('view-toggle');
 const viewCarousel = document.getElementById('view-carousel');
 const toolbar = document.getElementById('toolbar');
 const scrollAreas = document.getElementsByClassName('js-scroll-area');
+const loadingIndicator = document.getElementById('loading-indicator');
 
 // Handle DOM events
 signInButton.onclick = () => ipcRenderer.send('trySignIn');
@@ -34,8 +35,10 @@ viewToggle.onclick = () => handleViewToggle();
 ipcRenderer.once('onSignInStatusUpdate', (event, isSignedIn) => {
   if (isSignedIn) {
     body.classList.add('post-sign-in');
+    loadingIndicator.dataset.state = 'get-environments'
     ipcRenderer.send('getEnvironments');
   } else {
+    loadingIndicator.dataset.state = 'done';
     body.classList.add('pre-sign-in');
   }
 });
@@ -45,6 +48,8 @@ let cachedEnvironments = [];
 
 ipcRenderer.once('onEnvironmentsAvailable', (event, {environments, userSettings}) => {
   body.classList.add('environment-available');
+  loadingIndicator.dataset.state = 'done';
+
   cachedEnvironments = environments;
   allEnvironments.innerHTML = renderAllEnvironments({environments, userSettings, animateEnter: true});
   favoriteEnvironments.innerHTML = renderFavoriteEnvironments({environments, userSettings, animateEnter: true});
