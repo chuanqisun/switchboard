@@ -39,10 +39,10 @@
       </div>
 
       <div id="toolbar" class="toolbar">
-        <div class="tabs">
-          <button id="tab-favorites" class="button button--tab button--tab-selected">Favorites</button>
-          <button id="tab-all" class="button button--tab">All</button>
-        </div>
+        <button data-selected-option="favorites" id="view-toggle" class="toggle">
+          <span data-option="favorites" data-selected class="toggle__option">Favorites</span>
+          <span data-option="all" class="toggle__option">All</span>
+        </button>
         <button class="button button--primary button--destructive button--sign-out" id="sign-out">Sign out</button>
       </div>
       <div id="scroll-area" class="scroll-area">
@@ -167,12 +167,49 @@
         box-shadow: var(--shadow-3);
       }
 
-      .tabs {
+      .toggle {
         flex: 0 0 auto;
         background-color: var(--color-primary-dark);
         height: 2rem;
         border-radius: 1rem;
+        border: none;
         box-shadow: inset var(--shadow-2);
+        display: flex;
+        align-items: center;
+        position: relative;
+        padding: 0;
+      }
+
+      .toggle::before {
+        content: 'Favorites';
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: transparent;
+        padding: 0 1rem;
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        background-color: white;
+        box-shadow: var(--shadow-2);
+        border-radius: 1rem;
+        width: var(--indicator-width, auto);
+        transform: translate3d(var(--indicator-translate), 0, 0);
+        box-sizing: border-box;
+        transition: width 250ms, transform 250ms;
+      }
+
+      .toggle__option {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: white;
+        padding: 0 1rem;
+        position: relative;
+        transition: color 250ms;
+      }
+
+      .toggle__option[data-selected] {
+        color: var(--color-primary);
       }
 
       button {
@@ -226,23 +263,6 @@
       .button--extra-wide {
         width: 100%;
         max-width: 24rem;
-      }
-
-      .button--tab {
-        background-color: transparent;
-        border: none;
-        height: 2rem;
-        font-size: 0.85rem;
-        font-weight: 600;
-        color: white;
-        border-radius: 1rem;
-        padding: 0 1rem;
-      }
-
-      .button--tab-selected {
-        color: var(--color-primary);
-        background-color: white;
-        box-shadow: var(--shadow-2);
       }
 
       .button--pin {

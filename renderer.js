@@ -14,8 +14,7 @@ const signOutButton = document.querySelector('#sign-out');
 const minimizeButton = document.querySelector('#minimize');
 const closeButton = document.querySelector('#close');
 const environmentList = document.querySelector('#environments');
-const tabFavorites = document.querySelector('#tab-favorites');
-const tabAll = document.querySelector('#tab-all');
+const viewToggle = document.querySelector('#view-toggle');
 const toolbar = document.querySelector('#toolbar');
 const scrollArea = document.querySelector('#scroll-area');
 
@@ -25,8 +24,7 @@ signOutButton.onclick = () => ipcRenderer.send('trySignOut');
 minimizeButton.onclick = () => ipcRenderer.send('tryMinimize');
 closeButton.onclick = () => ipcRenderer.send('tryClose');
 environmentList.onclick = (event) => handleEnvironmentActions(event);
-tabFavorites.onclick = () => handleSwitchToTabFavorites();
-tabAll.onclick = () => handleSwitchToTabAll();
+viewToggle.onclick = () => handleViewToggle();
 
 
 // Handle IPC events
@@ -115,14 +113,24 @@ async function handleEnvironmentActions(event) {
   await driver.findElement(By.id('idSIButton9')).click();
 }
 
-function handleSwitchToTabFavorites() {
-  tabFavorites.classList.add('button--tab-selected');
-  tabAll.classList.remove('button--tab-selected');
-}
+function handleViewToggle() {
+  const selectedOption = viewToggle.dataset.selectedOption;
+  const options = [...viewToggle.children];
+  const leftLabelWidth = options[0].offsetWidth;
+  if (!viewToggle.style.getPropertyValue('--indicator-width')) {
+    viewToggle.style.setProperty('--indicator-width', `${leftLabelWidth}px`);
+  }
 
-function handleSwitchToTabAll() {
-  tabAll.classList.add('button--tab-selected');
-  tabFavorites.classList.remove('button--tab-selected');
+  options.forEach(option => {
+    if (option.dataset.option === selectedOption) {
+      delete option.dataset.selected;
+    } else {
+      option.dataset.selected = '';
+      viewToggle.dataset.selectedOption = option.dataset.option;
+      viewToggle.style.setProperty('--indicator-width', `${option.offsetWidth}px`);
+      viewToggle.style.setProperty('--indicator-translate', option === options[1] ? `${leftLabelWidth}px` : '0');
+    }
+  });
 }
 
 function createObserver() {
