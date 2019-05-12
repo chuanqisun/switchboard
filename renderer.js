@@ -131,6 +131,7 @@ function renderEnvironment({environment, userSettings, animateEnter}) {
         class="button button--favorite${userSettings.favorites.includes(environment.appName) ? ' button--remove-favorite' : ' button--add-favorite'}" 
         data-app-id="${environment.appName}"
         data-action="${userSettings.favorites.includes(environment.appName) ? 'removeFavorite' : 'addFavorite'}"
+        title="${userSettings.favorites.includes(environment.appName) ? 'Remove from favorites' : 'Add to favorites'}"
       >
         <svg class="star" width="16" height="15">
           <use xlink:href="#svg-star" />

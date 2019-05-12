@@ -1,5 +1,6 @@
 const {BrowserWindow} = require('electron')
-const environmentDataFileLocation = 'https://microsoft.sharepoint.com/teams/Live.Drive.Repeat2/Shared%20Documents/General/Environments/environments.txt';
+const systemConfig = require('../system-config');
+
 const signInBlockerUrlPrefix = 'https://login.microsoftonline.com';
 const signInSuccessUrlPrefix = 'https://microsoft.sharepoint.com';
 
@@ -12,7 +13,7 @@ async function checkSignInStatus() {
       show: false,
     });
     
-    tempWindow.loadURL(environmentDataFileLocation);
+    tempWindow.loadURL(systemConfig.discoverEnvironmentsEndpoint);
 
     tempWindow.webContents.on('dom-ready', () => {
       const url = tempWindow.webContents.getURL()
@@ -41,7 +42,7 @@ async function signOut() {
       show: false,
     });
     
-    tempWindow.loadURL(environmentDataFileLocation);
+    tempWindow.loadURL(systemConfig.discoverEnvironmentsEndpoint);
 
     tempWindow.webContents.on('dom-ready', () => {
         tempWindow.webContents.session.clearStorageData();
@@ -74,7 +75,7 @@ async function signIn(parentWindow) {
 
     tempWindow.setMenu(null);
     
-    tempWindow.loadURL(environmentDataFileLocation);
+    tempWindow.loadURL(systemConfig.discoverEnvironmentsEndpoint);
 
     tempWindow.webContents.on('dom-ready', () => {
       const url = tempWindow.webContents.getURL()
