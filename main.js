@@ -71,6 +71,20 @@ ipcMain.on('getEnvironments', async (event) => {
   event.sender.send('onEnvironmentsAvailable', {environments, userSettings});
 });
 
+ipcMain.on('addFavorite', async (event, {appId}) => {
+  const { addFavorite, saveUserSettings } = require('./helpers/user-settings');
+  const userSettings = addFavorite(appId);
+  event.sender.send('onFavoritesChange', {userSettings});
+  saveUserSettings(userSettings);
+});
+
+ipcMain.on('removeFavorite', async (event, {appId}) => {
+  const { removeFavorite, saveUserSettings } = require('./helpers/user-settings');
+  const userSettings = removeFavorite(appId);
+  event.sender.send('onFavoritesChange', {userSettings});
+  saveUserSettings(userSettings);
+});
+
 async function signOut() {
   const { signOut } = require('./helpers/account');
   await signOut();

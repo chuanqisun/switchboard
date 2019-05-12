@@ -26,6 +26,7 @@ signOutButton.onclick = () => ipcRenderer.send('trySignOut');
 minimizeButton.onclick = () => ipcRenderer.send('tryMinimize');
 closeButton.onclick = () => ipcRenderer.send('tryClose');
 allEnvironments.onclick = (event) => handleEnvironmentActions(event);
+favoriteEnvironments.onclick = (event) => handleEnvironmentActions(event);
 viewToggle.onclick = () => handleViewToggle();
 
 
@@ -39,34 +40,98 @@ ipcRenderer.once('onSignInStatusUpdate', (event, isSignedIn) => {
   }
 });
 
+// Cache environment list for entire session
+let cachedEnvironments = [];
+
 ipcRenderer.once('onEnvironmentsAvailable', (event, {environments, userSettings}) => {
   body.classList.add('environment-available');
-  allEnvironments.innerHTML = renderAllEnvironments(environments);
-  favoriteEnvironments.innerHTML = renderFavoriteEnvironments(environments, userSettings);
+  cachedEnvironments = environments;
+  allEnvironments.innerHTML = renderAllEnvironments({environments, userSettings, animateEnter: true});
+  favoriteEnvironments.innerHTML = renderFavoriteEnvironments({environments, userSettings, animateEnter: true});
   
-  createObserver();
+  initializeToggle({userSettings});
+
+  scrollObservers = createObserver();
+});
+
+ipcRenderer.on('onFavoritesChange', (event, {userSettings}) => {
+  updateAllEnvironments({userSettings});
+
+  viewToggle.dataset.selectedOption === 'favorites' ?
+    updateFavoriteEnvironments({userSettings}) :
+    favoriteEnvironments.innerHTML = renderFavoriteEnvironments({environments: cachedEnvironments, userSettings});
 });
 
 // Init
 ipcRenderer.send('getSignInStatus');
 
 // Render functions
-function renderAllEnvironments(environments) {
-  return environments.map(environment => renderEnvironment(environment, false)).join('');
+function initializeToggle({userSettings}) {
+  const selectedOptions = document.querySelectorAll(`[data-option="${viewToggle.dataset.selectedOption}"]`);
+  [...selectedOptions].forEach(option => option.dataset.selected = '');
+
+  if (!userSettings.favorites.length) {
+    handleViewToggle();
+  }
 }
 
-function renderFavoriteEnvironments(environments, userSettings) {
+function renderAllEnvironments({environments, userSettings, animateEnter}) {
+  return environments.map(environment => renderEnvironment({environment, userSettings, animateEnter})).join('');
+}
+
+function renderFavoriteEnvironments({environments, userSettings, animateEnter}) {
   const favoriteEnvironments = environments.filter(environment => userSettings.favorites.includes(environment.appName));
 
-  return favoriteEnvironments.map(environment => renderEnvironment(environment, true)).join('');
+  return favoriteEnvironments.map(environment => renderEnvironment({environment, userSettings, animateEnter})).join('');
 }
 
-function renderEnvironment(environment, isFavorite) {
+function updateAllEnvironments({userSettings}) {
+  const unFavorited = allEnvironments.querySelectorAll(`[data-action="addFavorite"]`);
+  const favorited = allEnvironments.querySelectorAll(`[data-action="removeFavorite"]`);
+
+  [...unFavorited].forEach(item => {
+    if (userSettings.favorites.includes(item.dataset.appId)) {
+      item.dataset.action = 'removeFavorite';
+      item.classList.remove('button--add-favorite');
+      item.classList.add('button--remove-favorite');
+    }
+  });
+
+  [...favorited].forEach(item => {
+    if (!userSettings.favorites.includes(item.dataset.appId)) {
+      item.dataset.action = 'addFavorite';
+      item.classList.remove('button--remove-favorite');
+      item.classList.add('button--add-favorite');
+    }
+  });
+}
+
+function updateFavoriteEnvironments({userSettings}) {
+  const favorited = favoriteEnvironments.querySelectorAll(`[data-action="removeFavorite"]`);
+
+  [...favorited].forEach(item => {
+    if (!userSettings.favorites.includes(item.dataset.appId)) {
+      const unFavoritedCard = favoriteEnvironments.querySelector(`.js-card[data-app-id="${item.dataset.appId}"]`);
+      unFavoritedCard.addEventListener('animationend', e => {
+        unFavoritedCard.parentNode.removeChild(unFavoritedCard);
+      });
+      unFavoritedCard.classList.add('card--animate-exit');
+    }
+  });
+}
+
+function renderEnvironment({environment, userSettings, animateEnter}) {
   return `
-  <div class="card">
+  <div
+    class="card js-card${animateEnter ? ' card--animation-enter' : ''}"
+    data-app-id="${environment.appName}">
     <div class="card__header">
       <h1 class="card__title">${environment.appName}</h1>
-      <button class="button button--pin${isFavorite ? ' button--pinned' : ''}" data-id="${environment.appName}">
+      <button
+        class="button button--favorite${userSettings.favorites.includes(environment.appName) ? ' button--remove-favorite' : ' button--add-favorite'}" 
+        data-app-id="${environment.appName}"
+        data-action="${userSettings.favorites.includes(environment.appName) ? 'removeFavorite' : 'addFavorite'}"
+      >
         <svg class="star" width="16" height="15">
           <use xlink:href="#svg-star" />
         </svg>     
@@ -76,6 +141,7 @@ function renderEnvironment(environment, isFavorite) {
       ${environment.instances.map(instance => `
       <button
         class="button button--primary button--launch"
+        data-action="launch"
         data-type=${instance.type}
         data-url="${instance.url}"
         data-username="${instance.username}"
@@ -92,29 +158,36 @@ async function handleEnvironmentActions(event) {
   const targetButton = event.target.closest('button');
   if (!targetButton) return;
 
-  const animationEndHandler = (e) => {
-    event.target.classList.remove('button--launching');
-    event.target.removeEventListener("animationend", animationEndHandler);
-  }
-  event.target.addEventListener("animationend", animationEndHandler);
-  window.setTimeout(() => {
-    event.target.classList.add('button--launching');
-  },50);
+  if (targetButton.dataset.action === 'launch') {
+    const animationEndHandler = (e) => {
+      event.target.classList.remove('button--launching');
+      event.target.removeEventListener("animationend", animationEndHandler);
+    }
+    event.target.addEventListener("animationend", animationEndHandler);
+    window.setTimeout(() => {
+      event.target.classList.add('button--launching');
+    },50);
 
-  let {url, username, password} = targetButton.dataset;
-  if (event.shiftKey) {
-    url = systemConfig.trialAdminPortalUrl;
-  }
+    let {url, username, password} = targetButton.dataset;
+    if (event.shiftKey) {
+      url = systemConfig.trialAdminPortalUrl;
+    }
 
-  let driver = await ChromeBuilder.build();
-  await driver.get(url);
-  await driver.wait(until.elementLocated(By.name('loginfmt')));
-  await driver.findElement(By.name('loginfmt')).sendKeys(username, Key.RETURN);
-  await driver.wait(until.elementLocated(By.id('displayName')));
-  await driver.findElement(By.name('passwd')).sendKeys(password, Key.RETURN);
-  await driver.wait(until.elementLocated(By.id('KmsiCheckboxField')));
-  await driver.findElement(By.id('idSIButton9')).click();
+    let driver = await ChromeBuilder.build();
+    await driver.get(url);
+    await driver.wait(until.elementLocated(By.name('loginfmt')));
+    await driver.findElement(By.name('loginfmt')).sendKeys(username, Key.RETURN);
+    await driver.wait(until.elementLocated(By.id('displayName')));
+    await driver.findElement(By.name('passwd')).sendKeys(password, Key.RETURN);
+    await driver.wait(until.elementLocated(By.id('KmsiCheckboxField')));
+    await driver.findElement(By.id('idSIButton9')).click();
+  } else if (targetButton.dataset.action === 'addFavorite') {
+    ipcRenderer.send('addFavorite', {appId: targetButton.dataset.appId});
+  } else if (targetButton.dataset.action === 'removeFavorite') {
+    ipcRenderer.send('removeFavorite', {appId: targetButton.dataset.appId});
+  }
 }
+
 
 function handleViewToggle() {
   const selectedOption = viewToggle.dataset.selectedOption;
@@ -143,10 +216,12 @@ function handleViewToggle() {
 
   delete leavingView.dataset.selected;
   enteringView.dataset.selected = '';
+  enteringView.scrollTop = 0;
+  toolbar.classList.remove('toolbar--with-scroll');
 }
 
 function createObserver() {
-  [...scrollAreas].forEach(scrollArea => {
+  [...scrollAreas].map(scrollArea => {
 
     const options = {
       root: scrollArea,
@@ -164,5 +239,4 @@ function createObserver() {
 
     observer.observe(scrollArea.querySelector('.js-scroll-sentinel'));
   });
-
 }

@@ -30,11 +30,40 @@ function getDefaultUserSettings() {
   }
 }
 
+function addFavorite(appId) {
+  const userSettings = require(userSettingsPath);
+  const favorites = [appId, ...userSettings.favorites];
+  const dedupedFavorites = [...new Set(favorites)];
+  userSettings.favorites = dedupedFavorites;
+
+  return userSettings;
+}
+
+function removeFavorite(appId) {
+  const userSettings = require(userSettingsPath);
+  const favorites = userSettings.favorites.filter(existingAppId => existingAppId !== appId);
+  userSettings.favorites = favorites;
+
+  return userSettings;
+}
+
+function saveUserSettings(userSettings) {
+  return new Promise(resolve => {
+    fs.writeFile(userSettingsPath, JSON.stringify(userSettings), () => {
+      console.log('[user-settings] settings file saved');
+      resolve(userSettings);
+    });
+  });
+}
+
 function ensureUserSettingsSchema(userSettings) {
   if (!userSettings.favorites) throw new Error('NO_FAVORITES');
   if (!Array.isArray(userSettings.favorites)) throw new Error('FAVORITES_NOT_ARRAY');
 }
 
 module.exports = {
-  ensureUserSettings
+  ensureUserSettings,
+  addFavorite,
+  removeFavorite,
+  saveUserSettings,
 }

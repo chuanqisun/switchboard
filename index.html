@@ -40,14 +40,14 @@
 
       <div id="toolbar" class="toolbar">
         <button data-selected-option="favorites" id="view-toggle" class="toggle">
-          <span data-option="favorites" data-selected class="toggle__option">Favorites</span>
+          <span data-option="favorites" class="toggle__option">Favorites</span>
           <span data-option="all" class="toggle__option">All</span>
         </button>
         <button class="button button--primary button--destructive button--sign-out" id="sign-out">Sign out</button>
       </div>
 
       <div id="view-carousel" class="view-carousel">
-        <div class="scroll-area js-scroll-area view-carousel__item-left" data-option="favorites" data-selected>
+        <div class="scroll-area js-scroll-area view-carousel__item-left" data-option="favorites">
           <div class="scroll-sentinel js-scroll-sentinel"></div>
           <div class="environment-grid" id="favorite-environments"></div>
         </div>
@@ -273,17 +273,20 @@
         max-width: 24rem;
       }
 
-      .button--pin {
-        --star-stroke: var(--color-off-black);
-        --star-fill: transparent;
+      .button--favorite {
         --star-stroke-width: 1.25px;
-
+        --star-stroke: var(--color-off-black);
         background-color: transparent;
         border: none;
         padding: 0.25rem 0 0.25rem 0.25rem;
+        transition: transform 200ms;
       }
 
-      .button--pinned {
+      .button--add-favorite {
+        --star-fill: transparent;
+      }
+
+      .button--remove-favorite {
         --star-fill: var(--color-yellow);
       }
 
@@ -409,6 +412,8 @@
         grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
         grid-gap: 1rem;
         padding: 0 1rem;
+        overflow: hidden; /* exit animation will overflow */
+        flex: 0 0 auto;
       }
 
       .card {
@@ -417,19 +422,29 @@
         padding: 1rem;
         box-shadow: var(--shadow-2);
 
-        animation: card-enter 400ms 400ms;
-        animation-fill-mode: both;
         will-change: transform, opacity;
       }
 
-      .card:nth-child(2) { animation-delay: 500ms; }
-      .card:nth-child(3) { animation-delay: 600ms; }
-      .card:nth-child(4) { animation-delay: 700ms; }
-      .card:nth-child(5) { animation-delay: 800ms; }
-      .card:nth-child(6) { animation-delay: 900ms; }
-      .card:nth-child(7) { animation-delay: 1000ms; }
-      .card:nth-child(8) { animation-delay: 1100ms; }
-      .card:nth-child(9) { animation-delay: 1200ms; }
+      .card--animation-enter {
+        animation: card-enter 400ms 400ms;
+        animation-fill-mode: both;
+      }
+
+      .card--animation-enter:nth-child(2) { animation-delay: 500ms; }
+      .card--animation-enter:nth-child(3) { animation-delay: 600ms; }
+      .card--animation-enter:nth-child(4) { animation-delay: 700ms; }
+      .card--animation-enter:nth-child(5) { animation-delay: 800ms; }
+      .card--animation-enter:nth-child(6) { animation-delay: 900ms; }
+      .card--animation-enter:nth-child(7) { animation-delay: 1000ms; }
+      .card--animation-enter:nth-child(8) { animation-delay: 1100ms; }
+      .card--animation-enter:nth-child(9) { animation-delay: 1200ms; }
+
+      .card--animate-exit {
+        animation: card-exit 400ms;
+        animation-timing-function: cubic-bezier(0.4, 0.0, 1, 1);
+        animation-fill-mode: both;
+        animation-delay: 0ms !important;
+      }
 
 
       .card__actions {
@@ -451,15 +466,25 @@
         font-weight: 700;
       }
 
-
       @keyframes card-enter {
         0% {
-          transform: translateX(-64px);
+          transform: translate3d(-64px, 0, 0);
           opacity: 0;
         }
         100% {
-          transform: translateX(0);
+          transform: translate3d(0, 0, 0);
           opacity: 1;
+        }
+      }
+
+      @keyframes card-exit {
+        0% {
+          transform: translate3d(0, 0, 0);
+          opacity: 1;
+        }
+        100% {
+          transform: translate3d(-100%, 0, 0);
+          opacity: 0;
         }
       }
 
