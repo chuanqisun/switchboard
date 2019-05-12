@@ -62,13 +62,16 @@ ipcRenderer.once('onEnvironmentsAvailable', (event, {environments, userSettings}
   scrollObservers = createObserver();
 });
 
-ipcRenderer.on('onFavoritesChange', (event, {userSettings}) => {
+ipcRenderer.on('onFavoritesChange', async (event, {userSettings}) => {
   updateAllEnvironments({userSettings});
-  updateNoFavoriteMessage({userSettings});
 
-  viewToggle.dataset.selectedOption === 'favorites' ?
-    updateFavoriteEnvironments({userSettings}) :
+  if (viewToggle.dataset.selectedOption === 'favorites') {
+    await updateFavoriteEnvironments({userSettings});
+    updateNoFavoriteMessage({userSettings});
+  } else {
     favoriteEnvironments.innerHTML = renderFavoriteEnvironments({environments: cachedEnvironments, userSettings});
+    updateNoFavoriteMessage({userSettings});
+  }
 });
 
 // Init
@@ -121,20 +124,22 @@ function updateAllEnvironments({userSettings}) {
   });
 }
 
-function updateFavoriteEnvironments({userSettings}) {
-  const favorited = favoriteEnvironments.querySelectorAll(`[data-action="removeFavorite"]`);
-
-  [...favorited].forEach(item => {
-    if (!userSettings.favorites.includes(item.dataset.appId)) {
-      const unFavoritedCard = favoriteEnvironments.querySelector(`.js-card[data-app-id="${item.dataset.appId}"]`);
-      unFavoritedCard.addEventListener('animationend', e => {
-        console.dir(e);
-        if (e.animationName === 'just-wait') {
-          unFavoritedCard.parentNode.removeChild(unFavoritedCard);
-        }
-      });
-      unFavoritedCard.classList.add('card--animate-exit');
-    }
+async function updateFavoriteEnvironments({userSettings}) {
+  return new Promise(resolve => {
+    const favorited = favoriteEnvironments.querySelectorAll(`[data-action="removeFavorite"]`);
+    
+    [...favorited].forEach(item => {
+      if (!userSettings.favorites.includes(item.dataset.appId)) {
+        const unFavoritedCard = favoriteEnvironments.querySelector(`.js-card[data-app-id="${item.dataset.appId}"]`);
+        unFavoritedCard.addEventListener('animationend', e => {
+          if (e.animationName === 'just-wait') {
+            unFavoritedCard.parentNode.removeChild(unFavoritedCard);
+            resolve();
+          }
+        });
+        unFavoritedCard.classList.add('card--animate-exit');
+      }
+    });
   });
 }
 

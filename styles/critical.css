@@ -218,6 +218,7 @@ button {
   font-weight: 600;
   font-size: 0.85rem;
   box-shadow: var(--shadow-2);
+  outline-offset: 2px !important;
 }
 
 .button--primary:hover,
@@ -244,8 +245,19 @@ button {
   --star-stroke: var(--color-off-black);
   background-color: transparent;
   border: none;
-  padding: 0.25rem 0 0.25rem 0.25rem;
+  padding: 0;
+  width: 3rem;
+  height: 3rem;
   transition: transform 200ms;
+
+  position: absolute;
+  right: -1rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.button--favorite:hover {
+  transform: translateY(-50%) scale(1.2);
 }
 
 .button--add-favorite {
@@ -431,9 +443,9 @@ button {
 
 .card__header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;
+  position: relative;
 }
 
 .card__title {
