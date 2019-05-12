@@ -6,8 +6,8 @@ let mainWindow
 
 function createWindow () {
   const {screen} = require('electron');
-  let display = screen.getPrimaryDisplay();
-  let width = display.bounds.width;
+  const display = screen.getPrimaryDisplay();
+  const width = display.bounds.width;
   mainWindow = new BrowserWindow({
     width: 420,
     height: 800,
@@ -38,7 +38,8 @@ app.on('activate', function () {
 
 // Custom logic
 app.on('ready', () => {
-  globalShortcut.register('CommandOrControl+R', signOut);
+  globalShortcut.register('CommandOrControl+R', () => mainWindow.isFocused() && signOut());
+  globalShortcut.register('CommandOrControl+E', () => mainWindow.isFocused() && editEnvironments());
 });
 
 ipcMain.on('getSignInStatus', async (event) => {
@@ -89,4 +90,9 @@ async function signOut() {
   const { signOut } = require('./helpers/account');
   await signOut();
   mainWindow.reload();
+}
+
+function editEnvironments() {
+  const { editEnvironments } = require('./helpers/environments');
+  editEnvironments();
 }

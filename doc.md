@@ -10,4 +10,5 @@
 
 # User manual
 - `Cmd` or `Ctrl` + `R` to sign out and clean cache
+- `Cmd` or `Ctrl` + `E` to edit environments
 - `Shift` + Click to create new trial environment 
