@@ -1,4 +1,4 @@
-const {app, BrowserWindow, ipcMain, globalShortcut, dialog} = require('electron')
+const {app, BrowserWindow, ipcMain, globalShortcut, dialog, nativeImage} = require('electron')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -99,6 +99,10 @@ function editEnvironments() {
 }
 
 function showAbout() {
+  const path = require('path');
+  const iconPath = path.join(__dirname, 'build/icon.png');
+  const messageBoxIcon = nativeImage.createFromPath(iconPath);
+
   dialog.showMessageBox({
     buttons: ['Close'],
     title: 'Switchboard',
@@ -109,6 +113,6 @@ Node ${process.versions.node}
 Chrome ${process.versions.chrome}
 Electron ${process.versions.electron}
     `.trim(),
-    icon: './build/icon.png',
+    icon: messageBoxIcon,
   });
 }
