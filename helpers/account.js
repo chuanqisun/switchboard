@@ -13,7 +13,7 @@ async function checkSignInStatus() {
       show: false,
     });
     
-    tempWindow.loadURL(systemConfig.discoverEnvironmentsEndpoint);
+    tempWindow.loadURL(systemConfig.getEnvironmentsEndpoint);
 
     tempWindow.webContents.on('dom-ready', () => {
       const url = tempWindow.webContents.getURL()
@@ -42,7 +42,7 @@ async function signOut() {
       show: false,
     });
     
-    tempWindow.loadURL(systemConfig.discoverEnvironmentsEndpoint);
+    tempWindow.loadURL(systemConfig.getEnvironmentsEndpoint);
 
     tempWindow.webContents.on('dom-ready', () => {
         tempWindow.webContents.session.clearStorageData();
@@ -75,7 +75,7 @@ async function signIn(parentWindow) {
 
     tempWindow.setMenu(null);
     
-    tempWindow.loadURL(systemConfig.discoverEnvironmentsEndpoint);
+    tempWindow.loadURL(systemConfig.getEnvironmentsEndpoint);
 
     tempWindow.webContents.on('dom-ready', () => {
       const url = tempWindow.webContents.getURL()

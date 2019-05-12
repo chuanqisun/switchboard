@@ -1,6 +1,7 @@
 module.exports = {
-  discoverEnvironmentsEndpoint: "https://aka.ms/switchboard-environments",
+  getEnvironmentsEndpoint: "https://aka.ms/switchboard-environments",
   editEnvironmentsEndpoint: "https://aka.ms/switchboard-environments-edit",
+  getMetadataEndpoint: "https://aka.ms/switchboard-metadata",
   trialAdminPortalUrl: "https://aka.ms/switchboard-trial-admin-portal",
-  userSettingsFilename: "user-settings.json"
+  userSettingsFilename: "user-settings.json",
 }

@@ -10,7 +10,7 @@ async function getEnvironments() {
       show: false,
     });
     
-    tempWindow.loadURL(systemConfig.discoverEnvironmentsEndpoint);
+    tempWindow.loadURL(systemConfig.getEnvironmentsEndpoint);
 
     tempWindow.webContents.on('dom-ready', () => {
       tempWindow.webContents.executeJavaScript(`document.querySelector('pre').innerText`, undefined, result => {
