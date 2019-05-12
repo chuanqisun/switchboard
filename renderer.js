@@ -80,7 +80,7 @@ function renderAllEnvironments({environments, userSettings, animateEnter}) {
 }
 
 function renderFavoriteEnvironments({environments, userSettings, animateEnter}) {
-  const favoriteEnvironments = environments.filter(environment => userSettings.favorites.includes(environment.appName));
+  const favoriteEnvironments = environments.filter(environment => userSettings.favorites.includes(environment.appId));
 
   return favoriteEnvironments.map(environment => renderEnvironment({environment, userSettings, animateEnter})).join('');
 }
@@ -113,7 +113,10 @@ function updateFavoriteEnvironments({userSettings}) {
     if (!userSettings.favorites.includes(item.dataset.appId)) {
       const unFavoritedCard = favoriteEnvironments.querySelector(`.js-card[data-app-id="${item.dataset.appId}"]`);
       unFavoritedCard.addEventListener('animationend', e => {
-        unFavoritedCard.parentNode.removeChild(unFavoritedCard);
+        console.dir(e);
+        if (e.animationName === 'just-wait') {
+          unFavoritedCard.parentNode.removeChild(unFavoritedCard);
+        }
       });
       unFavoritedCard.classList.add('card--animate-exit');
     }
@@ -124,14 +127,14 @@ function renderEnvironment({environment, userSettings, animateEnter}) {
   return `
   <div
     class="card js-card${animateEnter ? ' card--animation-enter' : ''}"
-    data-app-id="${environment.appName}">
+    data-app-id="${environment.appId}">
     <div class="card__header">
       <h1 class="card__title">${environment.appName}</h1>
       <button
-        class="button button--favorite${userSettings.favorites.includes(environment.appName) ? ' button--remove-favorite' : ' button--add-favorite'}" 
-        data-app-id="${environment.appName}"
-        data-action="${userSettings.favorites.includes(environment.appName) ? 'removeFavorite' : 'addFavorite'}"
-        title="${userSettings.favorites.includes(environment.appName) ? 'Remove from favorites' : 'Add to favorites'}"
+        class="button button--favorite${userSettings.favorites.includes(environment.appId) ? ' button--remove-favorite' : ' button--add-favorite'}" 
+        data-app-id="${environment.appId}"
+        data-action="${userSettings.favorites.includes(environment.appId) ? 'removeFavorite' : 'addFavorite'}"
+        title="${userSettings.favorites.includes(environment.appId) ? 'Remove from favorites' : 'Add to favorites'}"
       >
         <svg class="star" width="16" height="15">
           <use xlink:href="#svg-star" />

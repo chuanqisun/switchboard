@@ -375,10 +375,10 @@ button {
 .card--animation-enter:nth-child(9) { animation-delay: 1200ms; }
 
 .card--animate-exit {
-  animation: card-exit 400ms;
+  animation: card-exit 250ms, just-wait 50ms;
   animation-timing-function: cubic-bezier(0.4, 0.0, 1, 1);
   animation-fill-mode: both;
-  animation-delay: 0ms !important;
+  animation-delay: 0ms, 250ms !important;
 }
 
 
@@ -414,13 +414,18 @@ button {
 
 @keyframes card-exit {
   0% {
-    transform: translate3d(0, 0, 0);
+    transform: scale(1);
     opacity: 1;
   }
   100% {
-    transform: translate3d(-100%, 0, 0);
+    transform: scale(0);
     opacity: 0;
   }
+}
+
+@keyframes just-wait {
+  0% { }
+  100% { }
 }
 
 @keyframes button-enter {
