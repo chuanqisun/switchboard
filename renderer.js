@@ -55,6 +55,7 @@ ipcRenderer.once('onEnvironmentsAvailable', (event, {environments, userSettings}
   favoriteEnvironments.innerHTML = renderFavoriteEnvironments({environments, userSettings, animateEnter: true});
   
   initializeToggle({userSettings});
+  initializeCarousel();
 
   scrollObservers = createObserver();
 });
@@ -78,6 +79,12 @@ function initializeToggle({userSettings}) {
   if (!userSettings.favorites.length) {
     handleViewToggle();
   }
+}
+
+function initializeCarousel() {
+  setTimeout(() => {
+    [...viewCarousel.children].forEach(child => child.dataset.canAnimate = '');
+  }, 100); // without timeout the scroll bar will be part of the slide-in animation
 }
 
 function renderAllEnvironments({environments, userSettings, animateEnter}) {

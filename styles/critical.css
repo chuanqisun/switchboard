@@ -339,21 +339,19 @@ button {
   position: relative;
 }
 
-.view-carousel__item-left {
-  transform: translate3d(-100%, 0, 0);
+.view-carousel__item[data-can-animate] {
   transition: transform 250ms;
 }
 
-.view-carousel__item-left[data-selected] {
-  transform: translate3d(0, 0, 0);
+.view-carousel__item-left {
+  transform: translate3d(-100%, 0, 0);
 }
 
 .view-carousel__item-right {
   transform: translate3d(100%, 0, 0);
-  transition: transform 250ms;
 }
 
-.view-carousel__item-right[data-selected] {
+.view-carousel__item[data-selected] {
   transform: translate3d(0, 0, 0);
 }
 
@@ -377,7 +375,7 @@ button {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
   grid-gap: 1rem;
-  padding: 0 1rem;
+  padding: 0 1rem 1rem 1rem;
   overflow: hidden; /* exit animation will overflow */
   flex: 0 0 auto;
 }
