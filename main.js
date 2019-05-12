@@ -1,4 +1,4 @@
-const {app, BrowserWindow, ipcMain, globalShortcut} = require('electron')
+const {app, BrowserWindow, ipcMain, globalShortcut, dialog} = require('electron')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -40,6 +40,7 @@ app.on('activate', function () {
 app.on('ready', () => {
   globalShortcut.register('CommandOrControl+R', () => mainWindow.isFocused() && signOut());
   globalShortcut.register('CommandOrControl+E', () => mainWindow.isFocused() && editEnvironments());
+  globalShortcut.register('CommandOrControl+H', () => mainWindow.isFocused() && showAbout());
 });
 
 ipcMain.on('getSignInStatus', async (event) => {
@@ -95,4 +96,19 @@ async function signOut() {
 function editEnvironments() {
   const { editEnvironments } = require('./helpers/environments');
   editEnvironments();
+}
+
+function showAbout() {
+  dialog.showMessageBox({
+    buttons: ['Close'],
+    title: 'Switchboard',
+    message: `
+Version ${app.getVersion()}
+-----------------
+Node ${process.versions.node}
+Chrome ${process.versions.chrome}
+Electron ${process.versions.electron}
+    `.trim(),
+    icon: './build/icon.png',
+  });
 }
