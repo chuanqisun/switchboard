@@ -380,6 +380,18 @@ button {
   flex: 0 0 auto;
 }
 
+.no-favorite-message {
+  display: none;
+  color: white;
+  --star-fill: white;
+  --star-stroke: var(--color-off-black);
+  padding: 0 1rem;
+}
+
+.no-favorite-message--show {
+  display: initial;
+}
+
 .card {
   background-color: white;
   border-radius: 4px;

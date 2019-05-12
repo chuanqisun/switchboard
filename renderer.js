@@ -20,6 +20,7 @@ const viewCarousel = document.getElementById('view-carousel');
 const toolbar = document.getElementById('toolbar');
 const scrollAreas = document.getElementsByClassName('js-scroll-area');
 const loadingIndicator = document.getElementById('loading-indicator');
+const noFavoriteMessage = document.getElementById('no-favorite-message');
 
 // Handle DOM events
 signInButton.onclick = () => ipcRenderer.send('trySignIn');
@@ -54,6 +55,7 @@ ipcRenderer.once('onEnvironmentsAvailable', (event, {environments, userSettings}
   allEnvironments.innerHTML = renderAllEnvironments({environments, userSettings, animateEnter: true});
   favoriteEnvironments.innerHTML = renderFavoriteEnvironments({environments, userSettings, animateEnter: true});
   
+  updateNoFavoriteMessage({userSettings});
   initializeToggle({userSettings});
   initializeCarousel();
 
@@ -62,6 +64,7 @@ ipcRenderer.once('onEnvironmentsAvailable', (event, {environments, userSettings}
 
 ipcRenderer.on('onFavoritesChange', (event, {userSettings}) => {
   updateAllEnvironments({userSettings});
+  updateNoFavoriteMessage({userSettings});
 
   viewToggle.dataset.selectedOption === 'favorites' ?
     updateFavoriteEnvironments({userSettings}) :
@@ -133,6 +136,14 @@ function updateFavoriteEnvironments({userSettings}) {
       unFavoritedCard.classList.add('card--animate-exit');
     }
   });
+}
+
+function updateNoFavoriteMessage({userSettings}) {
+  if (userSettings.favorites.length > 0) {
+    noFavoriteMessage.classList.remove('no-favorite-message--show')
+  } else {
+    noFavoriteMessage.classList.add('no-favorite-message--show')
+  }
 }
 
 function renderEnvironment({environment, userSettings, animateEnter}) {
