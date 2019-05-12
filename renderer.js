@@ -9,21 +9,23 @@ const ChromeBuilder = new Builder().forBrowser('chrome');
 
 // DOM elements
 const body = document.querySelector('body');
-const signInButton = document.querySelector('#sign-in');
-const signOutButton = document.querySelector('#sign-out');
-const minimizeButton = document.querySelector('#minimize');
-const closeButton = document.querySelector('#close');
-const environmentList = document.querySelector('#environments');
-const viewToggle = document.querySelector('#view-toggle');
-const toolbar = document.querySelector('#toolbar');
-const scrollArea = document.querySelector('#scroll-area');
+const signInButton = document.getElementById('sign-in');
+const signOutButton = document.getElementById('sign-out');
+const minimizeButton = document.getElementById('minimize');
+const closeButton = document.getElementById('close');
+const allEnvironments = document.getElementById('all-environments');
+const favoriteEnvironments = document.getElementById('favorite-environments');
+const viewToggle = document.getElementById('view-toggle');
+const viewCarousel = document.getElementById('view-carousel');
+const toolbar = document.getElementById('toolbar');
+const scrollAreas = document.getElementsByClassName('js-scroll-area');
 
 // Handle DOM events
 signInButton.onclick = () => ipcRenderer.send('trySignIn');
 signOutButton.onclick = () => ipcRenderer.send('trySignOut');
 minimizeButton.onclick = () => ipcRenderer.send('tryMinimize');
 closeButton.onclick = () => ipcRenderer.send('tryClose');
-environmentList.onclick = (event) => handleEnvironmentActions(event);
+allEnvironments.onclick = (event) => handleEnvironmentActions(event);
 viewToggle.onclick = () => handleViewToggle();
 
 
@@ -39,8 +41,8 @@ ipcRenderer.once('onSignInStatusUpdate', (event, isSignedIn) => {
 
 ipcRenderer.once('onEnvironmentsAvailable', (event, {environments, userSettings}) => {
   body.classList.add('environment-available');
-  environmentList.innerHTML = renderEnvironments(environments, userSettings);
-
+  allEnvironments.innerHTML = renderAllEnvironments(environments);
+  favoriteEnvironments.innerHTML = renderFavoriteEnvironments(environments, userSettings);
   
   createObserver();
 });
@@ -49,13 +51,14 @@ ipcRenderer.once('onEnvironmentsAvailable', (event, {environments, userSettings}
 ipcRenderer.send('getSignInStatus');
 
 // Render functions
-function renderEnvironments(environments, userSettings) {
+function renderAllEnvironments(environments) {
+  return environments.map(environment => renderEnvironment(environment, false)).join('');
+}
+
+function renderFavoriteEnvironments(environments, userSettings) {
   const favoriteEnvironments = environments.filter(environment => userSettings.favorites.includes(environment.appName));
 
-  return `
-  ${favoriteEnvironments.map(environment => renderEnvironment(environment, true)).join('')}
-  ${environments.map(environment => renderEnvironment(environment, false)).join('')}
-  `.trim();
+  return favoriteEnvironments.map(environment => renderEnvironment(environment, true)).join('');
 }
 
 function renderEnvironment(environment, isFavorite) {
@@ -117,38 +120,49 @@ function handleViewToggle() {
   const selectedOption = viewToggle.dataset.selectedOption;
   const options = [...viewToggle.children];
   const leftLabelWidth = options[0].offsetWidth;
+
+  // on first call, measure left label width
   if (!viewToggle.style.getPropertyValue('--indicator-width')) {
     viewToggle.style.setProperty('--indicator-width', `${leftLabelWidth}px`);
   }
 
-  options.forEach(option => {
-    if (option.dataset.option === selectedOption) {
-      delete option.dataset.selected;
-    } else {
-      option.dataset.selected = '';
-      viewToggle.dataset.selectedOption = option.dataset.option;
-      viewToggle.style.setProperty('--indicator-width', `${option.offsetWidth}px`);
-      viewToggle.style.setProperty('--indicator-translate', option === options[1] ? `${leftLabelWidth}px` : '0');
-    }
-  });
+  // update view toggle
+  const leavingOption = options.filter(option => option.dataset.option === selectedOption)[0];
+  const enteringOption = options.filter(option => option.dataset.option !== selectedOption)[0];
+  delete leavingOption.dataset.selected;
+  enteringOption.dataset.selected = '';
+
+  viewToggle.dataset.selectedOption = enteringOption.dataset.option;
+  viewToggle.style.setProperty('--indicator-width', `${enteringOption.offsetWidth}px`);
+  viewToggle.style.setProperty('--indicator-translate', enteringOption === options[1] ? `${leftLabelWidth}px` : '0');
+
+  // update carousel
+  const views = [...viewCarousel.querySelectorAll(`[data-option]`)];
+  const leavingView = views.filter(view => view.dataset.option === selectedOption)[0];
+  const enteringView = views.filter(view => view.dataset.option !== selectedOption)[0];
+
+  delete leavingView.dataset.selected;
+  enteringView.dataset.selected = '';
 }
 
 function createObserver() {
-  var observer;
+  [...scrollAreas].forEach(scrollArea => {
 
-  var options = {
-    root: scrollArea,
-    rootMargin: "0px",
-    threshold: 0,
-  };
+    const options = {
+      root: scrollArea,
+      rootMargin: "0px",
+      threshold: 0,
+    };
 
-  observer = new IntersectionObserver(e => {
-    if (e[0].isIntersecting) {
-      toolbar.classList.remove('toolbar--with-scroll');
-    } else {
-      toolbar.classList.add('toolbar--with-scroll');
-    }
-  }, options);
+    const observer = new IntersectionObserver(e => {
+      if (e[0].isIntersecting) {
+        toolbar.classList.remove('toolbar--with-scroll');
+      } else {
+        toolbar.classList.add('toolbar--with-scroll');
+      }
+    }, options);
 
-  observer.observe(document.getElementById('scroll-sentinel'));
+    observer.observe(scrollArea.querySelector('.js-scroll-sentinel'));
+  });
+
 }
