@@ -81,6 +81,7 @@ ipcRenderer.on('onFavoritesChange', async (event, {userSettings}) => {
   } else {
     favoriteEnvironments.innerHTML = renderFavoriteEnvironments({environments: cachedEnvironments, userSettings});
     updateNoFavoriteMessage({userSettings});
+    updateCarouselFocusTargets();
   }
 });
 
@@ -94,6 +95,8 @@ function initializeToggle({userSettings}) {
 
   if (!userSettings.favorites.length) {
     handleViewToggle();
+  } else {
+    updateCarouselFocusTargets();
   }
 }
 
@@ -101,6 +104,19 @@ function initializeCarousel() {
   setTimeout(() => {
     [...viewCarousel.children].forEach(child => child.dataset.canAnimate = '');
   }, 100); // without timeout the scroll bar will be part of the slide-in animation
+}
+
+function updateCarouselFocusTargets() {
+  // out of view buttons should not be focusable, assuming button is the only focusable element
+  [...viewCarousel.children].forEach(child => {
+    if (child.dataset.selected === undefined) {
+      const unreachableButtons = child.querySelectorAll('button');
+      [...unreachableButtons].forEach(button => button.tabIndex = '-1');
+    } else {
+      const unreachableButtons = child.querySelectorAll('button');
+      [...unreachableButtons].forEach(button => button.tabIndex = '0');
+    }
+  });
 }
 
 function renderAllEnvironments({environments, userSettings, animateEnter}) {
@@ -258,6 +274,9 @@ function handleViewToggle() {
 
   delete leavingView.dataset.selected;
   enteringView.dataset.selected = '';
+  updateCarouselFocusTargets();
+  
+  // reset scroll
   enteringView.scrollTop = 0;
   toolbar.classList.remove('toolbar--with-scroll');
 }
