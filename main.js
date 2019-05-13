@@ -1,4 +1,4 @@
-const {app, BrowserWindow, ipcMain, globalShortcut, dialog, nativeImage} = require('electron')
+const {app, BrowserWindow, ipcMain, globalShortcut} = require('electron')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -73,6 +73,21 @@ ipcMain.on('getEnvironments', async (event) => {
   event.sender.send('onEnvironmentsAvailable', {environments, userSettings});
 });
 
+ipcMain.on('checkMetadata', async (event) => {
+  const { getMetadata } = require('./helpers/metadata');
+  const metadata = await getMetadata();
+  const clientProfile = {
+    appVersion: app.getVersion(),
+    platform: process.platform,
+  }
+
+  event.sender.send('onMetadataAvailable', {metadata, clientProfile});
+});
+
+ipcMain.on('tryDownloadUpdate', (event, {metadata, clientProfile}) => {
+  showDownloadPrompt({metadata, clientProfile});
+});
+
 ipcMain.on('addFavorite', async (event, {appId}) => {
   const { addFavorite, saveUserSettings } = require('./helpers/user-settings');
   const userSettings = addFavorite(appId);
@@ -99,20 +114,11 @@ function editEnvironments() {
 }
 
 function showAbout() {
-  const path = require('path');
-  const iconPath = path.join(__dirname, 'build/icon.png');
-  const messageBoxIcon = nativeImage.createFromPath(iconPath);
+  const { showAbout } = require('./helpers/dialogs');
+  showAbout();
+}
 
-  dialog.showMessageBox({
-    buttons: ['Close'],
-    title: 'Switchboard',
-    message: `
-Version ${app.getVersion()}
------------------
-Node ${process.versions.node}
-Chrome ${process.versions.chrome}
-Electron ${process.versions.electron}
-    `.trim(),
-    icon: messageBoxIcon,
-  });
+function showDownloadPrompt({metadata, clientProfile}) {
+  const { showDownloadPrompt } = require('./helpers/dialogs');
+  showDownloadPrompt({metadata, clientProfile});
 }

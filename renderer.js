@@ -21,6 +21,7 @@ const toolbar = document.getElementById('toolbar');
 const scrollAreas = document.getElementsByClassName('js-scroll-area');
 const loadingIndicator = document.getElementById('loading-indicator');
 const noFavoriteMessage = document.getElementById('no-favorite-message');
+const appTitleButton = document.getElementById('app-title-button');
 
 // Handle DOM events
 signInButton.onclick = () => ipcRenderer.send('trySignIn');
@@ -38,9 +39,18 @@ ipcRenderer.once('onSignInStatusUpdate', (event, isSignedIn) => {
     body.classList.add('post-sign-in');
     loadingIndicator.dataset.state = 'get-environments'
     ipcRenderer.send('getEnvironments');
+    ipcRenderer.send('checkMetadata');
   } else {
     loadingIndicator.dataset.state = 'done';
     body.classList.add('pre-sign-in');
+  }
+});
+
+ipcRenderer.once('onMetadataAvailable', (event, {metadata, clientProfile}) => {
+  if (!metadata.supportedAppVersions.includes(clientProfile.appVersion)) {
+    appTitleButton.dataset.hasUpdate = '';
+    appTitleButton.title = 'A new version is avaialbe. Click to download.';
+    appTitleButton.onclick = () => ipcRenderer.send('tryDownloadUpdate', {metadata, clientProfile})
   }
 });
 
