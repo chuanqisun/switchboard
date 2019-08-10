@@ -63,6 +63,7 @@ jobs:
           action: 'create'
           target: '$(Build.SourceVersion)'
           tagSource: 'auto'
+          tag: 'vX.Y.Z'
           title: 'vX.Y.Z'
           releaseNotesSource: 'input'
           releaseNotes: |
