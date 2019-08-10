@@ -73,7 +73,6 @@ jobs:
           assets: '.\github-release-assets\**\*'
           releaseNotesSource: 'input'
           releaseNotes: |
-            === This is an auto-generator release ===
-            === Release me with release notes ===
+            === Replace me with release notes ===
           isDraft: true
           addChangeLog: false
