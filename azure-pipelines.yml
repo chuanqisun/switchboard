@@ -24,6 +24,7 @@ jobs:
   #       inputs:
   #         Contents: 'dist/*.dmg'
   #         TargetFolder: 'drop'
+  #         flattenFolders: true
   #     - task: PublishPipelineArtifact@0
   #       inputs:
   #         artifactName: 'drop-osx'
@@ -69,6 +70,5 @@ jobs:
           releaseNotes: |
             === This is an auto-generator release ===
             === Release me with release notes ===
-          assets: 'drop\*'
           isDraft: true
           addChangeLog: false
