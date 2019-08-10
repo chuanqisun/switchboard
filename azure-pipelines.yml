@@ -43,20 +43,12 @@ jobs:
       - task: CopyFiles@2
         inputs:
           Contents: 'dist\*.exe'
-          TargetFolder: 'drop'
+          TargetFolder: '$(Build.ArtifactStagingDirectory)'
           flattenFolders: true
-      - task: PublishPipelineArtifact@0
-        inputs:
-          artifactName: 'drop-win'
-          targetPath: drop
-
-  - job: github_release
-    dependsOn:
-      # - osx_build
-      - win_build
-    pool:
-      vmImage: 'windows-2019'
-    steps:
+      # - task: PublishPipelineArtifact@0
+      #   inputs:
+      #     artifactName: 'drop-win'
+      #     targetPath: drop
       - task: GitHubRelease@0
         inputs:
           gitHubConnection: 'chuanqisun'
@@ -72,3 +64,25 @@ jobs:
             === Release me with release notes ===
           isDraft: true
           addChangeLog: false
+  # - job: github_release
+  #   dependsOn:
+  #     - osx_build
+  #     - win_build
+  #   pool:
+  #     vmImage: 'windows-2019'
+  #   steps:
+  #     - task: GitHubRelease@0
+  #       inputs:
+  #         gitHubConnection: 'chuanqisun'
+  #         repositoryName: '$(Build.Repository.Name)'
+  #         action: 'create'
+  #         target: '$(Build.SourceVersion)'
+  #         tagSource: 'manual'
+  #         tag: 'vX.Y.Z'
+  #         title: 'vX.Y.Z'
+  #         releaseNotesSource: 'input'
+  #         releaseNotes: |
+  #           === This is an auto-generator release ===
+  #           === Release me with release notes ===
+  #         isDraft: true
+  #         addChangeLog: false
