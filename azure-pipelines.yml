@@ -9,42 +9,41 @@ trigger:
 jobs:
   - job: osx_build
     pool:
-      vmImage: 'macOS-10.14'
+      vmImage: "macOS-10.14"
 
     steps:
       - task: NodeTool@0
         inputs:
-          versionSpec: '10.x'
-        displayName: 'Install Node.js'
+          versionSpec: "10.x"
+        displayName: "Install Node.js"
       - script: |
           npm install
-          npm run build
           npm run dist:osx
-        displayName: 'npm install, build, pack, and dist'
+        displayName: "npm install, pack, and dist"
       - task: CopyFiles@2
         inputs:
-          Contents: 'dist/*.dmg'
-          TargetFolder: 'drop'
+          Contents: "dist/*.dmg"
+          TargetFolder: "drop"
       - task: PublishPipelineArtifact@0
         inputs:
-          artifactName: 'drop-osx'
+          artifactName: "drop-osx"
           targetPath: drop
 
   - job: win_build
     pool:
-      vmImage: 'windows-2019'
+      vmImage: "windows-2019"
     steps:
       - task: NodeTool@0
         inputs:
-          versionSpec: '10.x'
-        displayName: 'Install Node.js'
-      - script: npm install && npm run build && npm run dist:win
-        displayName: 'npm install, build, pack, and dist'
+          versionSpec: "10.x"
+        displayName: "Install Node.js"
+      - script: npm install && npm run dist:win
+        displayName: "npm install, pack, and dist"
       - task: CopyFiles@2
         inputs:
           Contents: 'dist\*.exe'
-          TargetFolder: 'drop'
+          TargetFolder: "drop"
       - task: PublishPipelineArtifact@0
         inputs:
-          artifactName: 'drop-win'
+          artifactName: "drop-win"
           targetPath: drop
