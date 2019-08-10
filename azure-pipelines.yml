@@ -74,7 +74,7 @@ jobs:
       - task: DownloadPipelineArtifact@2
         inputs:
           buildType: 'current'
-          targetPath: '$(Build.ArtifactStagingDirectory)'
+          targetPath: 'github-asset'
       - task: GitHubRelease@0
         inputs:
           gitHubConnection: 'chuanqisun'
@@ -84,7 +84,7 @@ jobs:
           tagSource: 'manual'
           tag: 'vX.Y.Z'
           title: 'vX.Y.Z'
-          assets: '$(Build.ArtifactStagingDirectory)\*'
+          assets: 'github-asset\*.*'
           releaseNotesSource: 'input'
           releaseNotes: |
             === This is an auto-generator release ===
