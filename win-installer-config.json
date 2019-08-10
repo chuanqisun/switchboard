@@ -1,7 +1,0 @@
-{
-  "src": ".temp/switchboard-win32-x64",
-  "dest": ".dist",
-  "icon": "build/icon.ico",
-  "animation": "build/installer.gif",
-  "certificateFile": "build/switchboard-cert.pfx"
-}

@@ -1,14 +1,13 @@
 {
   "name": "switchboard",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Instanly launch multiple Dynamics demo environments",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "build:win": "electron-packager . --out=.temp --icon=build/icon.ico",
-    "build:osx": "electron-packager . --out=.temp --platform=darwin --arch=x64 --icon=build/icon.icns",
-    "pack:win": "electron-installer-windows --config win-installer-config.json",
-    "pack:osx": "electron-installer-dmg .temp/switchboard-darwin-x64/switchboard.app switchboard --out=.dist --icon=build/icon.icns"
+    "pack": "electron-builder --dir",
+    "dist:win": "electron-builder --windows --publish=never",
+    "dist:osx": "electron-builder --macos --publish=never"
   },
   "repository": "https://github.com/chuanqisun/switchboard",
   "keywords": [],
@@ -16,12 +15,16 @@
   "license": "MIT",
   "devDependencies": {
     "electron": "^6.0.1",
-    "electron-installer-dmg": "^3.0.0",
-    "electron-installer-windows": "^2.0.0",
-    "electron-packager": "^14.0.4"
+    "electron-builder": "^21.2.0"
   },
   "dependencies": {
     "chromedriver": "76.0.0",
     "selenium-webdriver": "^4.0.0-alpha.4"
+  },
+  "build": {
+    "artifactName": "${name}-${version}.${ext}",
+    "productName": "Switchboard",
+    "appId": "com.switchboard.app",
+    "asar": false
   }
 }
