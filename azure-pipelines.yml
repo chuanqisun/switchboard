@@ -47,3 +47,26 @@ jobs:
         inputs:
           artifactName: 'drop-win'
           targetPath: drop
+
+  - job: github_release
+    dependsOn:
+    - osx_build
+    - win_build
+    pool:
+      vmImage: 'windows-2019'
+    steps:
+    - task: GitHubRelease@0
+      inputs:
+        gitHubConnection: 'chuanqisun'
+        repositoryName: '$(Build.Repository.Name)'
+        action: 'create'
+        target: '$(Build.SourceVersion)'
+        tagSource: 'auto'
+        title: 'vX.Y.Z'
+        releaseNotesSource: 'input'
+        releaseNotes: |
+          === This is an auto-generator release ===
+          === Release me with release notes ===
+        assets: 'drop/*'
+        isDraft: true
+        addChangeLog: false
