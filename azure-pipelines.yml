@@ -62,7 +62,7 @@ jobs:
           repositoryName: '$(Build.Repository.Name)'
           action: 'create'
           target: '$(Build.SourceVersion)'
-          tagSource: 'auto'
+          tagSource: 'manual'
           tag: 'vX.Y.Z'
           title: 'vX.Y.Z'
           releaseNotesSource: 'input'
