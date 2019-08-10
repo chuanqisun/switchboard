@@ -84,6 +84,7 @@ jobs:
           tagSource: 'manual'
           tag: 'vX.Y.Z'
           title: 'vX.Y.Z'
+          assets: '$(Build.ArtifactStagingDirectory)\*'
           releaseNotesSource: 'input'
           releaseNotes: |
             === This is an auto-generator release ===
