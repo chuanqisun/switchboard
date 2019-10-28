@@ -1,6 +1,6 @@
 {
   "name": "switchboard",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Instanly launch multiple Dynamics demo environments",
   "main": "main.js",
   "scripts": {
@@ -18,7 +18,7 @@
     "electron-builder": "^21.2.0"
   },
   "dependencies": {
-    "chromedriver": "77.0.0",
+    "chromedriver": "78.0.1",
     "selenium-webdriver": "^4.0.0-alpha.5"
   },
   "build": {
