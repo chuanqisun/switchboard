@@ -1,30 +1,9 @@
 const { BrowserWindow } = require('electron');
 const systemConfig = require('../system-config');
+const { getJsonFromSharepointUrl } = require('./sharepoint');
 
 async function getEnvironments() {
-  return new Promise((resolve, reject) => {
-    console.log('[environment] get environment: start');
-    const tempWindow = new BrowserWindow({
-      width: 800,
-      height: 600,
-      show: false,
-    });
-
-    tempWindow.loadURL(systemConfig.getEnvironmentsEndpoint);
-
-    tempWindow.webContents.on('dom-ready', async () => {
-      const result = await tempWindow.webContents.executeJavaScript(`document.querySelector('pre').innerText`);
-      tempWindow.destroy();
-      try {
-        const resultObject = JSON.parse(result);
-        resolve(resultObject);
-      } catch (e) {
-        console.error(e);
-        resolve({});
-      }
-      console.log('[environment] get environment: json fetched');
-    });
-  });
+  return getJsonFromSharepointUrl(systemConfig.getEnvironmentsEndpoint);
 }
 
 async function editEnvironments() {
