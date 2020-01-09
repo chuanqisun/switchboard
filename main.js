@@ -102,6 +102,27 @@ ipcMain.on('removeFavorite', async (event, { appId }) => {
   saveUserSettings(userSettings);
 });
 
+ipcMain.on('download-chromium', async (event, { revision }) => {
+  const download = require('download-chromium');
+  const os = require('os');
+  const path = require('path');
+  const userDataPath = app.getPath('userData');
+  console.log(userDataPath);
+  console.log('will download ' + revision);
+
+  download({
+    revision,
+    installPath: path.join(userDataPath, '/local-chromium'),
+    onProgress: ({ percent }) => {
+      console.log(percent);
+      event.sender.send('onDownloadProgress', { percent });
+    },
+  }).then(exec => {
+    console.log(exec);
+    event.sender.send('onDownloadComplete', { exec });
+  });
+});
+
 async function signOut() {
   const { signOut } = require('./helpers/account');
   await signOut();

@@ -12,17 +12,17 @@ async function getMetadata() {
 
     tempWindow.loadURL(systemConfig.getMetadataEndpoint);
 
-    tempWindow.webContents.on('dom-ready', () => {
-      tempWindow.webContents.executeJavaScript(`document.querySelector('pre').innerText`, undefined, result => {
-        tempWindow.destroy();
-        try {
-          resolve(JSON.parse(result));
-        } catch (e) {
-          console.error(e);
-          resolve({});
-        }
-        console.log('[metadata] get metadata: json fetched');
-      });
+    tempWindow.webContents.on('dom-ready', async () => {
+      const result = await tempWindow.webContents.executeJavaScript(`document.querySelector('pre').innerText`);
+      tempWindow.destroy();
+      try {
+        const resultObject = JSON.parse(result);
+        resolve(resultObject);
+      } catch (e) {
+        console.error(e);
+        resolve({});
+      }
+      console.log('[metadata] get metadata: json fetched');
     });
   });
 }
