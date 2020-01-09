@@ -22,34 +22,25 @@ Electron ${process.versions.electron}
 function showDownloadPrompt({ metadata, clientProfile }) {
   const latestVersion = metadata.supportedAppVersions[metadata.supportedAppVersions.length - 1];
   const currentVersion = clientProfile.appVersion;
+  const systemConfig = require('../system-config');
 
-  dialog.showMessageBox(
-    {
-      buttons: ['Download now', 'Maybe later'],
-      title: 'Update available - Switchboard',
-      message: `
-Switchboard ${latestVersion} is ready for download.
-    `.trim(),
-      detail: `Your current version is ${currentVersion}.`,
-      icon: messageBoxIcon,
+  dialog
+    .showMessageBox({
+      title: 'Switchboard',
+      type: 'question',
+      message: `Updates are available`,
+      detail: `The latest version is ${latestVersion}. Your current version is ${currentVersion}.`,
+      defaultId: 0,
       cancelId: 1,
-    },
-    response => {
+      noLink: true,
+      buttons: ['Download from GitHub', 'Cancel'],
+    })
+    .then(({ response }) => {
       if (response === 0) {
-        if (clientProfile.platform === 'win32') {
-          openDownloadPage(metadata.win32DownloadUrl);
-        } else if (clientProfile.platform === 'darwin') {
-          openDownloadPage(metadata.osxDownloadUrl);
-        }
+        const { shell } = require('electron');
+        shell.openExternal(systemConfig.latestReleaseUrl);
       }
-    }
-  );
-}
-
-function openDownloadPage(url) {
-  const { shell } = require('electron');
-
-  shell.openExternal(url);
+    });
 }
 
 module.exports = {
