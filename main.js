@@ -1,11 +1,11 @@
-const {app, BrowserWindow, ipcMain, globalShortcut} = require('electron')
+const { app, BrowserWindow, ipcMain, globalShortcut } = require('electron');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let mainWindow
+let mainWindow;
 
-function createWindow () {
-  const {screen} = require('electron');
+function createWindow() {
+  const { screen } = require('electron');
   const display = screen.getPrimaryDisplay();
   const width = display.bounds.width;
   mainWindow = new BrowserWindow({
@@ -15,26 +15,26 @@ function createWindow () {
     y: 16,
     frame: false,
     webPreferences: {
-      nodeIntegration: true
-    }
-  })
+      nodeIntegration: true,
+    },
+  });
 
-  mainWindow.loadFile('index.html')
+  mainWindow.loadFile('index.html');
 
-  mainWindow.on('closed', function () {
-    mainWindow = null
-  })
+  mainWindow.on('closed', function() {
+    mainWindow = null;
+  });
 }
 
-app.on('ready', createWindow)
+app.on('ready', createWindow);
 
-app.on('window-all-closed', function () {
-  if (process.platform !== 'darwin') app.quit()
-})
+app.on('window-all-closed', function() {
+  if (process.platform !== 'darwin') app.quit();
+});
 
-app.on('activate', function () {
-  if (mainWindow === null) createWindow()
-})
+app.on('activate', function() {
+  if (mainWindow === null) createWindow();
+});
 
 // Custom logic
 app.on('ready', () => {
@@ -43,21 +43,21 @@ app.on('ready', () => {
   globalShortcut.register('CommandOrControl+H', () => mainWindow.isFocused() && showAbout());
 });
 
-ipcMain.on('getSignInStatus', async (event) => {
+ipcMain.on('getSignInStatus', async event => {
   const { checkSignInStatus } = require('./helpers/account');
   const isSignedIn = await checkSignInStatus();
   event.sender.send('onSignInStatusUpdate', isSignedIn);
 });
 
-ipcMain.on('tryMinimize', (event) => {
+ipcMain.on('tryMinimize', event => {
   mainWindow.minimize();
 });
 
-ipcMain.on('tryClose', (event) => {
+ipcMain.on('tryClose', event => {
   mainWindow.close();
 });
 
-ipcMain.on('trySignIn', async (event) => {
+ipcMain.on('trySignIn', async event => {
   const { signIn } = require('./helpers/account');
   await signIn(mainWindow);
   mainWindow.reload();
@@ -65,40 +65,40 @@ ipcMain.on('trySignIn', async (event) => {
 
 ipcMain.on('trySignOut', signOut);
 
-ipcMain.on('getEnvironments', async (event) => {
+ipcMain.on('getEnvironments', async event => {
   const { ensureUserSettings } = require('./helpers/user-settings');
   const { getEnvironments } = require('./helpers/environments');
   const [userSettings, environments] = await Promise.all([ensureUserSettings(), getEnvironments()]);
-  
-  event.sender.send('onEnvironmentsAvailable', {environments, userSettings});
+
+  event.sender.send('onEnvironmentsAvailable', { environments, userSettings });
 });
 
-ipcMain.on('checkMetadata', async (event) => {
+ipcMain.on('checkMetadata', async event => {
   const { getMetadata } = require('./helpers/metadata');
   const metadata = await getMetadata();
   const clientProfile = {
     appVersion: app.getVersion(),
     platform: process.platform,
-  }
+  };
 
-  event.sender.send('onMetadataAvailable', {metadata, clientProfile});
+  event.sender.send('onMetadataAvailable', { metadata, clientProfile });
 });
 
-ipcMain.on('tryDownloadUpdate', (event, {metadata, clientProfile}) => {
-  showDownloadPrompt({metadata, clientProfile});
+ipcMain.on('tryDownloadUpdate', (event, { metadata, clientProfile }) => {
+  showDownloadPrompt({ metadata, clientProfile });
 });
 
-ipcMain.on('addFavorite', async (event, {appId}) => {
+ipcMain.on('addFavorite', async (event, { appId }) => {
   const { addFavorite, saveUserSettings } = require('./helpers/user-settings');
   const userSettings = addFavorite(appId);
-  event.sender.send('onFavoritesChange', {userSettings});
+  event.sender.send('onFavoritesChange', { userSettings });
   saveUserSettings(userSettings);
 });
 
-ipcMain.on('removeFavorite', async (event, {appId}) => {
+ipcMain.on('removeFavorite', async (event, { appId }) => {
   const { removeFavorite, saveUserSettings } = require('./helpers/user-settings');
   const userSettings = removeFavorite(appId);
-  event.sender.send('onFavoritesChange', {userSettings});
+  event.sender.send('onFavoritesChange', { userSettings });
   saveUserSettings(userSettings);
 });
 
@@ -118,7 +118,7 @@ function showAbout() {
   showAbout();
 }
 
-function showDownloadPrompt({metadata, clientProfile}) {
+function showDownloadPrompt({ metadata, clientProfile }) {
   const { showDownloadPrompt } = require('./helpers/dialogs');
-  showDownloadPrompt({metadata, clientProfile});
+  showDownloadPrompt({ metadata, clientProfile });
 }

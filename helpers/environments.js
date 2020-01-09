@@ -1,4 +1,4 @@
-const {BrowserWindow} = require('electron')
+const { BrowserWindow } = require('electron');
 const systemConfig = require('../system-config');
 
 async function getEnvironments() {
@@ -9,7 +9,7 @@ async function getEnvironments() {
       height: 600,
       show: false,
     });
-    
+
     tempWindow.loadURL(systemConfig.getEnvironmentsEndpoint);
 
     tempWindow.webContents.on('dom-ready', () => {
@@ -22,15 +22,15 @@ async function getEnvironments() {
           resolve({});
         }
         console.log('[environment] get environment: json fetched');
-      })
+      });
     });
   });
 }
 
 async function editEnvironments() {
-  const {screen} = require('electron');
+  const { screen } = require('electron');
   const display = screen.getPrimaryDisplay();
-  const {width, height} = display.bounds;
+  const { width, height } = display.bounds;
 
   const tempWindow = new BrowserWindow({
     width: 800,
@@ -38,7 +38,7 @@ async function editEnvironments() {
     x: Math.max(16, width - 16 - 420 - 16 - 800),
     y: 16,
   });
-  
+
   tempWindow.setMenu(null);
   tempWindow.loadURL(systemConfig.editEnvironmentsEndpoint);
 }
@@ -46,4 +46,4 @@ async function editEnvironments() {
 module.exports = {
   getEnvironments,
   editEnvironments,
-}
+};

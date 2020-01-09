@@ -1,4 +1,4 @@
-const {app} = require('electron')
+const { app } = require('electron');
 const fs = require('fs');
 const path = require('path');
 const systemConfig = require('../system-config');
@@ -26,8 +26,8 @@ async function ensureUserSettings() {
 
 function getDefaultUserSettings() {
   return {
-    favorites: []
-  }
+    favorites: [],
+  };
 }
 
 function addFavorite(appId) {
@@ -66,4 +66,4 @@ module.exports = {
   addFavorite,
   removeFavorite,
   saveUserSettings,
-}
+};

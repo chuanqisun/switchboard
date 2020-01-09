@@ -1,4 +1,4 @@
-const {BrowserWindow} = require('electron')
+const { BrowserWindow } = require('electron');
 const systemConfig = require('../system-config');
 
 async function getMetadata() {
@@ -9,7 +9,7 @@ async function getMetadata() {
       height: 600,
       show: false,
     });
-    
+
     tempWindow.loadURL(systemConfig.getMetadataEndpoint);
 
     tempWindow.webContents.on('dom-ready', () => {
@@ -22,11 +22,11 @@ async function getMetadata() {
           resolve({});
         }
         console.log('[metadata] get metadata: json fetched');
-      })
+      });
     });
   });
 }
 
 module.exports = {
   getMetadata,
-}
+};

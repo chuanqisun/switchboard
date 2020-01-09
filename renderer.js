@@ -1,10 +1,10 @@
-const {ipcRenderer} = require('electron')
+const { ipcRenderer } = require('electron');
 const systemConfig = require('./system-config');
 
 // Webdriver
 /* require this up front or the 1st launch will be laggy */
 require('chromedriver');
-const {Builder, By, Key, until} = require('selenium-webdriver');
+const { Builder, By, Key, until } = require('selenium-webdriver');
 const ChromeBuilder = new Builder().forBrowser('chrome');
 
 // DOM elements
@@ -28,16 +28,15 @@ signInButton.onclick = () => ipcRenderer.send('trySignIn');
 signOutButton.onclick = () => ipcRenderer.send('trySignOut');
 minimizeButton.onclick = () => ipcRenderer.send('tryMinimize');
 closeButton.onclick = () => ipcRenderer.send('tryClose');
-allEnvironments.onclick = (event) => handleEnvironmentActions(event);
-favoriteEnvironments.onclick = (event) => handleEnvironmentActions(event);
+allEnvironments.onclick = event => handleEnvironmentActions(event);
+favoriteEnvironments.onclick = event => handleEnvironmentActions(event);
 viewToggle.onclick = () => handleViewToggle();
-
 
 // Handle IPC events
 ipcRenderer.once('onSignInStatusUpdate', (event, isSignedIn) => {
   if (isSignedIn) {
     body.classList.add('post-sign-in');
-    loadingIndicator.dataset.state = 'get-environments'
+    loadingIndicator.dataset.state = 'get-environments';
     ipcRenderer.send('getEnvironments');
     ipcRenderer.send('checkMetadata');
   } else {
@@ -46,41 +45,41 @@ ipcRenderer.once('onSignInStatusUpdate', (event, isSignedIn) => {
   }
 });
 
-ipcRenderer.once('onMetadataAvailable', (event, {metadata, clientProfile}) => {
+ipcRenderer.once('onMetadataAvailable', (event, { metadata, clientProfile }) => {
   if (!metadata.supportedAppVersions.includes(clientProfile.appVersion)) {
     appTitleButton.dataset.hasUpdate = '';
     appTitleButton.title = 'A new version is avaialbe. Click to download.';
-    appTitleButton.onclick = () => ipcRenderer.send('tryDownloadUpdate', {metadata, clientProfile})
+    appTitleButton.onclick = () => ipcRenderer.send('tryDownloadUpdate', { metadata, clientProfile });
   }
 });
 
 // Cache environment list for entire session
 let cachedEnvironments = [];
 
-ipcRenderer.once('onEnvironmentsAvailable', (event, {environments, userSettings}) => {
+ipcRenderer.once('onEnvironmentsAvailable', (event, { environments, userSettings }) => {
   body.classList.add('environment-available');
   loadingIndicator.dataset.state = 'done';
 
   cachedEnvironments = environments;
-  allEnvironments.innerHTML = renderAllEnvironments({environments, userSettings, animateEnter: true});
-  favoriteEnvironments.innerHTML = renderFavoriteEnvironments({environments, userSettings, animateEnter: true});
-  
-  updateNoFavoriteMessage({userSettings});
-  initializeToggle({userSettings});
+  allEnvironments.innerHTML = renderAllEnvironments({ environments, userSettings, animateEnter: true });
+  favoriteEnvironments.innerHTML = renderFavoriteEnvironments({ environments, userSettings, animateEnter: true });
+
+  updateNoFavoriteMessage({ userSettings });
+  initializeToggle({ userSettings });
   initializeCarousel();
 
   scrollObservers = createObserver();
 });
 
-ipcRenderer.on('onFavoritesChange', async (event, {userSettings}) => {
-  updateAllEnvironments({userSettings});
+ipcRenderer.on('onFavoritesChange', async (event, { userSettings }) => {
+  updateAllEnvironments({ userSettings });
 
   if (viewToggle.dataset.selectedOption === 'favorites') {
-    await updateFavoriteEnvironments({userSettings});
-    updateNoFavoriteMessage({userSettings});
+    await updateFavoriteEnvironments({ userSettings });
+    updateNoFavoriteMessage({ userSettings });
   } else {
-    favoriteEnvironments.innerHTML = renderFavoriteEnvironments({environments: cachedEnvironments, userSettings});
-    updateNoFavoriteMessage({userSettings});
+    favoriteEnvironments.innerHTML = renderFavoriteEnvironments({ environments: cachedEnvironments, userSettings });
+    updateNoFavoriteMessage({ userSettings });
     updateCarouselFocusTargets();
   }
 });
@@ -89,9 +88,9 @@ ipcRenderer.on('onFavoritesChange', async (event, {userSettings}) => {
 ipcRenderer.send('getSignInStatus');
 
 // Render functions
-function initializeToggle({userSettings}) {
+function initializeToggle({ userSettings }) {
   const selectedOptions = document.querySelectorAll(`[data-option="${viewToggle.dataset.selectedOption}"]`);
-  [...selectedOptions].forEach(option => option.dataset.selected = '');
+  [...selectedOptions].forEach(option => (option.dataset.selected = ''));
 
   if (!userSettings.favorites.length) {
     handleViewToggle();
@@ -102,7 +101,7 @@ function initializeToggle({userSettings}) {
 
 function initializeCarousel() {
   setTimeout(() => {
-    [...viewCarousel.children].forEach(child => child.dataset.canAnimate = '');
+    [...viewCarousel.children].forEach(child => (child.dataset.canAnimate = ''));
   }, 100); // without timeout the scroll bar will be part of the slide-in animation
 }
 
@@ -111,25 +110,25 @@ function updateCarouselFocusTargets() {
   [...viewCarousel.children].forEach(child => {
     if (child.dataset.selected === undefined) {
       const unreachableButtons = child.querySelectorAll('button');
-      [...unreachableButtons].forEach(button => button.tabIndex = '-1');
+      [...unreachableButtons].forEach(button => (button.tabIndex = '-1'));
     } else {
       const unreachableButtons = child.querySelectorAll('button');
-      [...unreachableButtons].forEach(button => button.tabIndex = '0');
+      [...unreachableButtons].forEach(button => (button.tabIndex = '0'));
     }
   });
 }
 
-function renderAllEnvironments({environments, userSettings, animateEnter}) {
-  return environments.map(environment => renderEnvironment({environment, userSettings, animateEnter})).join('');
+function renderAllEnvironments({ environments, userSettings, animateEnter }) {
+  return environments.map(environment => renderEnvironment({ environment, userSettings, animateEnter })).join('');
 }
 
-function renderFavoriteEnvironments({environments, userSettings, animateEnter}) {
+function renderFavoriteEnvironments({ environments, userSettings, animateEnter }) {
   const favoriteEnvironments = environments.filter(environment => userSettings.favorites.includes(environment.appId));
 
-  return favoriteEnvironments.map(environment => renderEnvironment({environment, userSettings, animateEnter})).join('');
+  return favoriteEnvironments.map(environment => renderEnvironment({ environment, userSettings, animateEnter })).join('');
 }
 
-function updateAllEnvironments({userSettings}) {
+function updateAllEnvironments({ userSettings }) {
   const unFavorited = allEnvironments.querySelectorAll(`[data-action="addFavorite"]`);
   const favorited = allEnvironments.querySelectorAll(`[data-action="removeFavorite"]`);
 
@@ -150,10 +149,10 @@ function updateAllEnvironments({userSettings}) {
   });
 }
 
-async function updateFavoriteEnvironments({userSettings}) {
+async function updateFavoriteEnvironments({ userSettings }) {
   return new Promise(resolve => {
     const favorited = favoriteEnvironments.querySelectorAll(`[data-action="removeFavorite"]`);
-    
+
     [...favorited].forEach(item => {
       if (!userSettings.favorites.includes(item.dataset.appId)) {
         const unFavoritedCard = favoriteEnvironments.querySelector(`.js-card[data-app-id="${item.dataset.appId}"]`);
@@ -169,15 +168,15 @@ async function updateFavoriteEnvironments({userSettings}) {
   });
 }
 
-function updateNoFavoriteMessage({userSettings}) {
+function updateNoFavoriteMessage({ userSettings }) {
   if (userSettings.favorites.length > 0) {
-    noFavoriteMessage.classList.remove('no-favorite-message--show')
+    noFavoriteMessage.classList.remove('no-favorite-message--show');
   } else {
-    noFavoriteMessage.classList.add('no-favorite-message--show')
+    noFavoriteMessage.classList.add('no-favorite-message--show');
   }
 }
 
-function renderEnvironment({environment, userSettings, animateEnter}) {
+function renderEnvironment({ environment, userSettings, animateEnter }) {
   return `
   <div
     class="card js-card${animateEnter ? ' card--animation-enter' : ''}"
@@ -196,7 +195,9 @@ function renderEnvironment({environment, userSettings, animateEnter}) {
       </button>
     </div>
     <div class="card__actions">
-      ${environment.instances.map(instance => `
+      ${environment.instances
+        .map(instance =>
+          `
       <button
         class="button button--primary button--launch"
         data-action="launch"
@@ -205,7 +206,9 @@ function renderEnvironment({environment, userSettings, animateEnter}) {
         data-username="${instance.username}"
         data-password="${instance.password}"
       >${instance.type}</button>
-      `.trim()).join('')}
+      `.trim()
+        )
+        .join('')}
     </div>
   </div>
   `.trim();
@@ -217,16 +220,16 @@ async function handleEnvironmentActions(event) {
   if (!targetButton) return;
 
   if (targetButton.dataset.action === 'launch') {
-    const animationEndHandler = (e) => {
+    const animationEndHandler = e => {
       event.target.classList.remove('button--launching');
-      event.target.removeEventListener("animationend", animationEndHandler);
-    }
-    event.target.addEventListener("animationend", animationEndHandler);
+      event.target.removeEventListener('animationend', animationEndHandler);
+    };
+    event.target.addEventListener('animationend', animationEndHandler);
     window.setTimeout(() => {
       event.target.classList.add('button--launching');
-    },50);
+    }, 50);
 
-    let {url, username, password} = targetButton.dataset;
+    let { url, username, password } = targetButton.dataset;
     if (event.shiftKey) {
       url = systemConfig.trialAdminPortalUrl;
     }
@@ -240,12 +243,11 @@ async function handleEnvironmentActions(event) {
     await driver.wait(until.elementLocated(By.id('KmsiCheckboxField')));
     await driver.findElement(By.id('idSIButton9')).click();
   } else if (targetButton.dataset.action === 'addFavorite') {
-    ipcRenderer.send('addFavorite', {appId: targetButton.dataset.appId});
+    ipcRenderer.send('addFavorite', { appId: targetButton.dataset.appId });
   } else if (targetButton.dataset.action === 'removeFavorite') {
-    ipcRenderer.send('removeFavorite', {appId: targetButton.dataset.appId});
+    ipcRenderer.send('removeFavorite', { appId: targetButton.dataset.appId });
   }
 }
-
 
 function handleViewToggle() {
   const selectedOption = viewToggle.dataset.selectedOption;
@@ -275,7 +277,7 @@ function handleViewToggle() {
   delete leavingView.dataset.selected;
   enteringView.dataset.selected = '';
   updateCarouselFocusTargets();
-  
+
   // reset scroll
   enteringView.scrollTop = 0;
   toolbar.classList.remove('toolbar--with-scroll');
@@ -283,10 +285,9 @@ function handleViewToggle() {
 
 function createObserver() {
   [...scrollAreas].map(scrollArea => {
-
     const options = {
       root: scrollArea,
-      rootMargin: "0px",
+      rootMargin: '0px',
       threshold: 0,
     };
 
