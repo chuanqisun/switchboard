@@ -24,7 +24,6 @@
   "build": {
     "artifactName": "${name}-${version}.${ext}",
     "productName": "Switchboard",
-    "appId": "com.switchboard.app",
-    "asar": false
+    "appId": "com.switchboard.app"
   }
 }
