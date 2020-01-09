@@ -2,7 +2,8 @@ const puppeteer = require('puppeteer-core');
 const { ipcRenderer } = require('electron');
 
 const chromiumExecPromise = new Promise(resolve => {
-  ipcRenderer.send('download-chromium', { revision: 727529 });
+  // version comes from latest pupeeter release: https://github.com/puppeteer/puppeteer/releases
+  ipcRenderer.send('download-chromium', { revision: 706915 });
   ipcRenderer.on('onDownloadProgress', (event, { percent }) => {
     console.log(percent);
   });
@@ -13,7 +14,10 @@ const chromiumExecPromise = new Promise(resolve => {
     resolve(exec);
   });
 });
-chromiumExecPromise.then();
+
+async function initializeChromium() {
+  await chromiumExecPromise;
+}
 
 async function signInDynamicsUCApp(url, username, password) {
   const chromiumExec = await chromiumExecPromise;
@@ -44,4 +48,5 @@ async function fillInput(page, selector, content) {
 
 module.exports = {
   signInDynamicsUCApp,
+  initializeChromium,
 };

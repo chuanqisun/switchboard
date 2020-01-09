@@ -16,6 +16,7 @@ const scrollAreas = document.getElementsByClassName('js-scroll-area');
 const loadingIndicator = document.getElementById('loading-indicator');
 const noFavoriteMessage = document.getElementById('no-favorite-message');
 const appTitleButton = document.getElementById('app-title-button');
+const notification = document.getElementById('notification');
 
 // Handle DOM events
 signInButton.onclick = () => ipcRenderer.send('trySignIn');
@@ -78,8 +79,20 @@ ipcRenderer.on('onFavoritesChange', async (event, { userSettings }) => {
   }
 });
 
+ipcRenderer.on('onDownloadProgress', (event, { percent }) => {
+  notification.innerText = percent;
+});
+
+ipcRenderer.on('onDownloadComplete', (event, { exec }) => {
+  notification.innerText = 'Installing...';
+});
+
 // Init
 ipcRenderer.send('getSignInStatus');
+const { initializeChromium } = require('./automation/automation');
+initializeChromium().then(() => {
+  notification.innerText = 'Installed';
+});
 
 // Render functions
 function initializeToggle({ userSettings }) {
