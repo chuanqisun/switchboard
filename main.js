@@ -73,19 +73,9 @@ ipcMain.on('getEnvironments', async event => {
   event.sender.send('onEnvironmentsAvailable', { environments, userSettings });
 });
 
-ipcMain.on('checkMetadata', async event => {
-  const { getMetadata } = require('./helpers/metadata');
-  const metadata = await getMetadata();
-  const clientProfile = {
-    appVersion: app.getVersion(),
-    platform: process.platform,
-  };
-
-  event.sender.send('onMetadataAvailable', { metadata, clientProfile });
-});
-
-ipcMain.on('tryDownloadUpdate', (event, { metadata, clientProfile }) => {
-  showDownloadPrompt({ metadata, clientProfile });
+ipcMain.on('downloadUpdate', () => {
+  const { downloadUpdate } = require('./helpers/dialogs');
+  downloadUpdate();
 });
 
 ipcMain.on('addFavorite', async (event, { appId }) => {
@@ -137,9 +127,4 @@ function editEnvironments() {
 function showAbout() {
   const { showAbout } = require('./helpers/dialogs');
   showAbout();
-}
-
-function showDownloadPrompt({ metadata, clientProfile }) {
-  const { showDownloadPrompt } = require('./helpers/dialogs');
-  showDownloadPrompt({ metadata, clientProfile });
 }

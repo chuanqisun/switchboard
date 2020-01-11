@@ -89,6 +89,7 @@ body.pre-sign-in {
   display: flex;
   align-items: center;
   font-size: 0.85rem;
+  padding: 0 1rem;
 }
 
 .header__actions {
@@ -207,37 +208,6 @@ button {
 .button--shell:focus {
   outline: none;
   background-color: #484644;
-}
-
-.button--app-title {
-  width: auto;
-  padding: 0 1rem;
-  height: 100%;
-  position: relative;
-  -webkit-app-region: drag;
-  pointer-events: none;
-}
-
-.button--app-title[data-has-update] {
-  -webkit-app-region: no-drag;
-  pointer-events: all;
-}
-
-.button--app-title::after {
-  content: '';
-  position: absolute;
-  top: 0.3rem;
-  right: 0.5rem;
-  width: 0.4rem;
-  height: 0.4rem;
-  border-radius: 0.2rem;
-  background-color: var(--color-destructive);
-  opacity: 0;
-  transition: opacity 250ms;
-}
-
-.button--app-title[data-has-update]::after {
-  opacity: 1;
 }
 
 .button--primary {

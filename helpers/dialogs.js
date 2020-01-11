@@ -19,31 +19,13 @@ Electron ${process.versions.electron}
   });
 }
 
-function showDownloadPrompt({ metadata, clientProfile }) {
-  const latestVersion = metadata.supportedAppVersions[metadata.supportedAppVersions.length - 1];
-  const currentVersion = clientProfile.appVersion;
+function downloadUpdate() {
   const urls = require('../urls');
-
-  dialog
-    .showMessageBox({
-      title: 'Switchboard',
-      type: 'question',
-      message: `Updates are available`,
-      detail: `The latest version is ${latestVersion}. Your current version is ${currentVersion}.`,
-      defaultId: 0,
-      cancelId: 1,
-      noLink: true,
-      buttons: ['Download from GitHub', 'Cancel'],
-    })
-    .then(({ response }) => {
-      if (response === 0) {
-        const { shell } = require('electron');
-        shell.openExternal(urls.latestReleaseUrl);
-      }
-    });
+  const { shell } = require('electron');
+  shell.openExternal(urls.latestReleaseUrl);
 }
 
 module.exports = {
   showAbout,
-  showDownloadPrompt,
+  downloadUpdate,
 };

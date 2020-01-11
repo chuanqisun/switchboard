@@ -14,7 +14,6 @@ const toolbar = document.getElementById('toolbar');
 const scrollAreas = document.getElementsByClassName('js-scroll-area');
 const loadingIndicator = document.getElementById('loading-indicator');
 const noFavoriteMessage = document.getElementById('no-favorite-message');
-const appTitleButton = document.getElementById('app-title-button');
 const notification = document.getElementById('notification');
 const mainMenuButton = document.getElementById('main-menu');
 
@@ -37,14 +36,6 @@ ipcRenderer.once('onSignInStatusUpdate', (event, isSignedIn) => {
   } else {
     loadingIndicator.dataset.state = 'done';
     body.classList.add('pre-sign-in');
-  }
-});
-
-ipcRenderer.once('onMetadataAvailable', (event, { metadata, clientProfile }) => {
-  if (!metadata.supportedAppVersions.includes(clientProfile.appVersion)) {
-    appTitleButton.dataset.hasUpdate = '';
-    appTitleButton.title = 'A new version is avaialbe. Click to download.';
-    appTitleButton.onclick = () => ipcRenderer.send('tryDownloadUpdate', { metadata, clientProfile });
   }
 });
 
@@ -284,16 +275,27 @@ function handleViewToggle() {
   toolbar.classList.remove('toolbar--with-scroll');
 }
 
-function handleMainMenuClick() {
+async function handleMainMenuClick() {
   // TODO implement toggle behavior
-  const menu = createMenu();
+  const menu = await createMenu();
   const { getCurrentWindow } = require('electron').remote;
   menu.popup({ window: getCurrentWindow() });
 }
 
-function createMenu() {
+async function createMenu() {
   const { Menu, MenuItem } = require('electron').remote;
   const menu = new Menu();
+  const { isUpdateAvailable } = require('./helpers/update');
+
+  const isDownloadUpdateEnabled = await isUpdateAvailable();
+
+  menu.append(
+    new MenuItem({
+      enabled: isDownloadUpdateEnabled,
+      label: 'Download update',
+      click: () => ipcRenderer.send('downloadUpdate'),
+    })
+  );
 
   menu.append(
     new MenuItem({
