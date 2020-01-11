@@ -1,5 +1,5 @@
 const { BrowserWindow } = require('electron');
-const systemConfig = require('../system-config');
+const urls = require('../urls');
 
 const signInBlockerUrlPrefix = 'https://login.microsoftonline.com';
 const signInSuccessUrlPrefix = 'https://microsoft.sharepoint.com';
@@ -13,7 +13,7 @@ async function checkSignInStatus() {
       show: false,
     });
 
-    tempWindow.loadURL(systemConfig.getEnvironmentsEndpoint);
+    tempWindow.loadURL(urls.getEnvironmentsEndpoint);
 
     tempWindow.webContents.on('dom-ready', () => {
       const url = tempWindow.webContents.getURL();
@@ -42,7 +42,7 @@ async function signOut() {
       show: false,
     });
 
-    tempWindow.loadURL(systemConfig.getEnvironmentsEndpoint);
+    tempWindow.loadURL(urls.getEnvironmentsEndpoint);
 
     tempWindow.webContents.on('dom-ready', () => {
       tempWindow.webContents.session.clearStorageData();
@@ -75,7 +75,7 @@ async function signIn(parentWindow) {
 
     tempWindow.setMenu(null);
 
-    tempWindow.loadURL(systemConfig.getEnvironmentsEndpoint);
+    tempWindow.loadURL(urls.getEnvironmentsEndpoint);
 
     tempWindow.webContents.on('dom-ready', () => {
       const url = tempWindow.webContents.getURL();

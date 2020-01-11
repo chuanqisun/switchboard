@@ -1,8 +1,8 @@
-const systemConfig = require('../system-config');
+const urls = require('../urls');
 const { getJsonFromSharepointUrl } = require('./sharepoint');
 
 async function getMetadata() {
-  return getJsonFromSharepointUrl(systemConfig.getMetadataEndpoint);
+  return getJsonFromSharepointUrl(urls.getMetadataEndpoint);
 }
 
 module.exports = {

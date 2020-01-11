@@ -1,9 +1,9 @@
 const { BrowserWindow } = require('electron');
-const systemConfig = require('../system-config');
+const urls = require('../urls');
 const { getJsonFromSharepointUrl } = require('./sharepoint');
 
 async function getEnvironments() {
-  return getJsonFromSharepointUrl(systemConfig.getEnvironmentsEndpoint);
+  return getJsonFromSharepointUrl(urls.getEnvironmentsEndpoint);
 }
 
 async function editEnvironments() {
@@ -19,7 +19,7 @@ async function editEnvironments() {
   });
 
   tempWindow.setMenu(null);
-  tempWindow.loadURL(systemConfig.editEnvironmentsEndpoint);
+  tempWindow.loadURL(urls.editEnvironmentsEndpoint);
 }
 
 module.exports = {

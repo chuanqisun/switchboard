@@ -22,7 +22,7 @@ Electron ${process.versions.electron}
 function showDownloadPrompt({ metadata, clientProfile }) {
   const latestVersion = metadata.supportedAppVersions[metadata.supportedAppVersions.length - 1];
   const currentVersion = clientProfile.appVersion;
-  const systemConfig = require('../system-config');
+  const urls = require('../urls');
 
   dialog
     .showMessageBox({
@@ -38,7 +38,7 @@ function showDownloadPrompt({ metadata, clientProfile }) {
     .then(({ response }) => {
       if (response === 0) {
         const { shell } = require('electron');
-        shell.openExternal(systemConfig.latestReleaseUrl);
+        shell.openExternal(urls.latestReleaseUrl);
       }
     });
 }

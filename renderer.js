@@ -1,5 +1,5 @@
 const { ipcRenderer } = require('electron');
-const systemConfig = require('./system-config');
+const urls = require('./urls');
 
 // DOM elements
 const body = document.querySelector('body');
@@ -238,7 +238,7 @@ async function handleEnvironmentActions(event) {
 
     let { url, username, password } = targetButton.dataset;
     if (event.shiftKey) {
-      url = systemConfig.trialAdminPortalUrl;
+      url = urls.trialAdminPortalUrl;
     }
 
     const { signInDynamicsUCApp } = require('./automation/automation');
