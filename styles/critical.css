@@ -1,15 +1,15 @@
 :root {
   --color-primary: #0078d4;
-  --color-primary-light: #0084E9;
-  --color-primary-dark: #0069B9;
+  --color-primary-light: #0084e9;
+  --color-primary-dark: #0069b9;
   --color-destructive: #d4002e;
   --color-yellow: #e0bf03;
   --color-purple: #5100d4;
   --color-orange: #d45500;
   --color-off-black: #333333;
-  --shadow-1: 0 1.6px 3.6px 0 rgba(0,0,0,.132), 0 0.3px 0.9px 0 rgba(0,0,0,.108);
-  --shadow-2: 0 3.2px 7.2px 0 rgba(0,0,0,.132), 0 0.6px 1.8px 0 rgba(0,0,0,.108);
-  --shadow-3: 0 6.4px 14.4px 0 rgba(0,0,0,.132), 0 1.2px 3.6px 0 rgba(0,0,0,.108);
+  --shadow-1: 0 1.6px 3.6px 0 rgba(0, 0, 0, 0.132), 0 0.3px 0.9px 0 rgba(0, 0, 0, 0.108);
+  --shadow-2: 0 3.2px 7.2px 0 rgba(0, 0, 0, 0.132), 0 0.6px 1.8px 0 rgba(0, 0, 0, 0.108);
+  --shadow-3: 0 6.4px 14.4px 0 rgba(0, 0, 0, 0.132), 0 1.2px 3.6px 0 rgba(0, 0, 0, 0.108);
   --gradient-app-background: linear-gradient(var(--color-primary-light) 0%, var(--color-primary-dark) 100%) 100% 100%;
   --gradient-app-toolbar: linear-gradient(var(--color-primary-light) 0%, var(--color-primary-light) 100%) 100% 100%;
   --app-header-height: 1.75rem;
@@ -33,7 +33,7 @@
   box-sizing: inherit;
   font-family: inherit;
 }
-    
+
 html {
   height: 100%;
   color: var(--color-off-black);
@@ -41,21 +41,21 @@ html {
 }
 
 body {
-  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
   box-sizing: border-box;
   margin: 0;
   height: 100%;
   display: flex;
   flex-direction: column;
   background: var(--gradient-app-toolbar), var(--gradient-app-background);
-  background-size: 100% calc(var(--app-background-offset-post-signin)), 100% calc(100% - var(--app-header-height) - var(--app-toolbar-height)); 
+  background-size: 100% calc(var(--app-background-offset-post-signin)), 100% calc(100% - var(--app-header-height) - var(--app-toolbar-height));
   background-position: top left, top calc(var(--app-header-height) + var(--app-toolbar-height)) left;
   background-repeat: no-repeat, no-repeat;
   overflow: hidden;
 }
 
 body.pre-sign-in {
-  background: url("../assets/sitting-3.svg") bottom right no-repeat, var(--gradient-app-background);
+  background: url('../assets/sitting-3.svg') bottom right no-repeat, var(--gradient-app-background);
   background-size: 65%, 100% 100%;
 }
 
@@ -114,15 +114,15 @@ body.pre-sign-in {
   display: none;
 }
 
-.loading-indicator[data-state="sign-in"] [data-for-state="sign-in"]{
+.loading-indicator[data-state='sign-in'] [data-for-state='sign-in'] {
   display: initial;
 }
 
-.loading-indicator[data-state="get-environments"] [data-for-state="get-environments"]{
+.loading-indicator[data-state='get-environments'] [data-for-state='get-environments'] {
   display: initial;
 }
 
-.loading-indicator[data-state="done"] {
+.loading-indicator[data-state='done'] {
   display: none;
 }
 
@@ -131,6 +131,7 @@ body.pre-sign-in {
   flex: 0 0 auto;
   height: var(--app-toolbar-height);
   align-items: center;
+  justify-content: space-between;
   padding: 0 1rem;
   background: var(--gradient-app-toolbar);
   position: relative;
@@ -261,11 +262,6 @@ button {
   box-shadow: var(--shadow-1);
 }
 
-.button--destructive {
-  background-color: white;
-  color: var(--color-destructive);
-}
-
 .button--extra-wide {
   width: 100%;
   max-width: 24rem;
@@ -307,11 +303,11 @@ button {
   text-transform: capitalize;
 }
 
-.button--launch[data-type="trial"] {
+.button--launch[data-type='trial'] {
   background-color: var(--color-orange);
 }
 
-.button--launch[data-type="livedrive"] {
+.button--launch[data-type='livedrive'] {
   background-color: var(--color-purple);
 }
 
@@ -361,13 +357,7 @@ button {
   will-change: transform, opacity;
 }
 
-
-.button--sign-out {
-  margin: 0 0 0 auto;
-  flex: 0 0 auto;
-}
-
-.post-sign-in.environment-available .toolbar{
+.post-sign-in.environment-available .toolbar {
   display: flex;
 
   animation: toolbar-enter 400ms;
@@ -402,7 +392,7 @@ button {
   overflow: auto;
   flex: 0 1 auto;
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
   position: absolute;
   top: 0;
   left: 0;
@@ -449,22 +439,37 @@ button {
   animation-fill-mode: both;
 }
 
-.card--animation-enter:nth-child(2) { animation-delay: 500ms; }
-.card--animation-enter:nth-child(3) { animation-delay: 600ms; }
-.card--animation-enter:nth-child(4) { animation-delay: 700ms; }
-.card--animation-enter:nth-child(5) { animation-delay: 800ms; }
-.card--animation-enter:nth-child(6) { animation-delay: 900ms; }
-.card--animation-enter:nth-child(7) { animation-delay: 1000ms; }
-.card--animation-enter:nth-child(8) { animation-delay: 1100ms; }
-.card--animation-enter:nth-child(9) { animation-delay: 1200ms; }
+.card--animation-enter:nth-child(2) {
+  animation-delay: 500ms;
+}
+.card--animation-enter:nth-child(3) {
+  animation-delay: 600ms;
+}
+.card--animation-enter:nth-child(4) {
+  animation-delay: 700ms;
+}
+.card--animation-enter:nth-child(5) {
+  animation-delay: 800ms;
+}
+.card--animation-enter:nth-child(6) {
+  animation-delay: 900ms;
+}
+.card--animation-enter:nth-child(7) {
+  animation-delay: 1000ms;
+}
+.card--animation-enter:nth-child(8) {
+  animation-delay: 1100ms;
+}
+.card--animation-enter:nth-child(9) {
+  animation-delay: 1200ms;
+}
 
 .card--animate-exit {
   animation: card-exit 250ms, just-wait 50ms;
-  animation-timing-function: cubic-bezier(0.4, 0.0, 1, 1);
+  animation-timing-function: cubic-bezier(0.4, 0, 1, 1);
   animation-fill-mode: both;
   animation-delay: 0ms, 250ms !important;
 }
-
 
 .card__actions {
   display: grid;
@@ -509,8 +514,10 @@ button {
 }
 
 @keyframes just-wait {
-  0% { }
-  100% { }
+  0% {
+  }
+  100% {
+  }
 }
 
 @keyframes button-enter {
@@ -535,7 +542,6 @@ button {
   }
 }
 
-
 @keyframes launch {
   0% {
     transform: translateX(-100%);
@@ -553,12 +559,12 @@ button {
 
 @keyframes pulse {
   0% {
-   opacity: 1;
+    opacity: 1;
   }
   50% {
-   opacity: 0.5;
+    opacity: 0.5;
   }
   10% {
-   opacity: 1;
+    opacity: 1;
   }
 }

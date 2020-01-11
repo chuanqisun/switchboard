@@ -4,7 +4,6 @@ const urls = require('./urls');
 // DOM elements
 const body = document.querySelector('body');
 const signInButton = document.getElementById('sign-in');
-const signOutButton = document.getElementById('sign-out');
 const minimizeButton = document.getElementById('minimize');
 const closeButton = document.getElementById('close');
 const allEnvironments = document.getElementById('all-environments');
@@ -17,15 +16,16 @@ const loadingIndicator = document.getElementById('loading-indicator');
 const noFavoriteMessage = document.getElementById('no-favorite-message');
 const appTitleButton = document.getElementById('app-title-button');
 const notification = document.getElementById('notification');
+const mainMenuButton = document.getElementById('main-menu');
 
 // Handle DOM events
 signInButton.onclick = () => ipcRenderer.send('trySignIn');
-signOutButton.onclick = () => ipcRenderer.send('trySignOut');
 minimizeButton.onclick = () => ipcRenderer.send('tryMinimize');
 closeButton.onclick = () => ipcRenderer.send('tryClose');
 allEnvironments.onclick = event => handleEnvironmentActions(event);
 favoriteEnvironments.onclick = event => handleEnvironmentActions(event);
 viewToggle.onclick = () => handleViewToggle();
+mainMenuButton.onclick = () => handleMainMenuClick();
 
 // Handle IPC events
 ipcRenderer.once('onSignInStatusUpdate', (event, isSignedIn) => {
@@ -282,6 +282,26 @@ function handleViewToggle() {
   // reset scroll
   enteringView.scrollTop = 0;
   toolbar.classList.remove('toolbar--with-scroll');
+}
+
+function handleMainMenuClick() {
+  // TODO implement toggle behavior
+  const menu = createMenu();
+  const { getCurrentWindow } = require('electron').remote;
+  menu.popup({ window: getCurrentWindow() });
+}
+
+function createMenu() {
+  const { Menu, MenuItem } = require('electron').remote;
+  const menu = new Menu();
+
+  menu.append(
+    new MenuItem({
+      label: 'Sign out',
+      click: () => ipcRenderer.send('trySignOut'),
+    })
+  );
+  return menu;
 }
 
 function createObserver() {
