@@ -1,9 +1,9 @@
 const { app } = require('electron');
 const fs = require('fs');
 const path = require('path');
-const systemConfig = require('../system-config');
 const userDataPath = app.getPath('userData');
-const userSettingsPath = path.join(userDataPath, systemConfig.userSettingsFilename);
+const userSettingsFilename = 'user-settings.json';
+const userSettingsPath = path.join(userDataPath, userSettingsFilename);
 
 async function ensureUserSettings() {
   return new Promise(resolve => {
