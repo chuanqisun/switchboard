@@ -49,14 +49,6 @@ ipcMain.on('getSignInStatus', async event => {
   event.sender.send('onSignInStatusUpdate', isSignedIn);
 });
 
-ipcMain.on('tryMinimize', event => {
-  mainWindow.minimize();
-});
-
-ipcMain.on('tryClose', event => {
-  mainWindow.close();
-});
-
 ipcMain.on('trySignIn', async event => {
   const { signIn } = require('./helpers/account');
   await signIn(mainWindow);

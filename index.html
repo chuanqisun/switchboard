@@ -15,33 +15,8 @@
           stroke-width="var(--star-stroke-width)"
         />
       </symbol>
-      <symbol id="svg-minimize" viewBox="0 0 2048 2048">
-        <path fill="currentcolor" transform="translate(0,2048) scale(1,-1)" d="M0 1229L2048 1229L2048 1024L0 1024L0 1229Z"></path>
-      </symbol>
-      <symbol id="svg-close" viewBox="0 0 2048 2048">
-        <path
-          fill="currentcolor"
-          transform="translate(0,2048) scale(1,-1)"
-          d="M2048 1903L1169 1024L2048 145L1903 0L1024 879L145 0L0 145L879 1024L0 1903L145 2048L1024 1169L1903 2048L2048 1903Z"
-        ></path>
-      </symbol>
     </svg>
 
-    <header id="header" class="header body--fixed-top">
-      <div class="header__title">Switchboard</div>
-      <div class="header__actions">
-        <button class="button button--shell" id="minimize">
-          <svg width="0.6rem" height="0.6rem">
-            <use xlink:href="#svg-minimize" />
-          </svg>
-        </button>
-        <button class="button button--shell" id="close">
-          <svg width="0.6rem" height="0.6rem">
-            <use xlink:href="#svg-close" />
-          </svg>
-        </button>
-      </div>
-    </header>
     <app-header></app-header>
 
     <div id="loading-indicator" class="loading-indicator" data-state="sign-in">

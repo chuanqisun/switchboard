@@ -4,8 +4,6 @@ const urls = require('./urls');
 // DOM elements
 const body = document.querySelector('body');
 const signInButton = document.getElementById('sign-in');
-const minimizeButton = document.getElementById('minimize');
-const closeButton = document.getElementById('close');
 const allEnvironments = document.getElementById('all-environments');
 const favoriteEnvironments = document.getElementById('favorite-environments');
 const viewToggle = document.getElementById('view-toggle');
@@ -19,8 +17,6 @@ const mainMenuButton = document.getElementById('main-menu');
 
 // Handle DOM events
 signInButton.onclick = () => ipcRenderer.send('trySignIn');
-minimizeButton.onclick = () => ipcRenderer.send('tryMinimize');
-closeButton.onclick = () => ipcRenderer.send('tryClose');
 allEnvironments.onclick = event => handleEnvironmentActions(event);
 favoriteEnvironments.onclick = event => handleEnvironmentActions(event);
 viewToggle.onclick = () => handleViewToggle();
