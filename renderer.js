@@ -275,7 +275,7 @@ async function createMenu() {
   menu.append(
     new MenuItem({
       enabled: isDownloadUpdateEnabled,
-      label: 'Download update',
+      label: 'Get updates',
       click: () => ipcRenderer.send('downloadUpdate'),
     })
   );
