@@ -189,20 +189,14 @@ function renderEnvironment({ environment, userSettings, animateEnter }) {
       </button>
     </div>
     <div class="card__actions">
-      ${environment.instances
-        .map(instance =>
-          `
       <button
         class="button button--primary button--launch"
         data-action="launch"
-        data-type=${instance.type}
-        data-url="${instance.url}"
-        data-username="${instance.username}"
-        data-password="${instance.password}"
-      >${instance.type}</button>
-      `.trim()
-        )
-        .join('')}
+        data-type=${environment.type}
+        data-url="${environment.url}"
+        data-username="${environment.username}"
+        data-password="${environment.password}"
+      >Launch</button>
     </div>
   </div>
   `.trim();
