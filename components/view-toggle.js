@@ -96,4 +96,4 @@ function ViewToggle({ dataLeft, dataRight, dataSelected }) {
 
 ViewToggle.observedAttributes = ['data-left', 'data-right', 'data-selected'];
 
-customElements.define('view-toggle', component(ViewToggle));
+customElements.define('sb-view-toggle', component(ViewToggle));

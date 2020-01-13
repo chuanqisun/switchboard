@@ -26,4 +26,4 @@ function Environments() {
   `;
 }
 
-customElements.define('environments', component(Environments));
+customElements.define('sb-environments', component(Environments));

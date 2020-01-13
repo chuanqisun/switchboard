@@ -89,4 +89,4 @@ function AppHeader() {
   `;
 }
 
-customElements.define('app-header', component(AppHeader));
+customElements.define('sb-app-header', component(AppHeader));
