@@ -11,15 +11,7 @@ function ViewToggle() {
   const knobElement = useRef(null);
 
   useEffect(() => {
-    let interval = setInterval(() => {
-      console.log('ensure measure');
-      ensureMeasurements();
-      console.log(fromWidth.current);
-      if (fromWidth.current !== null) {
-        console.log('success!');
-        clearInterval(interval);
-      }
-    }, 100);
+    measureElements();
   }, []);
 
   const onToggle = () => {
@@ -32,20 +24,18 @@ function ViewToggle() {
     }
   };
 
-  const ensureMeasurements = () => {
+  const measureElements = () => {
     if (!knobElement.current) {
       knobElement.current = this.shadowRoot.querySelector('.knob');
     }
 
     if (!toWidth.current) {
-      toWidth.current = this.shadowRoot.querySelector('.option-text--right').getBoundingClientRect().width || null;
+      toWidth.current = this.shadowRoot.querySelector('.option-text--right').getBoundingClientRect().width;
     }
 
     if (!fromWidth.current) {
-      fromWidth.current = this.shadowRoot.querySelector('.option-text--left').getBoundingClientRect().width || null;
-      if (fromWidth.current) {
-        knobElement.current.style.setProperty('--knob-width', `${fromWidth.current}px`);
-      }
+      fromWidth.current = this.shadowRoot.querySelector('.option-text--left').getBoundingClientRect().width;
+      knobElement.current.style.setProperty('--knob-width', `${fromWidth.current}px`);
     }
   };
 
