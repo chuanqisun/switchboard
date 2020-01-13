@@ -63,11 +63,18 @@ function ViewToggle() {
         box-shadow: inset var(--shadow-2);
       }
       .option-text {
+        color: white;
+        font-weight: 600;
         position: relative;
         padding: 0 1rem;
+        transition: color 250ms;
+      }
+      .option-text--active {
+        color: var(--color-primary-dark);
       }
       .knob {
         box-sizing: border-box;
+        box-shadow: var(--shadow-2);
         border-radius: 1rem;
         top: 0;
         bottom: 0;
@@ -84,8 +91,8 @@ function ViewToggle() {
     </style>
     <button class="toggle" @click=${onToggle}>
       <div class="knob" aria-hidden="true">Favorites</div>
-      <div class="option-text option-text--left">Favorites</div>
-      <div class="option-text option-text--right">All</div>
+      <div class="option-text option-text--left${isToggleOnLeft ? ' option-text--active' : ''}">Favorites</div>
+      <div class="option-text option-text--right${isToggleOnLeft ? '' : ' option-text--active'}">All</div>
     </button>
     ${FocusVisibleStyle}
   `;
