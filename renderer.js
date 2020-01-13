@@ -7,6 +7,7 @@ const signInButton = document.getElementById('sign-in');
 const allEnvironments = document.getElementById('all-environments');
 const favoriteEnvironments = document.getElementById('favorite-environments');
 const viewToggle = document.getElementById('view-toggle');
+const viewToggleV2 = document.querySelector('view-toggle');
 const viewCarousel = document.getElementById('view-carousel');
 const toolbar = document.getElementById('toolbar');
 const scrollAreas = document.getElementsByClassName('js-scroll-area');
@@ -20,6 +21,7 @@ signInButton.onclick = () => ipcRenderer.send('trySignIn');
 allEnvironments.onclick = event => handleEnvironmentActions(event);
 favoriteEnvironments.onclick = event => handleEnvironmentActions(event);
 viewToggle.onclick = () => handleViewToggle();
+viewToggleV2.onclick = e => handleViewToggleV2(e);
 mainMenuButton.onclick = () => handleMainMenuClick();
 
 // Handle IPC events
@@ -234,6 +236,14 @@ async function handleEnvironmentActions(event) {
     ipcRenderer.send('addFavorite', { appId: targetButton.dataset.appId });
   } else if (targetButton.dataset.action === 'removeFavorite') {
     ipcRenderer.send('removeFavorite', { appId: targetButton.dataset.appId });
+  }
+}
+
+function handleViewToggleV2(e) {
+  if (viewToggleV2.dataset.select === 'left') {
+    viewToggleV2.dataset.select = 'right';
+  } else if (viewToggleV2.dataset.select === 'right') {
+    viewToggleV2.dataset.select = 'left';
   }
 }
 

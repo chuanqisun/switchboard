@@ -2,9 +2,10 @@ import { html } from '../lib/lit-html.js';
 import { component, useState, useEffect, useRef } from '../lib/haunted.js';
 import { useFocusVisible } from './use-focus-visible.js';
 
-function ViewToggle() {
+function ViewToggle({ dataLeft, dataRight, dataSelect }) {
   const { FocusVisibleStyle } = useFocusVisible(this.shadowRoot);
-  const [isToggleOnLeft, setIsToggleOnLeft] = useState(true);
+  const isToggleOnLeft = dataSelect === 'left';
+  const isToggleOnRight = dataSelect === 'right';
 
   const fromWidth = useRef(null);
   const toWidth = useRef(null);
@@ -14,14 +15,25 @@ function ViewToggle() {
     measureElements();
   }, []);
 
+  useEffect(() => {
+    isToggleOnRight && animateToRight();
+    isToggleOnLeft && animateToLeft();
+  }, [dataSelect]);
+
   const onToggle = () => {
-    if (isToggleOnLeft) {
-      animateToRight();
-      setIsToggleOnLeft(false);
-    } else {
-      animateToLeft();
-      setIsToggleOnLeft(true);
-    }
+    // let newSelect;
+    // if (isToggleOnLeft) {
+    //   newSelect = 'right';
+    // }
+    // if (isToggleOnRight) {
+    //   newSelect = 'left';
+    // }
+    // const event = new CustomEvent('click', {
+    //   bubbles: true, // this let's the event bubble up through the DOM
+    //   composed: true, // this let's the event cross the Shadow DOM boundary
+    //   detail: { select: newSelect }, // all data you wish to pass must be in `detail`
+    // });
+    // this.dispatchEvent(event);
   };
 
   const measureElements = () => {
@@ -53,14 +65,15 @@ function ViewToggle() {
   return html`
     <style>
       .toggle {
-        display: flex;
-        padding: 0;
-        border: none;
-        position: relative;
         background-color: var(--color-primary-dark);
-        height: 2rem;
         border-radius: 1rem;
+        border: none;
         box-shadow: inset var(--shadow-2);
+        cursor: pointer;
+        display: flex;
+        height: 2rem;
+        padding: 0;
+        position: relative;
       }
       .option-text {
         color: white;
@@ -90,12 +103,14 @@ function ViewToggle() {
       }
     </style>
     <button class="toggle" @click=${onToggle}>
-      <div class="knob" aria-hidden="true">Favorites</div>
-      <div class="option-text option-text--left${isToggleOnLeft ? ' option-text--active' : ''}">Favorites</div>
-      <div class="option-text option-text--right${isToggleOnLeft ? '' : ' option-text--active'}">All</div>
+      <div class="knob" aria-hidden="true">${dataLeft}</div>
+      <div class="option-text option-text--left${isToggleOnLeft ? ' option-text--active' : ''}">${dataLeft}</div>
+      <div class="option-text option-text--right${isToggleOnRight ? ' option-text--active' : ''}">${dataRight}</div>
     </button>
     ${FocusVisibleStyle}
   `;
 }
+
+ViewToggle.observedAttributes = ['data-left', 'data-right', 'data-select'];
 
 customElements.define('view-toggle', component(ViewToggle));
