@@ -6,7 +6,6 @@ const body = document.querySelector('body');
 const signInButton = document.getElementById('sign-in');
 const allEnvironments = document.getElementById('all-environments');
 const favoriteEnvironments = document.getElementById('favorite-environments');
-const viewToggle = document.getElementById('view-toggle');
 const viewToggleV2 = document.querySelector('view-toggle');
 const viewCarousel = document.getElementById('view-carousel');
 const toolbar = document.getElementById('toolbar');
@@ -20,8 +19,7 @@ const mainMenuButton = document.getElementById('main-menu');
 signInButton.onclick = () => ipcRenderer.send('trySignIn');
 allEnvironments.onclick = event => handleEnvironmentActions(event);
 favoriteEnvironments.onclick = event => handleEnvironmentActions(event);
-viewToggle.onclick = () => handleViewToggle();
-viewToggleV2.onclick = e => handleViewToggleV2(e);
+viewToggleV2.onclick = e => handleViewToggleV2();
 mainMenuButton.onclick = () => handleMainMenuClick();
 
 // Handle IPC events
@@ -85,11 +83,11 @@ initializeChromium().then(() => {
 
 // Render functions
 function initializeToggle({ userSettings }) {
-  const selectedOptions = document.querySelectorAll(`[data-option="${viewToggle.dataset.selectedOption}"]`);
+  const selectedOptions = document.querySelectorAll(`[data-option="Favorites"]`);
   [...selectedOptions].forEach(option => (option.dataset.selected = ''));
 
   if (!userSettings.favorites.length) {
-    handleViewToggle();
+    handleViewToggleV2();
   } else {
     updateCarouselFocusTargets();
   }
@@ -239,38 +237,20 @@ async function handleEnvironmentActions(event) {
   }
 }
 
-function handleViewToggleV2(e) {
+function handleViewToggleV2() {
+  let selectedOption = null;
   if (viewToggleV2.dataset.select === 'left') {
     viewToggleV2.dataset.select = 'right';
+    selectedOption = viewToggleV2.dataset.right;
   } else if (viewToggleV2.dataset.select === 'right') {
     viewToggleV2.dataset.select = 'left';
+    selectedOption = viewToggleV2.dataset.left;
   }
-}
-
-function handleViewToggle() {
-  const selectedOption = viewToggle.dataset.selectedOption;
-  const options = [...viewToggle.children];
-  const leftLabelWidth = options[0].offsetWidth;
-
-  // on first call, measure left label width
-  if (!viewToggle.style.getPropertyValue('--indicator-width')) {
-    viewToggle.style.setProperty('--indicator-width', `${leftLabelWidth}px`);
-  }
-
-  // update view toggle
-  const leavingOption = options.filter(option => option.dataset.option === selectedOption)[0];
-  const enteringOption = options.filter(option => option.dataset.option !== selectedOption)[0];
-  delete leavingOption.dataset.selected;
-  enteringOption.dataset.selected = '';
-
-  viewToggle.dataset.selectedOption = enteringOption.dataset.option;
-  viewToggle.style.setProperty('--indicator-width', `${enteringOption.offsetWidth}px`);
-  viewToggle.style.setProperty('--indicator-translate', enteringOption === options[1] ? `${leftLabelWidth}px` : '0');
 
   // update carousel
   const views = [...viewCarousel.querySelectorAll(`[data-option]`)];
-  const leavingView = views.filter(view => view.dataset.option === selectedOption)[0];
-  const enteringView = views.filter(view => view.dataset.option !== selectedOption)[0];
+  const leavingView = views.filter(view => view.dataset.option !== selectedOption)[0];
+  const enteringView = views.filter(view => view.dataset.option === selectedOption)[0];
 
   delete leavingView.dataset.selected;
   enteringView.dataset.selected = '';

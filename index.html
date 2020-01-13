@@ -39,21 +39,21 @@
       </div>
 
       <div id="toolbar" class="toolbar">
-        <button data-selected-option="favorites" id="view-toggle" class="toggle">
-          <span data-option="favorites" class="toggle__option">Favorites</span>
-          <span data-option="all" class="toggle__option">All</span>
-        </button>
+        <!-- <button data-selected-option="Favorites" id="view-toggle" class="toggle">
+          <span data-option="Favorites" class="toggle__option">Favorites</span>
+          <span data-option="All" class="toggle__option">All</span>
+        </button> -->
         <view-toggle data-left="Favorites" data-right="All" data-select="left"></view-toggle>
         <button class="button button--primary" id="main-menu">Menu</button>
       </div>
 
       <div id="view-carousel" class="view-carousel">
-        <div class="scroll-area js-scroll-area view-carousel__item view-carousel__item-left" data-option="favorites">
+        <div class="scroll-area js-scroll-area view-carousel__item view-carousel__item-left" data-option="Favorites">
           <div id="no-favorite-message" class="no-favorite-message">You have no favorite apps.</div>
           <div class="scroll-sentinel js-scroll-sentinel"></div>
           <div class="environment-grid" id="favorite-environments"></div>
         </div>
-        <div class="scroll-area js-scroll-area view-carousel__item view-carousel__item-right" data-option="all">
+        <div class="scroll-area js-scroll-area view-carousel__item view-carousel__item-right" data-option="All">
           <div class="scroll-sentinel js-scroll-sentinel"></div>
           <div class="environment-grid" id="all-environments"></div>
         </div>

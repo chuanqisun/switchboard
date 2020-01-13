@@ -20,22 +20,6 @@ function ViewToggle({ dataLeft, dataRight, dataSelect }) {
     isToggleOnLeft && animateToLeft();
   }, [dataSelect]);
 
-  const onToggle = () => {
-    // let newSelect;
-    // if (isToggleOnLeft) {
-    //   newSelect = 'right';
-    // }
-    // if (isToggleOnRight) {
-    //   newSelect = 'left';
-    // }
-    // const event = new CustomEvent('click', {
-    //   bubbles: true, // this let's the event bubble up through the DOM
-    //   composed: true, // this let's the event cross the Shadow DOM boundary
-    //   detail: { select: newSelect }, // all data you wish to pass must be in `detail`
-    // });
-    // this.dispatchEvent(event);
-  };
-
   const measureElements = () => {
     if (!knobElement.current) {
       knobElement.current = this.shadowRoot.querySelector('.knob');
@@ -52,7 +36,6 @@ function ViewToggle({ dataLeft, dataRight, dataSelect }) {
   };
 
   const animateToRight = () => {
-    // play
     knobElement.current.style.setProperty('--x-translate', `${fromWidth.current}px`);
     knobElement.current.style.setProperty('--knob-width', `${toWidth.current}px`);
   };
@@ -102,7 +85,7 @@ function ViewToggle({ dataLeft, dataRight, dataSelect }) {
         transition: width 250ms, transform 250ms;
       }
     </style>
-    <button class="toggle" @click=${onToggle}>
+    <button class="toggle">
       <div class="knob" aria-hidden="true">${dataLeft}</div>
       <div class="option-text option-text--left${isToggleOnLeft ? ' option-text--active' : ''}">${dataLeft}</div>
       <div class="option-text option-text--right${isToggleOnRight ? ' option-text--active' : ''}">${dataRight}</div>
