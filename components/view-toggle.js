@@ -46,6 +46,11 @@ function ViewToggle({ dataLeft, dataRight, dataSelected }) {
   };
 
   return html`
+    <button class="toggle">
+      <div class="knob" aria-hidden="true">${dataLeft}</div>
+      <div class="option-text option-text--left${isToggleOnLeft ? ' option-text--active' : ''}">${dataLeft}</div>
+      <div class="option-text option-text--right${isToggleOnRight ? ' option-text--active' : ''}">${dataRight}</div>
+    </button>
     <style>
       .toggle {
         background-color: var(--color-primary-dark);
@@ -85,11 +90,6 @@ function ViewToggle({ dataLeft, dataRight, dataSelected }) {
         transition: width 250ms, transform 250ms;
       }
     </style>
-    <button class="toggle">
-      <div class="knob" aria-hidden="true">${dataLeft}</div>
-      <div class="option-text option-text--left${isToggleOnLeft ? ' option-text--active' : ''}">${dataLeft}</div>
-      <div class="option-text option-text--right${isToggleOnRight ? ' option-text--active' : ''}">${dataRight}</div>
-    </button>
     ${FocusVisibleStyle}
   `;
 }

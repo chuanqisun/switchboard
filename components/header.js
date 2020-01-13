@@ -17,6 +17,21 @@ function AppHeader() {
   };
 
   return html`
+    <header id="header" class="header body--fixed-top">
+      <div class="header__title">Switchboard</div>
+      <div class="header__actions">
+        <button class="button button--shell" @click=${onMinimize}>
+          <svg width="0.6rem" height="0.6rem">
+            <use xlink:href="#svg-minimize" />
+          </svg>
+        </button>
+        <button class="button button--shell" @click=${onClose}>
+          <svg width="0.6rem" height="0.6rem">
+            <use xlink:href="#svg-close" />
+          </svg>
+        </button>
+      </div>
+    </header>
     ${Minimize} ${Close}
     <style>
       .body--fixed-top {
@@ -71,21 +86,6 @@ function AppHeader() {
       }
     </style>
     ${FocusVisibleStyle}
-    <header id="header" class="header body--fixed-top">
-      <div class="header__title">Switchboard</div>
-      <div class="header__actions">
-        <button class="button button--shell" @click=${onMinimize}>
-          <svg width="0.6rem" height="0.6rem">
-            <use xlink:href="#svg-minimize" />
-          </svg>
-        </button>
-        <button class="button button--shell" @click=${onClose}>
-          <svg width="0.6rem" height="0.6rem">
-            <use xlink:href="#svg-close" />
-          </svg>
-        </button>
-      </div>
-    </header>
   `;
 }
 

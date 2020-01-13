@@ -6,8 +6,6 @@ function Environments() {
   const { FocusVisibleStyle } = useFocusVisible(this.shadowRoot);
 
   return html`
-    <style></style>
-    ${FocusVisibleStyle}
     <header id="header" class="header body--fixed-top">
       <div class="header__title">Switchboard</div>
       <div class="header__actions">
@@ -23,6 +21,8 @@ function Environments() {
         </button>
       </div>
     </header>
+    <style></style>
+    ${FocusVisibleStyle}
   `;
 }
 
