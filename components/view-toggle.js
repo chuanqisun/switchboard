@@ -1,10 +1,26 @@
 import { html } from '../lib/lit-html.js';
-import { component, useState, useEffect } from '../lib/haunted.js';
+import { component, useState, useEffect, useRef } from '../lib/haunted.js';
 import { useFocusVisible } from './use-focus-visible.js';
 
 function ViewToggle() {
   const { FocusVisibleStyle } = useFocusVisible(this.shadowRoot);
   const [isToggleOnLeft, setIsToggleOnLeft] = useState(true);
+
+  const fromWidth = useRef(null);
+  const toWidth = useRef(null);
+  const knobElement = useRef(null);
+
+  useEffect(() => {
+    let interval = setInterval(() => {
+      console.log('ensure measure');
+      ensureMeasurements();
+      console.log(fromWidth.current);
+      if (fromWidth.current !== null) {
+        console.log('success!');
+        clearInterval(interval);
+      }
+    }, 100);
+  }, []);
 
   const onToggle = () => {
     if (isToggleOnLeft) {
@@ -16,40 +32,37 @@ function ViewToggle() {
     }
   };
 
+  const ensureMeasurements = () => {
+    if (!knobElement.current) {
+      knobElement.current = this.shadowRoot.querySelector('.knob');
+    }
+
+    if (!toWidth.current) {
+      toWidth.current = this.shadowRoot.querySelector('.option-text--right').getBoundingClientRect().width || null;
+    }
+
+    if (!fromWidth.current) {
+      fromWidth.current = this.shadowRoot.querySelector('.option-text--left').getBoundingClientRect().width || null;
+      if (fromWidth.current) {
+        knobElement.current.style.setProperty('--knob-width', `${fromWidth.current}px`);
+      }
+    }
+  };
+
   const animateToRight = () => {
-    const knobElement = this.shadowRoot.querySelector('.knob');
-    const fromWidth = knobElement.getBoundingClientRect().width;
-
-    // fast forward
-    knobElement.innerText = 'All';
-    const toWidth = knobElement.getBoundingClientRect().width;
-
-    // back
-    knobElement.innerText = 'Favorites';
-
     // play
-    const scaleRatio = toWidth / fromWidth;
-    knobElement.style.setProperty('--x-translate', `${fromWidth}px`);
-    knobElement.style.setProperty('--x-scale', `${scaleRatio}`);
+    knobElement.current.style.setProperty('--x-translate', `${fromWidth.current}px`);
+    knobElement.current.style.setProperty('--knob-width', `${toWidth.current}px`);
   };
 
   const animateToLeft = () => {
-    const knobElement = this.shadowRoot.querySelector('.knob');
-
-    knobElement.style.setProperty('--x-translate', `0`);
-    knobElement.style.setProperty('--x-scale', `1`);
+    knobElement.current.style.setProperty('--x-translate', `0`);
+    knobElement.current.style.setProperty('--knob-width', `${fromWidth.current}px`);
   };
 
   return html`
-    <button class="toggle" @click=${onToggle}>
-      <div class="knob" aria-hidden="true">Favorites</div>
-      <div class="option-text">Favorites</div>
-      <div class="option-text">All</div>
-    </button>
     <style>
       .toggle {
-        --x-translate: 0;
-        --x-scale: 1;
         display: flex;
         padding: 0;
         border: none;
@@ -64,6 +77,7 @@ function ViewToggle() {
         padding: 0 1rem;
       }
       .knob {
+        box-sizing: border-box;
         border-radius: 1rem;
         top: 0;
         bottom: 0;
@@ -73,9 +87,16 @@ function ViewToggle() {
         padding: 0 1rem;
         background-color: white;
         transform-origin: left;
-        transform: translateX(var(--x-translate)) scaleX(var(--x-scale));
+        transform: translateX(var(--x-translate, 0));
+        width: var(--knob-width, auto);
+        transition: width 250ms, transform 250ms;
       }
     </style>
+    <button class="toggle" @click=${onToggle}>
+      <div class="knob" aria-hidden="true">Favorites</div>
+      <div class="option-text option-text--left">Favorites</div>
+      <div class="option-text option-text--right">All</div>
+    </button>
     ${FocusVisibleStyle}
   `;
 }
