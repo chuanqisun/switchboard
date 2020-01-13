@@ -6,7 +6,7 @@ const body = document.querySelector('body');
 const signInButton = document.getElementById('sign-in');
 const allEnvironments = document.getElementById('all-environments');
 const favoriteEnvironments = document.getElementById('favorite-environments');
-const viewToggleV2 = document.querySelector('view-toggle');
+const viewToggle = document.querySelector('view-toggle');
 const viewCarousel = document.getElementById('view-carousel');
 const toolbar = document.getElementById('toolbar');
 const scrollAreas = document.getElementsByClassName('js-scroll-area');
@@ -19,7 +19,7 @@ const mainMenuButton = document.getElementById('main-menu');
 signInButton.onclick = () => ipcRenderer.send('trySignIn');
 allEnvironments.onclick = event => handleEnvironmentActions(event);
 favoriteEnvironments.onclick = event => handleEnvironmentActions(event);
-viewToggleV2.onclick = e => handleViewToggleV2();
+viewToggle.onclick = e => handleViewToggle();
 mainMenuButton.onclick = () => handleMainMenuClick();
 
 // Handle IPC events
@@ -56,7 +56,7 @@ ipcRenderer.once('onEnvironmentsAvailable', (event, { environments, userSettings
 ipcRenderer.on('onFavoritesChange', async (event, { userSettings }) => {
   updateAllEnvironments({ userSettings });
 
-  if (viewToggleV2.dataset.selected === 'Favorites') {
+  if (viewToggle.dataset.selected === 'Favorites') {
     await updateFavoriteEnvironments({ userSettings });
     updateNoFavoriteMessage({ userSettings });
   } else {
@@ -87,7 +87,7 @@ function initializeToggle({ userSettings }) {
   [...selectedOptions].forEach(option => (option.dataset.selected = ''));
 
   if (!userSettings.favorites.length) {
-    handleViewToggleV2();
+    handleViewToggle();
   } else {
     updateCarouselFocusTargets();
   }
@@ -237,17 +237,17 @@ async function handleEnvironmentActions(event) {
   }
 }
 
-function handleViewToggleV2() {
-  if (viewToggleV2.dataset.selected === viewToggleV2.dataset.left) {
-    viewToggleV2.dataset.selected = viewToggleV2.dataset.right;
+function handleViewToggle() {
+  if (viewToggle.dataset.selected === viewToggle.dataset.left) {
+    viewToggle.dataset.selected = viewToggle.dataset.right;
   } else {
-    viewToggleV2.dataset.selected = viewToggleV2.dataset.left;
+    viewToggle.dataset.selected = viewToggle.dataset.left;
   }
 
   // update carousel
   const views = [...viewCarousel.querySelectorAll(`[data-option]`)];
-  const leavingView = views.filter(view => view.dataset.option !== viewToggleV2.dataset.selected)[0];
-  const enteringView = views.filter(view => view.dataset.option === viewToggleV2.dataset.selected)[0];
+  const leavingView = views.filter(view => view.dataset.option !== viewToggle.dataset.selected)[0];
+  const enteringView = views.filter(view => view.dataset.option === viewToggle.dataset.selected)[0];
 
   delete leavingView.dataset.selected;
   enteringView.dataset.selected = '';
