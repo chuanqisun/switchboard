@@ -124,51 +124,6 @@ body.pre-sign-in {
   box-shadow: var(--shadow-3);
 }
 
-.toggle {
-  flex: 0 0 auto;
-  background-color: var(--color-primary-dark);
-  height: 2rem;
-  border-radius: 1rem;
-  border: none;
-  box-shadow: inset var(--shadow-2);
-  display: flex;
-  align-items: center;
-  position: relative;
-  padding: 0;
-}
-
-.toggle::before {
-  content: 'Favorites';
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: transparent;
-  padding: 0 1rem;
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  background-color: white;
-  box-shadow: var(--shadow-2);
-  border-radius: 1rem;
-  width: var(--indicator-width, auto);
-  transform: translate3d(var(--indicator-translate), 0, 0);
-  box-sizing: border-box;
-  transition: width 250ms, transform 250ms;
-}
-
-.toggle__option {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: white;
-  padding: 0 1rem;
-  position: relative;
-  transition: color 250ms;
-}
-
-.toggle__option[data-selected] {
-  color: var(--color-primary-dark);
-}
-
 button {
   cursor: pointer;
   -webkit-app-region: no-drag;
@@ -268,7 +223,6 @@ button {
 .notification-container {
   position: absolute;
   bottom: 0;
-  /* z-index: 99; */
 }
 
 .sign-in-container {
