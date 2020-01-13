@@ -2,10 +2,10 @@ import { html } from '../lib/lit-html.js';
 import { component, useState, useEffect, useRef } from '../lib/haunted.js';
 import { useFocusVisible } from './use-focus-visible.js';
 
-function ViewToggle({ dataLeft, dataRight, dataSelect }) {
+function ViewToggle({ dataLeft, dataRight, dataSelected }) {
   const { FocusVisibleStyle } = useFocusVisible(this.shadowRoot);
-  const isToggleOnLeft = dataSelect === 'left';
-  const isToggleOnRight = dataSelect === 'right';
+  const isToggleOnLeft = dataSelected === dataLeft;
+  const isToggleOnRight = dataSelected === dataRight;
 
   const fromWidth = useRef(null);
   const toWidth = useRef(null);
@@ -18,7 +18,7 @@ function ViewToggle({ dataLeft, dataRight, dataSelect }) {
   useEffect(() => {
     isToggleOnRight && animateToRight();
     isToggleOnLeft && animateToLeft();
-  }, [dataSelect]);
+  }, [dataSelected]);
 
   const measureElements = () => {
     if (!knobElement.current) {
@@ -94,6 +94,6 @@ function ViewToggle({ dataLeft, dataRight, dataSelect }) {
   `;
 }
 
-ViewToggle.observedAttributes = ['data-left', 'data-right', 'data-select'];
+ViewToggle.observedAttributes = ['data-left', 'data-right', 'data-selected'];
 
 customElements.define('view-toggle', component(ViewToggle));

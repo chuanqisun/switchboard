@@ -56,7 +56,7 @@ ipcRenderer.once('onEnvironmentsAvailable', (event, { environments, userSettings
 ipcRenderer.on('onFavoritesChange', async (event, { userSettings }) => {
   updateAllEnvironments({ userSettings });
 
-  if (viewToggle.dataset.selectedOption === 'favorites') {
+  if (viewToggleV2.dataset.selected === 'Favorites') {
     await updateFavoriteEnvironments({ userSettings });
     updateNoFavoriteMessage({ userSettings });
   } else {
@@ -238,19 +238,16 @@ async function handleEnvironmentActions(event) {
 }
 
 function handleViewToggleV2() {
-  let selectedOption = null;
-  if (viewToggleV2.dataset.select === 'left') {
-    viewToggleV2.dataset.select = 'right';
-    selectedOption = viewToggleV2.dataset.right;
-  } else if (viewToggleV2.dataset.select === 'right') {
-    viewToggleV2.dataset.select = 'left';
-    selectedOption = viewToggleV2.dataset.left;
+  if (viewToggleV2.dataset.selected === 'Favorites') {
+    viewToggleV2.dataset.selected = 'All';
+  } else if (viewToggleV2.dataset.selected === 'All') {
+    viewToggleV2.dataset.selected = 'Favorites';
   }
 
   // update carousel
   const views = [...viewCarousel.querySelectorAll(`[data-option]`)];
-  const leavingView = views.filter(view => view.dataset.option !== selectedOption)[0];
-  const enteringView = views.filter(view => view.dataset.option === selectedOption)[0];
+  const leavingView = views.filter(view => view.dataset.option !== viewToggleV2.dataset.selected)[0];
+  const enteringView = views.filter(view => view.dataset.option === viewToggleV2.dataset.selected)[0];
 
   delete leavingView.dataset.selected;
   enteringView.dataset.selected = '';
