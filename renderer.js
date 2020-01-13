@@ -238,10 +238,10 @@ async function handleEnvironmentActions(event) {
 }
 
 function handleViewToggleV2() {
-  if (viewToggleV2.dataset.selected === 'Favorites') {
-    viewToggleV2.dataset.selected = 'All';
-  } else if (viewToggleV2.dataset.selected === 'All') {
-    viewToggleV2.dataset.selected = 'Favorites';
+  if (viewToggleV2.dataset.selected === viewToggleV2.dataset.left) {
+    viewToggleV2.dataset.selected = viewToggleV2.dataset.right;
+  } else {
+    viewToggleV2.dataset.selected = viewToggleV2.dataset.left;
   }
 
   // update carousel
