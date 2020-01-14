@@ -33,14 +33,14 @@ function Environments() {
           text-align: left;
           font-size: 0.85rem;
           font-weight: 600;
-          padding: 0.5rem 1rem;
+          padding: 1rem 1rem;
           flex: 1 0 auto;
           border: none;
           background-color: transparent;
         }
         .more {
           opacity: 0;
-          padding: 0.5rem;
+          padding: 1rem;
           flex: 0 0 2rem;
           border: none;
           background-color: transparent;

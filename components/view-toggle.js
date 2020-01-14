@@ -54,7 +54,7 @@ function ViewToggle({ dataLeft, dataRight, dataSelected }) {
     <style>
       .toggle {
         background-color: var(--color-primary-dark);
-        border-radius: 1rem;
+        border-radius: 0.8rem;
         border: none;
         box-shadow: inset var(--shadow-2);
         cursor: pointer;
