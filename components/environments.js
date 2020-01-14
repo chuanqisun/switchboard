@@ -8,46 +8,56 @@ function Environments() {
 
   const environments = useJsonFromUrl('https://aka.ms/switchboard-environments-v2') || [];
 
-  const userSettings = {
-    favorites: [],
-  };
-  const animateEnter = false;
-
   return html`
-    ${environments.map(environment => renderEnvironment({ environment, userSettings, animateEnter }))}
-    <style></style>
+    <div class="environment-list">
+      ${environments.map(environment => renderEnvironment({ environment, root: this }))}
+      <style>
+        .environment-list {
+          margin: 1rem;
+          display: grid;
+          overflow: hidden;
+          border-radius: 4px;
+        }
+        .environment-card {
+          padding: 0.5rem 1rem;
+          background-color: white;
+          display: flex;
+        }
+        .environment-card + .environment-card {
+          border-top: 1px solid #333;
+        }
+        .main-action {
+          flex: 1 0 auto;
+          border: none;
+          background-color: transparent;
+        }
+        .more {
+          flex: 0 0 2rem;
+          border: none;
+          background-color: transparent;
+        }
+      </style>
+    </div>
     ${FocusVisibleStyle}
   `;
 }
 
-function renderEnvironment({ environment, userSettings, animateEnter }) {
+function renderEnvironment({ environment, root }) {
+  const launchEnvironment = env => {
+    const event = new CustomEvent('launch', {
+      bubbles: true,
+      composed: true,
+      detail: { environment },
+    });
+    root.dispatchEvent(event);
+  };
+
   return html`
-    <div class="card js-card${animateEnter ? ' card--animation-enter' : ''}" data-app-id="${environment.appId}">
-      <div class="card__header">
-        <h1 class="card__title">${environment.appName}</h1>
-        <button
-          class="button button--favorite${userSettings.favorites.includes(environment.appId) ? ' button--remove-favorite' : ' button--add-favorite'}"
-          data-app-id="${environment.appId}"
-          data-action="${userSettings.favorites.includes(environment.appId) ? 'removeFavorite' : 'addFavorite'}"
-          title="${userSettings.favorites.includes(environment.appId) ? 'Remove from favorites' : 'Add to favorites'}"
-        >
-          <svg class="star" width="16" height="15">
-            <use xlink:href="#svg-star" />
-          </svg>
-        </button>
-      </div>
-      <div class="card__actions">
-        <button
-          class="button button--primary button--launch"
-          data-action="launch"
-          data-type=${environment.type}
-          data-url="${environment.url}"
-          data-username="${environment.username}"
-          data-password="${environment.password}"
-        >
-          Launch
-        </button>
-      </div>
+    <div class="environment-card">
+      <button class="main-action" @click=${() => launchEnvironment(environment)}>
+        ${environment.appName}
+      </button>
+      <button class="more">...</button>
     </div>
   `;
 }

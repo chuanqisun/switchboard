@@ -14,6 +14,7 @@ const loadingIndicator = document.getElementById('loading-indicator');
 const noFavoriteMessage = document.getElementById('no-favorite-message');
 const notification = document.getElementById('notification');
 const mainMenuButton = document.getElementById('main-menu');
+const environmentsV2 = document.querySelector('sb-environments');
 
 // Handle DOM events
 signInButton.onclick = () => ipcRenderer.send('trySignIn');
@@ -21,6 +22,11 @@ allEnvironments.onclick = event => handleEnvironmentActions(event);
 favoriteEnvironments.onclick = event => handleEnvironmentActions(event);
 viewToggle.onclick = e => handleViewToggle();
 mainMenuButton.onclick = () => handleMainMenuClick();
+environmentsV2.addEventListener('launch', async e => {
+  const { signInDynamicsUCApp } = require('./automation/automation');
+  const { url, username, password } = e.detail.environment;
+  await signInDynamicsUCApp(url, username, password);
+});
 
 // Handle IPC events
 ipcRenderer.once('onSignInStatusUpdate', (event, isSignedIn) => {
