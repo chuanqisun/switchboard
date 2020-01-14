@@ -19,19 +19,28 @@ function Environments() {
           border-radius: 4px;
         }
         .environment-card {
-          padding: 0.5rem 1rem;
           background-color: white;
           display: flex;
         }
+        .environment-card:hover .more {
+          border-left: 1px solid rgba(0, 0, 0, 0.21);
+          opacity: 1;
+        }
         .environment-card + .environment-card {
-          border-top: 1px solid #333;
+          border-top: 1px solid rgba(0, 0, 0, 0.21);
         }
         .main-action {
+          text-align: left;
+          font-size: 0.85rem;
+          font-weight: 600;
+          padding: 0.5rem 1rem;
           flex: 1 0 auto;
           border: none;
           background-color: transparent;
         }
         .more {
+          opacity: 0;
+          padding: 0.5rem;
           flex: 0 0 2rem;
           border: none;
           background-color: transparent;
