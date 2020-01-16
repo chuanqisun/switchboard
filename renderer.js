@@ -13,7 +13,6 @@ const scrollAreas = document.getElementsByClassName('js-scroll-area');
 const loadingIndicator = document.getElementById('loading-indicator');
 const noFavoriteMessage = document.getElementById('no-favorite-message');
 const notification = document.getElementById('notification');
-const mainMenuButton = document.getElementById('main-menu');
 const environmentsV2 = document.querySelector('sb-environments');
 
 // Handle DOM events
@@ -21,7 +20,6 @@ signInButton.onclick = () => ipcRenderer.send('trySignIn');
 allEnvironments.onclick = event => handleEnvironmentActions(event);
 favoriteEnvironments.onclick = event => handleEnvironmentActions(event);
 viewToggle.onclick = e => handleViewToggle();
-mainMenuButton.onclick = () => handleMainMenuClick();
 environmentsV2.addEventListener('launch', async e => {
   const { signInDynamicsUCApp } = require('./automation/automation');
   const { url, username, password } = e.detail.environment;
@@ -256,37 +254,6 @@ function handleViewToggle() {
   // reset scroll
   enteringView.scrollTop = 0;
   toolbar.classList.remove('toolbar--with-scroll');
-}
-
-async function handleMainMenuClick() {
-  // TODO implement toggle behavior
-  const menu = await createMenu();
-  const { getCurrentWindow } = require('electron').remote;
-  menu.popup({ window: getCurrentWindow() });
-}
-
-async function createMenu() {
-  const { Menu, MenuItem } = require('electron').remote;
-  const menu = new Menu();
-  const { isUpdateAvailable } = require('./helpers/update');
-
-  const isDownloadUpdateEnabled = await isUpdateAvailable();
-
-  menu.append(
-    new MenuItem({
-      enabled: isDownloadUpdateEnabled,
-      label: 'Get updates',
-      click: () => ipcRenderer.send('downloadUpdate'),
-    })
-  );
-
-  menu.append(
-    new MenuItem({
-      label: 'Sign out',
-      click: () => ipcRenderer.send('trySignOut'),
-    })
-  );
-  return menu;
 }
 
 function createObserver() {

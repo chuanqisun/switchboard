@@ -33,6 +33,7 @@ function Environments() {
         }
         .main-action {
           text-align: left;
+          font-family: var(--font-family-system);
           font-size: 0.85rem;
           font-weight: 600;
           padding: 1rem 1rem;

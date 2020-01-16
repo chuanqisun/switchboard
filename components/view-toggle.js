@@ -53,6 +53,7 @@ function ViewToggle({ dataLeft, dataRight, dataSelected }) {
     </button>
     <style>
       .toggle {
+        font-family: var(--font-family-system);
         background-color: var(--color-primary-dark);
         border-radius: 0.8rem;
         border: none;
