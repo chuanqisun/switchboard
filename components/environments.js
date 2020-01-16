@@ -1,6 +1,7 @@
 import { html } from '../lib/lit-html.js';
 import { component } from '../lib/haunted.js';
 import { useFocusVisible } from './use-focus-visible.js';
+import { Star } from './icons.js';
 import { useJsonFromUrl } from './use-json-from-url.js';
 
 function Environments() {
@@ -9,6 +10,7 @@ function Environments() {
   const environments = useJsonFromUrl('https://aka.ms/switchboard-environments-v2') || [];
 
   return html`
+    ${Star}
     <div class="environment-list">
       ${environments.map(environment => renderEnvironment({ environment, root: this }))}
       <style>
@@ -39,6 +41,10 @@ function Environments() {
           background-color: transparent;
         }
         .more {
+          --star-stroke-width: 1.25px;
+          --star-stroke: var(--color-off-black);
+          /* --star-fill: var(--color-yellow); */
+          --star-fill: transparent;
           opacity: 0;
           padding: 1rem;
           flex: 0 0 2rem;
@@ -66,7 +72,11 @@ function renderEnvironment({ environment, root }) {
       <button class="main-action" @click=${() => launchEnvironment(environment)}>
         ${environment.appName}
       </button>
-      <button class="more">...</button>
+      <button class="more">
+        <svg class="star" width="16" height="15">
+          <use xlink:href="#svg-star" />
+        </svg>
+      </button>
     </div>
   `;
 }

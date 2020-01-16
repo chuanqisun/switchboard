@@ -17,6 +17,7 @@ function AppHeader() {
   };
 
   return html`
+    ${Minimize} ${Close}
     <header id="header" class="header body--fixed-top">
       <div class="header__title">Switchboard</div>
       <div class="header__actions">
@@ -32,7 +33,6 @@ function AppHeader() {
         </button>
       </div>
     </header>
-    ${Minimize} ${Close}
     <style>
       .body--fixed-top {
         flex: 0 0 auto;
