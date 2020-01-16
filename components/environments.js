@@ -1,13 +1,13 @@
 import { html } from '../lib/lit-html.js';
-import { component } from '../lib/haunted.js';
+import { component, useContext } from '../lib/haunted.js';
 import { useFocusVisible } from './use-focus-visible.js';
 import { Star } from './icons.js';
-import { useJsonFromUrl } from './use-json-from-url.js';
+import { EnvironmentsContext } from './environments-context.js';
 
 function Environments() {
   const { FocusVisibleStyle } = useFocusVisible(this.shadowRoot);
 
-  const environments = useJsonFromUrl('https://aka.ms/switchboard-environments-v2') || [];
+  const environments = useContext(EnvironmentsContext);
 
   return html`
     ${Star}
