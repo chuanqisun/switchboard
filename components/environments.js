@@ -25,7 +25,6 @@ function Environments() {
           display: flex;
         }
         .environment-card:hover .more {
-          border-left: 1px solid rgba(0, 0, 0, 0.21);
           opacity: 1;
         }
         .environment-card + .environment-card {

@@ -68,41 +68,6 @@ body.pre-sign-in {
   box-sizing: inherit;
 }
 
-.loading-indicator {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-}
-
-.loading-image {
-  width: 3rem;
-  animation: pulse 3s infinite;
-}
-
-.loading-message {
-  margin-top: 1rem;
-  color: white;
-  display: none;
-}
-
-.loading-indicator[data-state='sign-in'] [data-for-state='sign-in'] {
-  display: initial;
-}
-
-.loading-indicator[data-state='get-environments'] [data-for-state='get-environments'] {
-  display: initial;
-}
-
-.loading-indicator[data-state='done'] {
-  display: none;
-}
-
 .toolbar {
   display: none;
   flex: 0 0 auto;

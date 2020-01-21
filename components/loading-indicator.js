@@ -4,18 +4,21 @@ const { ipcRenderer } = require('electron');
 
 function LoadingIndicator() {
   useEffect(() => {
-    // Handle IPC events
     const loadingIndicator = this.shadowRoot.querySelector('#loading-indicator');
 
     ipcRenderer.once('onSignInStatusUpdate', (event, isSignedIn) => {
       if (isSignedIn) {
         loadingIndicator.dataset.state = 'get-environments';
-        ipcRenderer.send('getEnvironments');
-        ipcRenderer.send('checkMetadata');
       } else {
         loadingIndicator.dataset.state = 'done';
       }
     });
+
+    ipcRenderer.once('onEnvironmentsAvailable', (event, { environments, userSettings }) => {
+      loadingIndicator.dataset.state = 'done';
+    });
+
+    ipcRenderer.send('getSignInStatus');
   }, []);
 
   return html`
@@ -39,6 +42,29 @@ function LoadingIndicator() {
         align-items: center;
         justify-content: center;
         flex-direction: column;
+      }
+
+      .loading-image {
+        width: 3rem;
+        animation: pulse 3s infinite;
+      }
+
+      .loading-message {
+        margin-top: 1rem;
+        color: white;
+        display: none;
+      }
+
+      .loading-indicator[data-state='sign-in'] [data-for-state='sign-in'] {
+        display: initial;
+      }
+
+      .loading-indicator[data-state='get-environments'] [data-for-state='get-environments'] {
+        display: initial;
+      }
+
+      .loading-indicator[data-state='done'] {
+        display: none;
       }
     </style>
   `;

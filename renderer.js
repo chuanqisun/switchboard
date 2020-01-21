@@ -10,7 +10,6 @@ const viewToggle = document.querySelector('sb-view-toggle');
 const viewCarousel = document.getElementById('view-carousel');
 const toolbar = document.getElementById('toolbar');
 const scrollAreas = document.getElementsByClassName('js-scroll-area');
-const loadingIndicator = document.getElementById('loading-indicator');
 const noFavoriteMessage = document.getElementById('no-favorite-message');
 const notification = document.getElementById('notification');
 const environmentsV2 = document.querySelector('sb-environments');
@@ -29,13 +28,8 @@ environmentsV2.addEventListener('launch', async e => {
 // Handle IPC events
 ipcRenderer.once('onSignInStatusUpdate', (event, isSignedIn) => {
   if (isSignedIn) {
-    body.classList.add('post-sign-in');
-    loadingIndicator.dataset.state = 'get-environments';
     ipcRenderer.send('getEnvironments');
     ipcRenderer.send('checkMetadata');
-  } else {
-    loadingIndicator.dataset.state = 'done';
-    body.classList.add('pre-sign-in');
   }
 });
 
@@ -44,7 +38,6 @@ let cachedEnvironments = [];
 
 ipcRenderer.once('onEnvironmentsAvailable', (event, { environments, userSettings }) => {
   body.classList.add('environment-available');
-  loadingIndicator.dataset.state = 'done';
 
   cachedEnvironments = environments;
   allEnvironments.innerHTML = renderAllEnvironments({ environments, userSettings, animateEnter: true });
@@ -79,7 +72,7 @@ ipcRenderer.on('onDownloadComplete', (event, { exec }) => {
 });
 
 // Init
-ipcRenderer.send('getSignInStatus');
+// ipcRenderer.send('getSignInStatus');
 const { initializeChromium } = require('./automation/automation');
 initializeChromium().then(() => {
   notification.innerText = 'Installed';
