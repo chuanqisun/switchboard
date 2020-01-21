@@ -35,6 +35,11 @@
         <sb-app-menu></sb-app-menu>
       </div>
 
+      <sb-view-carousel data-left="Favorites" data-right="All" data-selected="Favorites">
+        <div slot="Favorites">left from outside</div>
+        <div slot="All">right from outside</div>
+      </sb-view-carousel>
+
       <div id="view-carousel" class="view-carousel">
         <div class="scroll-area js-scroll-area view-carousel__item view-carousel__item-left" data-option="Favorites">
           <div id="no-favorite-message" class="no-favorite-message">You have no favorite apps.</div>

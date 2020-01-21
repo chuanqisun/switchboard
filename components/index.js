@@ -1,6 +1,7 @@
 import './app-menu.js';
-import './header.js';
-import './view-toggle.js';
-import './environments.js';
 import './environments-context.js';
+import './environments.js';
+import './header.js';
 import './loading-indicator.js';
+import './view-carousel.js';
+import './view-toggle.js';
