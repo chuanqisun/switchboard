@@ -20,7 +20,6 @@
     <sb-app-header></sb-app-header>
 
     <sb-loading-indicator></sb-loading-indicator>
-
     <main class="main body--flex-middle">
       <div id="sign-in-container" class="sign-in-container main__pre-sign-in-container">
         <button class="button button--primary button--extra-wide button--sign-in" id="sign-in">Sign in</button>
@@ -45,19 +44,21 @@
           </sb-scroll-observer>
         </sb-view-carousel>
       </sb-environments-provider> -->
-
-      <div id="view-carousel" class="view-carousel">
-        <sb-scroll-observer class="scroll-area view-carousel__item view-carousel__item-left" data-option="Favorites">
-          <div id="no-favorite-message" class="no-favorite-message">You have no favorite apps.</div>
-          <div class="environment-grid" id="favorite-environments"></div>
-        </sb-scroll-observer>
-        <sb-scroll-observer class="scroll-area view-carousel__item view-carousel__item-right" data-option="All">
-          <sb-environments-provider>
-            <sb-environments></sb-environments>
-          </sb-environments-provider>
-          <div class="environment-grid" id="all-environments"></div>
-        </sb-scroll-observer>
-      </div>
+      <sb-environments-provider>
+        <sb-favorites-provider>
+          <div id="view-carousel" class="view-carousel">
+            <sb-scroll-observer class="scroll-area view-carousel__item view-carousel__item-left" data-option="Favorites">
+              <div id="no-favorite-message" class="no-favorite-message">You have no favorite apps.</div>
+              <sb-environments data-favorites-only></sb-environments>
+              <div class="environment-grid" id="favorite-environments"></div>
+            </sb-scroll-observer>
+            <sb-scroll-observer class="scroll-area view-carousel__item view-carousel__item-right" data-option="All">
+              <sb-environments></sb-environments>
+              <div class="environment-grid" id="all-environments"></div>
+            </sb-scroll-observer>
+          </div>
+        </sb-favorites-provider>
+      </sb-environments-provider>
     </main>
 
     <script>

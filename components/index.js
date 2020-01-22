@@ -6,3 +6,4 @@ import './loading-indicator.js';
 import './view-carousel.js';
 import './view-toggle.js';
 import './scroll-observer.js';
+import './favorites-context.js';

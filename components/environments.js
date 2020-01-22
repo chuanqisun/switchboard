@@ -2,12 +2,20 @@ import { html } from '../lib/lit-html.js';
 import { component, useContext } from '../lib/haunted.js';
 import { useFocusVisible } from './use-focus-visible.js';
 import { Star } from './icons.js';
+import { FavoritesContext } from './favorites-context.js';
 import { EnvironmentsContext } from './environments-context.js';
 
-function Environments() {
+function Environments({ dataFavoritesOnly }) {
   const { FocusVisibleStyle } = useFocusVisible(this.shadowRoot);
 
-  const environments = useContext(EnvironmentsContext);
+  let environments = useContext(EnvironmentsContext);
+  const favorites = useContext(FavoritesContext);
+
+  if (dataFavoritesOnly) {
+    console.dir(environments);
+    console.dir(favorites);
+    environments = environments.filter(environment => favorites.includes(environment.appId));
+  }
 
   return html`
     ${Star}
@@ -80,5 +88,7 @@ function renderEnvironment({ environment, root }) {
     </div>
   `;
 }
+
+Environments.observedAttributes = ['data-favorites-only'];
 
 customElements.define('sb-environments', component(Environments));

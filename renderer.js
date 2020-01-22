@@ -254,7 +254,6 @@ function createObserver() {
 
   const observer = new MutationObserver(() => {
     // the value is "true" or "false" in string type
-    console.dir('changed');
     if (isAnyAreaScrolled()) {
       toolbar.classList.add('toolbar--with-scroll');
     } else {

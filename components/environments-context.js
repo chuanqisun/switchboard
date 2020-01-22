@@ -11,6 +11,12 @@ function EnvironmentsProvider() {
 
   return html`
     <sb-environments-provider-internal .value=${environments}><slot></slot></sb-environments-provider-internal>
+    <style>
+      :host,
+      sb-environments-provider-internal {
+        display: contents;
+      }
+    </style>
   `;
 }
 
