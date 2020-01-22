@@ -24,6 +24,8 @@ ipcRenderer.once('onSignInStatusUpdate', (event, isSignedIn) => {
   if (isSignedIn) {
     ipcRenderer.send('getEnvironments');
     ipcRenderer.send('checkMetadata');
+  } else {
+    document.body.classList.add('pre-sign-in');
   }
 });
 

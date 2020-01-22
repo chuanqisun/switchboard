@@ -37,7 +37,4 @@ function ensureUserSettingsSchema(userSettings) {
 
 module.exports = {
   ensureUserSettings,
-  addFavorite,
-  removeFavorite,
-  saveUserSettings,
 };
