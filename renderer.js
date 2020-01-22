@@ -9,7 +9,6 @@ const favoriteEnvironments = document.getElementById('favorite-environments');
 const viewToggle = document.querySelector('sb-view-toggle');
 const viewCarousel = document.getElementById('view-carousel');
 const toolbar = document.getElementById('toolbar');
-const scrollAreas = document.getElementsByClassName('js-scroll-area');
 const noFavoriteMessage = document.getElementById('no-favorite-message');
 const notification = document.getElementById('notification');
 const environmentsV2 = document.querySelector('sb-environments');
@@ -245,26 +244,28 @@ function handleViewToggle() {
   updateCarouselFocusTargets();
 
   // reset scroll
-  enteringView.scrollTop = 0;
-  toolbar.classList.remove('toolbar--with-scroll');
+  leavingView.scrollToTop();
 }
 
 function createObserver() {
-  [...scrollAreas].map(scrollArea => {
-    const options = {
-      root: scrollArea,
-      rootMargin: '0px',
-      threshold: 0,
-    };
+  const scrollAreas = document.querySelectorAll('sb-scroll-observer');
+  const scrollAreaLeft = scrollAreas[0];
+  const scrollAreaRight = scrollAreas[1];
 
-    const observer = new IntersectionObserver(e => {
-      if (e[0].isIntersecting) {
-        toolbar.classList.remove('toolbar--with-scroll');
-      } else {
-        toolbar.classList.add('toolbar--with-scroll');
-      }
-    }, options);
-
-    observer.observe(scrollArea.querySelector('.js-scroll-sentinel'));
+  const observer = new MutationObserver(() => {
+    // the value is "true" or "false" in string type
+    console.dir('changed');
+    if (isAnyAreaScrolled()) {
+      toolbar.classList.add('toolbar--with-scroll');
+    } else {
+      toolbar.classList.remove('toolbar--with-scroll');
+    }
   });
+
+  observer.observe(scrollAreaLeft, { attributes: true, attributeFilter: ['data-scrolled'] });
+  observer.observe(scrollAreaRight, { attributes: true, attributeFilter: ['data-scrolled'] });
+}
+
+function isAnyAreaScrolled() {
+  return [...document.querySelectorAll('sb-scroll-observer')].some(observer => observer.getAttribute('data-scrolled') === 'true');
 }
