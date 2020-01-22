@@ -66,6 +66,18 @@ function LoadingIndicator() {
       .loading-indicator[data-state='done'] {
         display: none;
       }
+
+      @keyframes pulse {
+        0% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.5;
+        }
+        10% {
+          opacity: 1;
+        }
+      }
     </style>
   `;
 }

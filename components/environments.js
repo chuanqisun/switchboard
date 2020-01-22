@@ -9,13 +9,38 @@ function Environments({ dataFavoritesOnly }) {
   const { FocusVisibleStyle } = useFocusVisible(this.shadowRoot);
 
   let environments = useContext(EnvironmentsContext);
-  const favorites = useContext(FavoritesContext);
+  const favoritesContext = useContext(FavoritesContext);
 
   if (dataFavoritesOnly) {
-    console.dir(environments);
-    console.dir(favorites);
-    environments = environments.filter(environment => favorites.includes(environment.appId));
+    environments = environments.filter(environment => favoritesContext.favorites.includes(environment.appId));
   }
+
+  const renderEnvironment = ({ environment, root }) => {
+    const launchEnvironment = env => {
+      const event = new CustomEvent('launch', {
+        bubbles: true,
+        composed: true,
+        detail: { environment },
+      });
+      root.dispatchEvent(event);
+    };
+
+    return html`
+      <div class="environment-card">
+        <button class="main-action" @click=${() => launchEnvironment(environment)}>
+          ${environment.appName}
+        </button>
+        <button
+          class="more${favoritesContext.isFavorite(environment.appId) ? ' more--favorite' : ''}"
+          @click=${() => favoritesContext.toggleFavoriteInContext(environment.appId)}
+        >
+          <svg class="star" width="16" height="15">
+            <use xlink:href="#svg-star" />
+          </svg>
+        </button>
+      </div>
+    `;
+  };
 
   return html`
     ${Star}
@@ -39,6 +64,7 @@ function Environments({ dataFavoritesOnly }) {
           border-top: 1px solid rgba(0, 0, 0, 0.21);
         }
         .main-action {
+          cursor: pointer;
           text-align: left;
           font-family: var(--font-family-system);
           font-size: 0.85rem;
@@ -51,41 +77,25 @@ function Environments({ dataFavoritesOnly }) {
         .more {
           --star-stroke-width: 1.25px;
           --star-stroke: var(--color-off-black);
-          /* --star-fill: var(--color-yellow); */
           --star-fill: transparent;
           opacity: 0;
           padding: 1rem;
           flex: 0 0 2rem;
           border: none;
           background-color: transparent;
+          cursor: pointer;
+        }
+        .more:hover {
+          transform: scale(1.2);
+        }
+
+        .more--favorite {
+          opacity: 1;
+          --star-fill: var(--color-yellow);
         }
       </style>
     </div>
     ${FocusVisibleStyle}
-  `;
-}
-
-function renderEnvironment({ environment, root }) {
-  const launchEnvironment = env => {
-    const event = new CustomEvent('launch', {
-      bubbles: true,
-      composed: true,
-      detail: { environment },
-    });
-    root.dispatchEvent(event);
-  };
-
-  return html`
-    <div class="environment-card">
-      <button class="main-action" @click=${() => launchEnvironment(environment)}>
-        ${environment.appName}
-      </button>
-      <button class="more">
-        <svg class="star" width="16" height="15">
-          <use xlink:href="#svg-star" />
-        </svg>
-      </button>
-    </div>
   `;
 }
 
