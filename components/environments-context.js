@@ -10,12 +10,17 @@ customElements.define('sb-environments-provider-internal', EnvironmentsContext.P
 
 function EnvironmentsProvider() {
   const [environments, setEnvironments] = useState([]);
-  const [status, setStatus] = useState('loading'); // 'loading' | 'loaded'
+  const [status, setStatus] = useState('loading'); // 'loading' | 'loaded' | 'error'
 
   useEffect(async () => {
     const result = await getJsonFromUrl('https://aka.ms/switchboard-environments-v2');
-    setEnvironments(result);
-    setStatus('loaded');
+    if (Array.isArray(result)) {
+      setEnvironments(result);
+      setStatus('loaded');
+    } else {
+      setEnvironments([]);
+      setStatus('error');
+    }
   }, []);
 
   const contextValue = {
