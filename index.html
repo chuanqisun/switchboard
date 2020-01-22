@@ -35,10 +35,16 @@
         <sb-app-menu></sb-app-menu>
       </div>
 
-      <sb-view-carousel data-left="Favorites" data-right="All" data-selected="Favorites">
-        <div slot="Favorites">left from outside</div>
-        <div slot="All">right from outside</div>
-      </sb-view-carousel>
+      <!-- <sb-environments-provider>
+        <sb-view-carousel data-left="Favorites" data-right="All" data-selected="Favorites">
+          <sb-scroll-observer slot="Favorites">
+            <h3>Favorites</h3>
+          </sb-scroll-observer>
+          <sb-scroll-observer slot="All">
+            <sb-environments></sb-environments>
+          </sb-scroll-observer>
+        </sb-view-carousel>
+      </sb-environments-provider> -->
 
       <div id="view-carousel" class="view-carousel">
         <div class="scroll-area js-scroll-area view-carousel__item view-carousel__item-left" data-option="Favorites">

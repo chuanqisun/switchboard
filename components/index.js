@@ -5,3 +5,4 @@ import './header.js';
 import './loading-indicator.js';
 import './view-carousel.js';
 import './view-toggle.js';
+import './scroll-observer.js';
