@@ -10,9 +10,9 @@ export async function getJsonFromUrl(url) {
     tempWindow.loadURL(url);
 
     tempWindow.webContents.on('dom-ready', async () => {
-      const result = await tempWindow.webContents.executeJavaScript(`document.querySelector('pre').innerText`);
-      tempWindow.destroy();
       try {
+        const result = await tempWindow.webContents.executeJavaScript(`document.querySelector('pre').innerText`);
+        tempWindow.destroy();
         const resultObject = JSON.parse(result);
         resolve(resultObject);
       } catch (e) {
