@@ -1,16 +1,30 @@
 import { createContext, useState, component, useEffect } from '../lib/haunted.js';
 import { html } from '../lib/lit-html.js';
-import { useJsonFromUrl } from './use-json-from-url.js';
+import { getJsonFromUrl } from '../helpers/get-json-from-url.js';
 
-export const EnvironmentsContext = createContext([]);
+export const EnvironmentsContext = createContext({
+  environments: [],
+});
 
 customElements.define('sb-environments-provider-internal', EnvironmentsContext.Provider);
 
 function EnvironmentsProvider() {
-  const environments = useJsonFromUrl('https://aka.ms/switchboard-environments-v2') || [];
+  const [environments, setEnvironments] = useState([]);
+  const [status, setStatus] = useState('loading'); // 'loading' | 'loaded'
+
+  useEffect(async () => {
+    const result = await getJsonFromUrl('https://aka.ms/switchboard-environments-v2');
+    setEnvironments(result);
+    setStatus('loaded');
+  }, []);
+
+  const contextValue = {
+    environments,
+    status,
+  };
 
   return html`
-    <sb-environments-provider-internal .value=${environments}><slot></slot></sb-environments-provider-internal>
+    <sb-environments-provider-internal .value=${contextValue}><slot></slot></sb-environments-provider-internal>
     <style>
       :host,
       sb-environments-provider-internal {

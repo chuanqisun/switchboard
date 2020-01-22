@@ -2,6 +2,7 @@ import { html } from '../lib/lit-html.js';
 import { component, useEffect } from '../lib/haunted.js';
 const { ipcRenderer } = require('electron');
 
+// TODO use loading indicator inside auth and environments context
 function LoadingIndicator() {
   useEffect(() => {
     const loadingIndicator = this.shadowRoot.querySelector('#loading-indicator');

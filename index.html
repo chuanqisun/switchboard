@@ -37,13 +37,12 @@
       <sb-environments-provider>
         <sb-favorites-provider>
           <div id="view-carousel" class="view-carousel">
-            <sb-scroll-observer class="scroll-area view-carousel__item view-carousel__item-left" data-option="Favorites">
-              <div id="no-favorite-message" class="no-favorite-message">You have no favorite apps.</div>
-              <sb-environments data-favorites-only></sb-environments>
+            <sb-scroll-observer class="scroll-area view-carousel__item view-carousel__item-left" data-selected data-option="Favorites">
+              <sb-environments data-empty-text="You have no favorite apps." data-favorites-only></sb-environments>
               <div class="environment-grid" id="favorite-environments"></div>
             </sb-scroll-observer>
             <sb-scroll-observer class="scroll-area view-carousel__item view-carousel__item-right" data-option="All">
-              <sb-environments></sb-environments>
+              <sb-environments data-empty-text="You have no apps."></sb-environments>
               <div class="environment-grid" id="all-environments"></div>
             </sb-scroll-observer>
           </div>

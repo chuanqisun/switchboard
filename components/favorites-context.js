@@ -2,7 +2,11 @@ import { createContext, useState, component, useEffect } from '../lib/haunted.js
 import { html } from '../lib/lit-html.js';
 import { ensureUserSettings, addFavorite, removeFavorite, saveUserSettings, isFavorite } from '../helpers/user-settings-v2.js';
 
-export const FavoritesContext = createContext([]);
+export const FavoritesContext = createContext({
+  favorites: [],
+  isFavorite: () => {},
+  toggleFavorite: () => {},
+});
 
 customElements.define('sb-favorites-provider-internal', FavoritesContext.Provider);
 
@@ -22,10 +26,10 @@ function FavoritesProvider() {
   const removeFavoriteInContext = async appId => {
     const userSettings = removeFavorite(appId);
     setFavorites(userSettings.favorites);
-    await removeFavorite(appId);
+    await saveUserSettings(userSettings);
   };
 
-  const toggleFavoriteInContext = async appId => {
+  const toggleFavorite = async appId => {
     if (isFavorite(appId)) {
       await removeFavoriteInContext(appId);
     } else {
@@ -36,7 +40,7 @@ function FavoritesProvider() {
   const contextValue = {
     favorites,
     isFavorite,
-    toggleFavoriteInContext,
+    toggleFavorite,
   };
 
   return html`

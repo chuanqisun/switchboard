@@ -1,7 +1,6 @@
 const { ipcRenderer } = require('electron');
 
 // DOM elements
-const body = document.querySelector('body');
 const signInButton = document.getElementById('sign-in');
 const viewToggle = document.querySelector('sb-view-toggle');
 const viewCarousel = document.getElementById('view-carousel');
@@ -52,9 +51,6 @@ initializeChromium().then(() => {
 
 // Render functions
 function initializeToggle({ userSettings }) {
-  const selectedOptions = document.querySelectorAll(`[data-option="Favorites"]`);
-  [...selectedOptions].forEach(option => (option.dataset.selected = ''));
-
   if (!userSettings.favorites.length) {
     handleViewToggle();
   } else {

@@ -61,27 +61,12 @@ ipcMain.on('getEnvironments', async event => {
   const { ensureUserSettings } = require('./helpers/user-settings');
   const { getEnvironments } = require('./helpers/environments');
   const [userSettings, environments] = await Promise.all([ensureUserSettings(), getEnvironments()]);
-
   event.sender.send('onEnvironmentsAvailable', { environments, userSettings });
 });
 
 ipcMain.on('downloadUpdate', () => {
   const { downloadUpdate } = require('./helpers/dialogs');
   downloadUpdate();
-});
-
-ipcMain.on('addFavorite', async (event, { appId }) => {
-  const { addFavorite, saveUserSettings } = require('./helpers/user-settings');
-  const userSettings = addFavorite(appId);
-  event.sender.send('onFavoritesChange', { userSettings });
-  saveUserSettings(userSettings);
-});
-
-ipcMain.on('removeFavorite', async (event, { appId }) => {
-  const { removeFavorite, saveUserSettings } = require('./helpers/user-settings');
-  const userSettings = removeFavorite(appId);
-  event.sender.send('onFavoritesChange', { userSettings });
-  saveUserSettings(userSettings);
 });
 
 ipcMain.on('download-chromium', async (event, { revision }) => {

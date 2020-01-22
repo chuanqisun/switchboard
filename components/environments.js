@@ -5,15 +5,18 @@ import { Star } from './icons.js';
 import { FavoritesContext } from './favorites-context.js';
 import { EnvironmentsContext } from './environments-context.js';
 
-function Environments({ dataFavoritesOnly }) {
+function Environments({ dataFavoritesOnly, dataEmptyText }) {
   const { FocusVisibleStyle } = useFocusVisible(this.shadowRoot);
 
-  let environments = useContext(EnvironmentsContext);
+  const environmentsContext = useContext(EnvironmentsContext);
   const favoritesContext = useContext(FavoritesContext);
 
+  let environments = environmentsContext.environments;
   if (dataFavoritesOnly) {
-    environments = environments.filter(environment => favoritesContext.favorites.includes(environment.appId));
+    environments = environmentsContext.environments.filter(environment => favoritesContext.favorites.includes(environment.appId));
   }
+
+  const isEmptyState = environmentsContext.status === 'loaded' && environments.length === 0;
 
   const renderEnvironment = ({ environment, root }) => {
     const launchEnvironment = env => {
@@ -32,7 +35,7 @@ function Environments({ dataFavoritesOnly }) {
         </button>
         <button
           class="more${favoritesContext.isFavorite(environment.appId) ? ' more--favorite' : ''}"
-          @click=${() => favoritesContext.toggleFavoriteInContext(environment.appId)}
+          @click=${() => favoritesContext.toggleFavorite(environment.appId)}
         >
           <svg class="star" width="16" height="15">
             <use xlink:href="#svg-star" />
@@ -45,8 +48,19 @@ function Environments({ dataFavoritesOnly }) {
   return html`
     ${Star}
     <div class="environment-list">
+      ${isEmptyState
+        ? html`
+            <div class="empty-text">${dataEmptyText}</div>
+          `
+        : null}
       ${environments.map(environment => renderEnvironment({ environment, root: this }))}
       <style>
+        .empty-text {
+          color: white;
+          --star-fill: white;
+          --star-stroke: var(--color-off-black);
+          padding: 0 1rem;
+        }
         .environment-list {
           margin: 1rem;
           display: grid;
@@ -99,6 +113,6 @@ function Environments({ dataFavoritesOnly }) {
   `;
 }
 
-Environments.observedAttributes = ['data-favorites-only'];
+Environments.observedAttributes = ['data-favorites-only', 'data-empty-text'];
 
 customElements.define('sb-environments', component(Environments));
