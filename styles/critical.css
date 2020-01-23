@@ -117,11 +117,6 @@ button {
   box-shadow: var(--shadow-1);
 }
 
-.button--extra-wide {
-  width: 100%;
-  max-width: 24rem;
-}
-
 .button--favorite {
   --star-stroke-width: 1.25px;
   --star-stroke: var(--color-off-black);
@@ -191,31 +186,19 @@ button {
   bottom: 0;
 }
 
-.sign-in-container {
-  display: none;
-  height: 100%;
-  justify-content: center;
-  align-items: center;
-}
-
-.pre-sign-in .sign-in-container {
-  display: flex;
-}
-
 .main {
   display: flex;
   flex-direction: column;
 }
 
-.main__pre-sign-in-container {
+sb-sign-in-form {
+  height: 100%;
   flex: 1 0 auto;
+  display: none;
 }
 
-.button--sign-in {
-  animation: button-enter 400ms 200ms;
-  animation-fill-mode: both;
-  will-change: transform, opacity;
-  box-sizing: border-box;
+sb-sign-in-form[data-active] {
+  display: block;
 }
 
 .view-carousel {
@@ -361,17 +344,6 @@ button {
   0% {
   }
   100% {
-  }
-}
-
-@keyframes button-enter {
-  0% {
-    transform: translateY(16px);
-    opacity: 0;
-  }
-  100% {
-    transform: translateX(0);
-    opacity: 1;
   }
 }
 

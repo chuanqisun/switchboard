@@ -21,7 +21,7 @@ function LoadingIndicator() {
     <div id="loading-indicator" class="loading-indicator" data-state="get-environments">
       <img class="loading-image" src="./assets/bolt.svg" />
       <div class="loading-message" data-for-state="get-environments">
-        Getting apps…
+        Checking sign-in status…
       </div>
     </div>
     <style>

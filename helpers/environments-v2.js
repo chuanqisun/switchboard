@@ -1,5 +1,6 @@
 const { BrowserWindow } = require('electron').remote;
 
+// TODO share url with auth.js
 const signInBlockerUrlPrefix = 'https://login.microsoftonline.com';
 const signInSuccessUrlPrefix = 'https://microsoft.sharepoint.com';
 const getEnvironmentsEndpoint = 'https://aka.ms/switchboard-environments-v2';

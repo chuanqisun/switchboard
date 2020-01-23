@@ -1,7 +1,6 @@
 const { ipcRenderer } = require('electron');
 
 // DOM elements
-const signInButton = document.getElementById('sign-in');
 const viewToggle = document.querySelector('sb-view-toggle');
 const viewCarousel = document.getElementById('view-carousel');
 const toolbar = document.getElementById('toolbar');
@@ -9,7 +8,6 @@ const notification = document.getElementById('notification');
 const environments = document.querySelectorAll('sb-environments');
 
 // Handle DOM events
-signInButton.onclick = () => ipcRenderer.send('trySignIn');
 viewToggle.onclick = e => handleViewToggle();
 environments.forEach(environments =>
   environments.addEventListener('launch', async e => {
