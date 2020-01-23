@@ -8,6 +8,8 @@ const userSettingsPath = path.join(userDataPath, userSettingsFilename);
 async function ensureUserSettings() {
   return new Promise(resolve => {
     try {
+      // clear cache each time so node always get the latest user settings
+      delete require.cache[require.resolve(userSettingsPath)];
       const userSettings = require(userSettingsPath);
       ensureUserSettingsSchema(userSettings);
       console.log(`[user-settings] settings file found at ${userSettingsPath}`);
