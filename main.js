@@ -49,12 +49,6 @@ ipcMain.on('getSignInStatus', async event => {
   event.sender.send('onSignInStatusUpdate', isSignedIn);
 });
 
-ipcMain.on('trySignIn', async event => {
-  const { signIn } = require('./helpers/account');
-  await signIn(mainWindow);
-  mainWindow.reload();
-});
-
 ipcMain.on('trySignOut', signOut);
 
 ipcMain.on('getEnvironments', async event => {
