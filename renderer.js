@@ -6,12 +6,12 @@ const viewToggle = document.querySelector('sb-view-toggle');
 const viewCarousel = document.getElementById('view-carousel');
 const toolbar = document.getElementById('toolbar');
 const notification = document.getElementById('notification');
-const environmentsV2 = document.querySelectorAll('sb-environments');
+const environments = document.querySelectorAll('sb-environments');
 
 // Handle DOM events
 signInButton.onclick = () => ipcRenderer.send('trySignIn');
 viewToggle.onclick = e => handleViewToggle();
-environmentsV2.forEach(environments =>
+environments.forEach(environments =>
   environments.addEventListener('launch', async e => {
     const { signInDynamicsUCApp } = require('./automation/automation');
     const { url, username, password } = e.detail.environment;

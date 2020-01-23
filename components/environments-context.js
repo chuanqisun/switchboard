@@ -1,8 +1,9 @@
 import { createContext, useState, component, useEffect } from '../lib/haunted.js';
+import { getEnvironments, rejectReasonSignedOut, rejectReasonInvalidEnvironmentsJson } from '../helpers/environments-v2.js';
 import { html } from '../lib/lit-html.js';
-import { getJsonFromUrl } from '../helpers/get-json-from-url.js';
 
 export const EnvironmentsContext = createContext({
+  status: 'loading',
   environments: [],
 });
 
@@ -10,22 +11,35 @@ customElements.define('sb-environments-provider-internal', EnvironmentsContext.P
 
 function EnvironmentsProvider() {
   const [environments, setEnvironments] = useState([]);
-  const [status, setStatus] = useState('loading'); // 'loading' | 'loaded' | 'error'
+  const [status, setStatus] = useState('loading'); // 'loading' | 'signed-out' | 'loaded' | 'error'
 
   useEffect(async () => {
-    const result = await getJsonFromUrl('https://aka.ms/switchboard-environments-v2');
-    if (Array.isArray(result)) {
-      setEnvironments(result);
-      setStatus('loaded');
-    } else {
-      setEnvironments([]);
-      setStatus('error');
+    try {
+      const environments = await getEnvironments();
+      if (Array.isArray(environments)) {
+        setEnvironments(environments);
+        setStatus('loaded');
+      } else {
+        console.log('[environments-context] parse environments json is not an array');
+        setStatus('error');
+      }
+    } catch (e) {
+      switch (e) {
+        case rejectReasonSignedOut:
+          console.log('[environments-context] not signed in');
+          setStatus('signed-out');
+          break;
+        case rejectReasonInvalidEnvironmentsJson:
+          console.log('[environments-context] parse environments json failed');
+          setStatus('error');
+          break;
+      }
     }
   }, []);
 
   const contextValue = {
-    environments,
     status,
+    environments,
   };
 
   return html`
