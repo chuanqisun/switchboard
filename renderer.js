@@ -45,7 +45,7 @@ ipcRenderer.on('onDownloadComplete', (event, { exec }) => {
 });
 
 // Init
-// ipcRenderer.send('getSignInStatus');
+ipcRenderer.send('getSignInStatus');
 const { initializeChromium } = require('./automation/automation');
 initializeChromium().then(() => {
   notification.innerText = 'Installed';

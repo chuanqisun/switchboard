@@ -1,33 +1,25 @@
 import { html } from '../lib/lit-html.js';
-import { component, useEffect } from '../lib/haunted.js';
-const { ipcRenderer } = require('electron');
+import { component, useEffect, useContext } from '../lib/haunted.js';
+import { EnvironmentsContext } from './environments-context.js';
 
-// TODO use loading indicator inside auth and environments context
 function LoadingIndicator() {
+  const environmentsContext = useContext(EnvironmentsContext);
+
   useEffect(() => {
     const loadingIndicator = this.shadowRoot.querySelector('#loading-indicator');
 
-    ipcRenderer.once('onSignInStatusUpdate', (event, isSignedIn) => {
-      if (isSignedIn) {
-        loadingIndicator.dataset.state = 'get-environments';
-      } else {
+    switch (environmentsContext.status) {
+      case 'loaded':
+      case 'signed-out':
+      case 'error':
         loadingIndicator.dataset.state = 'done';
-      }
-    });
-
-    ipcRenderer.once('onEnvironmentsAvailable', (event, { environments, userSettings }) => {
-      loadingIndicator.dataset.state = 'done';
-    });
-
-    ipcRenderer.send('getSignInStatus');
-  }, []);
+        break;
+    }
+  }, [environmentsContext.status]);
 
   return html`
-    <div id="loading-indicator" class="loading-indicator" data-state="sign-in">
+    <div id="loading-indicator" class="loading-indicator" data-state="get-environments">
       <img class="loading-image" src="./assets/bolt.svg" />
-      <div class="loading-message" data-for-state="sign-in">
-        Checking sign-in status…
-      </div>
       <div class="loading-message" data-for-state="get-environments">
         Getting apps…
       </div>
@@ -54,10 +46,6 @@ function LoadingIndicator() {
         margin-top: 1rem;
         color: white;
         display: none;
-      }
-
-      .loading-indicator[data-state='sign-in'] [data-for-state='sign-in'] {
-        display: initial;
       }
 
       .loading-indicator[data-state='get-environments'] [data-for-state='get-environments'] {

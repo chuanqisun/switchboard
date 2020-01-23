@@ -215,6 +215,7 @@ button {
   animation: button-enter 400ms 200ms;
   animation-fill-mode: both;
   will-change: transform, opacity;
+  box-sizing: border-box;
 }
 
 .view-carousel {
