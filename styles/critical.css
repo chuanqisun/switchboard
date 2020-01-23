@@ -298,26 +298,6 @@ sb-sign-in-form[data-active] {
   animation-delay: 0ms, 250ms !important;
 }
 
-.card__actions {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
-  grid-gap: 0.5rem;
-}
-
-.card__header {
-  display: flex;
-  align-items: center;
-  margin-bottom: 1rem;
-  padding-right: 2rem;
-  position: relative;
-}
-
-.card__title {
-  font-size: 1.25rem;
-  margin: 0;
-  font-weight: 700;
-}
-
 @keyframes card-enter {
   0% {
     transform: translate3d(-64px, 0, 0);
