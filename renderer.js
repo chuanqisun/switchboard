@@ -11,7 +11,7 @@ const environments = document.querySelectorAll('sb-environments');
 viewToggle.onclick = e => handleViewToggle();
 environments.forEach(environments =>
   environments.addEventListener('launch', async e => {
-    const { signInDynamicsUCApp } = require('./automation/automation');
+    const { signInDynamicsUCApp } = require('./helpers/automation');
     const { url, username, password } = e.detail.environment;
     await signInDynamicsUCApp(url, username, password);
   })
@@ -44,7 +44,7 @@ ipcRenderer.on('onDownloadComplete', (event, { exec }) => {
 
 // Init
 ipcRenderer.send('getSignInStatus');
-const { initializeChromium } = require('./automation/automation');
+const { initializeChromium } = require('./helpers/automation');
 initializeChromium().then(() => {
   notification.innerText = 'Installed';
 });

@@ -1,16 +1,23 @@
 const puppeteer = require('puppeteer-core');
-const { ipcRenderer } = require('electron');
 
 const chromiumExecPromise = new Promise(resolve => {
   // version comes from latest pupeeter release: https://github.com/puppeteer/puppeteer/releases
-  ipcRenderer.send('download-chromium', { revision: 706915 });
-  ipcRenderer.on('onDownloadProgress', (event, { percent }) => {
-    console.log(percent);
-  });
+  const download = require('download-chromium');
+  const path = require('path');
+  const { app } = require('electron').remote;
+  const revision = 706915;
 
-  ipcRenderer.on('onDownloadComplete', (event, { exec }) => {
-    console.log('Complete!');
-    console.log(exec);
+  const userDataPath = app.getPath('userData');
+  console.log(userDataPath);
+  console.log('[automation] will download ' + revision);
+
+  download({
+    revision,
+    installPath: path.join(userDataPath, '/local-chromium'),
+    onProgress: ({ percent }) => {
+      console.log(percent);
+    },
+  }).then(exec => {
     resolve(exec);
   });
 });
