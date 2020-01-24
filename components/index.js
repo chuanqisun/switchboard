@@ -1,4 +1,5 @@
 import './app-menu.js';
+import './app-root.js';
 import './environments-context.js';
 import './environments.js';
 import './favorites-context.js';
