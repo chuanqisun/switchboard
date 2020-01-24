@@ -22,11 +22,11 @@ const chromiumExecPromise = new Promise(resolve => {
   });
 });
 
-async function initializeChromium() {
+export async function initializeChromium() {
   await chromiumExecPromise;
 }
 
-async function signInDynamicsUCApp(url, username, password) {
+export async function signInDynamicsUCApp(url, username, password) {
   const chromiumExec = await chromiumExecPromise;
 
   const browser = await puppeteer.launch({ headless: false, defaultViewport: null, executablePath: chromiumExec });
@@ -52,8 +52,3 @@ async function fillInput(page, selector, content) {
   await input.focus();
   await page.keyboard.type(content);
 }
-
-module.exports = {
-  signInDynamicsUCApp,
-  initializeChromium,
-};
