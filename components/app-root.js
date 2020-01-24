@@ -1,7 +1,6 @@
 import { html } from '../lib/lit-html.js';
 import { component, useEffect, useRef, useState } from '../lib/haunted.js';
 const { ipcRenderer } = require('electron');
-import { signInDynamicsUCApp, initializeChromium } from '../helpers/automation.js';
 
 function AppRoot() {
   const viewToggleRef = useRef(null);
@@ -17,8 +16,6 @@ function AppRoot() {
 
   useEffect(() => {
     // DOM elements
-    const notification = this.shadowRoot.getElementById('notification');
-
     const root = this.shadowRoot;
 
     // Handle IPC events
@@ -38,19 +35,8 @@ function AppRoot() {
       createObserver(root);
     });
 
-    ipcRenderer.on('onDownloadProgress', (event, { percent }) => {
-      notification.innerText = percent;
-    });
-
-    ipcRenderer.on('onDownloadComplete', (event, { exec }) => {
-      notification.innerText = 'Installing...';
-    });
-
     // Init
     ipcRenderer.send('getSignInStatus');
-    initializeChromium().then(() => {
-      notification.innerText = 'Installed';
-    });
 
     // Render functions
     function initializeToggle({ userSettings }) {
@@ -103,43 +89,38 @@ function AppRoot() {
     leavingView.scrollToTop();
   };
 
-  const onLaunch = async e => {
-    const { url, username, password } = e.detail.environment;
-    await signInDynamicsUCApp(url, username, password);
-  };
-
   const updateCarouselFocusTargets = () => {
     console.log('// TODO prevent focus in unreachable slide');
   };
 
   return html`
     <sb-app-header></sb-app-header>
-    <sb-environments-provider>
-      <sb-loading-indicator></sb-loading-indicator>
-      <main class="main body--flex-middle">
-        <sb-sign-in-form></sb-sign-in-form>
+    <sb-chromium-provider>
+      <sb-environments-provider>
+        <sb-loading-indicator></sb-loading-indicator>
+        <main class="main body--flex-middle">
+          <sb-sign-in-form></sb-sign-in-form>
 
-        <div id="notification-container" class="notification-container">
-          <span id="notification">Downloading Chromium...</span>
-        </div>
+          <sb-notifications></sb-notifications>
 
-        <div class="toolbar${isHeaderElevated ? ' toolbar--with-scroll' : ''}">
-          <sb-view-toggle data-left="Favorites" data-right="All" data-selected="Favorites" @click=${onViewToggle}></sb-view-toggle>
-          <sb-app-menu></sb-app-menu>
-        </div>
-
-        <sb-favorites-provider>
-          <div id="view-carousel" class="view-carousel" @launch=${onLaunch}>
-            <sb-scroll-observer class="scroll-area view-carousel__item view-carousel__item-left" data-selected data-option="Favorites">
-              <sb-environments data-empty-text="You have no favorite apps." data-favorites-only></sb-environments>
-            </sb-scroll-observer>
-            <sb-scroll-observer class="scroll-area view-carousel__item view-carousel__item-right" data-option="All">
-              <sb-environments data-empty-text="You have no apps."></sb-environments>
-            </sb-scroll-observer>
+          <div class="toolbar${isHeaderElevated ? ' toolbar--with-scroll' : ''}">
+            <sb-view-toggle data-left="Favorites" data-right="All" data-selected="Favorites" @click=${onViewToggle}></sb-view-toggle>
+            <sb-app-menu></sb-app-menu>
           </div>
-        </sb-favorites-provider>
-      </main>
-    </sb-environments-provider>
+
+          <sb-favorites-provider>
+            <div id="view-carousel" class="view-carousel">
+              <sb-scroll-observer class="scroll-area view-carousel__item view-carousel__item-left" data-selected data-option="Favorites">
+                <sb-environments data-empty-text="You have no favorite apps." data-favorites-only></sb-environments>
+              </sb-scroll-observer>
+              <sb-scroll-observer class="scroll-area view-carousel__item view-carousel__item-right" data-option="All">
+                <sb-environments data-empty-text="You have no apps."></sb-environments>
+              </sb-scroll-observer>
+            </div>
+          </sb-favorites-provider>
+        </main>
+      </sb-environments-provider>
+    </sb-chromium-provider>
     <style>
       :host {
         display: contents;
@@ -306,7 +287,7 @@ function AppRoot() {
         will-change: transform, opacity;
       }
 
-      .notification-container {
+      sb-notifications {
         position: absolute;
         bottom: 0;
       }

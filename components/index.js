@@ -9,3 +9,5 @@ import './scroll-observer.js';
 import './sign-in-form.js';
 import './view-carousel.js';
 import './view-toggle.js';
+import './chromium-context.js';
+import './notifications.js';

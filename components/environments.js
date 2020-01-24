@@ -4,12 +4,15 @@ import { useFocusVisible } from './use-focus-visible.js';
 import { Star } from './icons.js';
 import { FavoritesContext } from './favorites-context.js';
 import { EnvironmentsContext } from './environments-context.js';
+import { signInDynamicsUCApp } from '../helpers/automation.js';
+import { ChromiumContext } from './chromium-context.js';
 
 function Environments({ dataFavoritesOnly, dataEmptyText }) {
   const { FocusVisibleStyle } = useFocusVisible(this.shadowRoot);
 
   const environmentsContext = useContext(EnvironmentsContext);
   const favoritesContext = useContext(FavoritesContext);
+  const chromiumContext = useContext(ChromiumContext);
 
   let environments = environmentsContext.environments;
   if (dataFavoritesOnly) {
@@ -18,16 +21,17 @@ function Environments({ dataFavoritesOnly, dataEmptyText }) {
 
   const isEmptyState = environmentsContext.status === 'loaded' && environments.length === 0;
 
-  const renderEnvironment = ({ environment, root }) => {
-    const launchEnvironment = env => {
-      const event = new CustomEvent('launch', {
-        bubbles: true,
-        composed: true,
-        detail: { environment },
-      });
-      root.dispatchEvent(event);
-    };
+  const launchEnvironment = async environment => {
+    const { url, username, password } = environment;
+    try {
+      await signInDynamicsUCApp(chromiumContext.exec, url, username, password);
+    } catch (e) {
+      console.dir(e);
+      console.log('[environments] automation runtime error');
+    }
+  };
 
+  const renderEnvironment = ({ environment }) => {
     return html`
       <div class="environment-card">
         <button class="main-action" @click=${() => launchEnvironment(environment)}>
@@ -53,7 +57,7 @@ function Environments({ dataFavoritesOnly, dataEmptyText }) {
             <div class="empty-text">${dataEmptyText}</div>
           `
         : null}
-      ${environments.map(environment => renderEnvironment({ environment, root: this }))}
+      ${environments.map(environment => renderEnvironment({ environment }))}
       <style>
         .empty-text {
           color: white;

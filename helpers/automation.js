@@ -1,35 +1,7 @@
 const puppeteer = require('puppeteer-core');
 
-const chromiumExecPromise = new Promise(resolve => {
-  // version comes from latest pupeeter release: https://github.com/puppeteer/puppeteer/releases
-  const download = require('download-chromium');
-  const path = require('path');
-  const { app } = require('electron').remote;
-  const revision = 706915;
-
-  const userDataPath = app.getPath('userData');
-  console.log(userDataPath);
-  console.log('[automation] will download ' + revision);
-
-  download({
-    revision,
-    installPath: path.join(userDataPath, '/local-chromium'),
-    onProgress: ({ percent }) => {
-      console.log(percent);
-    },
-  }).then(exec => {
-    resolve(exec);
-  });
-});
-
-export async function initializeChromium() {
-  await chromiumExecPromise;
-}
-
-export async function signInDynamicsUCApp(url, username, password) {
-  const chromiumExec = await chromiumExecPromise;
-
-  const browser = await puppeteer.launch({ headless: false, defaultViewport: null, executablePath: chromiumExec });
+export async function signInDynamicsUCApp(exec, url, username, password) {
+  const browser = await puppeteer.launch({ headless: false, defaultViewport: null, executablePath: exec });
 
   const page = (await browser.pages())[0];
 
