@@ -94,21 +94,21 @@ function AppRoot() {
   };
 
   return html`
-    <sb-app-header></sb-app-header>
     <sb-chromium-provider>
       <sb-environments-provider>
-        <sb-loading-indicator></sb-loading-indicator>
-        <main class="main body--flex-middle">
-          <sb-sign-in-form></sb-sign-in-form>
+        <sb-favorites-provider>
+          <sb-app-header></sb-app-header>
+          <sb-loading-indicator></sb-loading-indicator>
+          <main class="main body--flex-middle">
+            <sb-sign-in-form></sb-sign-in-form>
 
-          <sb-notifications></sb-notifications>
+            <sb-notifications></sb-notifications>
 
-          <div class="toolbar${isHeaderElevated ? ' toolbar--with-scroll' : ''}">
-            <sb-view-toggle data-left="Favorites" data-right="All" data-selected="Favorites" @click=${onViewToggle}></sb-view-toggle>
-            <sb-app-menu></sb-app-menu>
-          </div>
+            <div class="toolbar${isHeaderElevated ? ' toolbar--with-scroll' : ''}">
+              <sb-view-toggle data-left="Favorites" data-right="All" data-selected="Favorites" @click=${onViewToggle}></sb-view-toggle>
+              <sb-app-menu></sb-app-menu>
+            </div>
 
-          <sb-favorites-provider>
             <div id="view-carousel" class="view-carousel">
               <sb-scroll-observer class="scroll-area view-carousel__item view-carousel__item-left" data-selected data-option="Favorites">
                 <sb-environments data-empty-text="You have no favorite apps." data-favorites-only></sb-environments>
@@ -117,8 +117,8 @@ function AppRoot() {
                 <sb-environments data-empty-text="You have no apps."></sb-environments>
               </sb-scroll-observer>
             </div>
-          </sb-favorites-provider>
-        </main>
+          </main>
+        </sb-favorites-provider>
       </sb-environments-provider>
     </sb-chromium-provider>
     <style>
