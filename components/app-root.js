@@ -1,27 +1,25 @@
 import { html } from '../lib/lit-html.js';
-import { component, useEffect } from '../lib/haunted.js';
+import { component, useEffect, useRef, useState } from '../lib/haunted.js';
 const { ipcRenderer } = require('electron');
 import { signInDynamicsUCApp, initializeChromium } from '../helpers/automation.js';
 
 function AppRoot() {
+  const viewToggleRef = useRef(null);
+  const viewCarouselRef = useRef(null);
+
+  const [isHeaderElevated, setIsHeaderElevated] = useState(false);
+
+  // Cache DOM elements
+  useEffect(() => {
+    viewToggleRef.current = this.shadowRoot.querySelector('sb-view-toggle');
+    viewCarouselRef.current = this.shadowRoot.getElementById('view-carousel');
+  }, []);
+
   useEffect(() => {
     // DOM elements
-    const viewToggle = this.shadowRoot.querySelector('sb-view-toggle');
-    const viewCarousel = this.shadowRoot.getElementById('view-carousel');
-    const toolbar = this.shadowRoot.getElementById('toolbar');
     const notification = this.shadowRoot.getElementById('notification');
-    const environments = this.shadowRoot.querySelectorAll('sb-environments');
 
     const root = this.shadowRoot;
-
-    // Handle DOM events
-    viewToggle.onclick = e => handleViewToggle();
-    environments.forEach(environments =>
-      environments.addEventListener('launch', async e => {
-        const { url, username, password } = e.detail.environment;
-        await signInDynamicsUCApp(url, username, password);
-      })
-    );
 
     // Handle IPC events
     ipcRenderer.once('onSignInStatusUpdate', (event, isSignedIn) => {
@@ -57,7 +55,7 @@ function AppRoot() {
     // Render functions
     function initializeToggle({ userSettings }) {
       if (!userSettings.favorites.length) {
-        handleViewToggle();
+        onViewToggle();
       } else {
         updateCarouselFocusTargets();
       }
@@ -65,57 +63,54 @@ function AppRoot() {
 
     function initializeCarousel() {
       setTimeout(() => {
-        [...viewCarousel.children].forEach(child => (child.dataset.canAnimate = ''));
+        [...viewCarouselRef.current.children].forEach(child => (child.dataset.canAnimate = ''));
       }, 100); // without timeout the scroll bar will be part of the slide-in animation
-    }
-
-    // Event handler functions
-    function handleViewToggle() {
-      if (viewToggle.dataset.selected === viewToggle.dataset.left) {
-        viewToggle.dataset.selected = viewToggle.dataset.right;
-      } else {
-        viewToggle.dataset.selected = viewToggle.dataset.left;
-      }
-
-      // update carousel
-      const views = [...viewCarousel.querySelectorAll(`[data-option]`)];
-      const leavingView = views.filter(view => view.dataset.option !== viewToggle.dataset.selected)[0];
-      const enteringView = views.filter(view => view.dataset.option === viewToggle.dataset.selected)[0];
-
-      delete leavingView.dataset.selected;
-      enteringView.dataset.selected = '';
-      updateCarouselFocusTargets();
-
-      // reset scroll
-      leavingView.scrollToTop();
     }
 
     function createObserver(root) {
       const scrollAreas = root.querySelectorAll('sb-scroll-observer');
-      const scrollAreaLeft = scrollAreas[0];
-      const scrollAreaRight = scrollAreas[1];
-
       const observer = new MutationObserver(() => {
-        // the value is "true" or "false" in string type
-        if (isAnyAreaScrolled(root)) {
-          toolbar.classList.add('toolbar--with-scroll');
-        } else {
-          toolbar.classList.remove('toolbar--with-scroll');
-        }
+        setIsHeaderElevated(isAnyAreaScrolled(root));
       });
 
-      observer.observe(scrollAreaLeft, { attributes: true, attributeFilter: ['data-scrolled'] });
-      observer.observe(scrollAreaRight, { attributes: true, attributeFilter: ['data-scrolled'] });
+      observer.observe(scrollAreas[0], { attributes: true, attributeFilter: ['data-scrolled'] });
+      observer.observe(scrollAreas[1], { attributes: true, attributeFilter: ['data-scrolled'] });
     }
 
     function isAnyAreaScrolled(root) {
       return [...root.querySelectorAll('sb-scroll-observer')].some(observer => observer.getAttribute('data-scrolled') === 'true');
     }
-
-    function updateCarouselFocusTargets() {
-      console.log('// TODO prevent focus in unreachable slide');
-    }
   }, []);
+
+  const onViewToggle = () => {
+    const viewToggle = viewToggleRef.current;
+    if (viewToggle.dataset.selected === viewToggle.dataset.left) {
+      viewToggle.dataset.selected = viewToggle.dataset.right;
+    } else {
+      viewToggle.dataset.selected = viewToggle.dataset.left;
+    }
+
+    // update carousel
+    const views = [...viewCarouselRef.current.querySelectorAll(`[data-option]`)];
+    const leavingView = views.filter(view => view.dataset.option !== viewToggle.dataset.selected)[0];
+    const enteringView = views.filter(view => view.dataset.option === viewToggle.dataset.selected)[0];
+
+    delete leavingView.dataset.selected;
+    enteringView.dataset.selected = '';
+    updateCarouselFocusTargets();
+
+    // reset scroll
+    leavingView.scrollToTop();
+  };
+
+  const onLaunch = async e => {
+    const { url, username, password } = e.detail.environment;
+    await signInDynamicsUCApp(url, username, password);
+  };
+
+  const updateCarouselFocusTargets = () => {
+    console.log('// TODO prevent focus in unreachable slide');
+  };
 
   return html`
     <sb-app-header></sb-app-header>
@@ -128,13 +123,13 @@ function AppRoot() {
           <span id="notification">Downloading Chromium...</span>
         </div>
 
-        <div id="toolbar" class="toolbar">
-          <sb-view-toggle data-left="Favorites" data-right="All" data-selected="Favorites"></sb-view-toggle>
+        <div class="toolbar${isHeaderElevated ? ' toolbar--with-scroll' : ''}">
+          <sb-view-toggle data-left="Favorites" data-right="All" data-selected="Favorites" @click=${onViewToggle}></sb-view-toggle>
           <sb-app-menu></sb-app-menu>
         </div>
 
         <sb-favorites-provider>
-          <div id="view-carousel" class="view-carousel">
+          <div id="view-carousel" class="view-carousel" @launch=${onLaunch}>
             <sb-scroll-observer class="scroll-area view-carousel__item view-carousel__item-left" data-selected data-option="Favorites">
               <sb-environments data-empty-text="You have no favorite apps." data-favorites-only></sb-environments>
             </sb-scroll-observer>
