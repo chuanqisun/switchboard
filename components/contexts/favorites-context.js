@@ -3,6 +3,7 @@ import { html } from '../../lib/lit-html.js';
 import { ensureUserSettings, addFavorite, removeFavorite, saveUserSettings, isFavorite } from '../../helpers/user-settings-v2.js';
 
 export const FavoritesContext = createContext({
+  status: 'loading',
   favorites: [],
   isFavorite: () => {},
   toggleFavorite: () => {},
@@ -12,10 +13,12 @@ customElements.define('sb-favorites-provider-internal', FavoritesContext.Provide
 
 function FavoritesProvider() {
   const [favorites, setFavorites] = useState([]);
+  const [status, setStatus] = useState('loading'); // 'loading' | 'loaded'
 
   useEffect(async () => {
     const userSettings = await ensureUserSettings();
     setFavorites(userSettings.favorites);
+    setStatus('loaded');
   }, []);
 
   const addFavoriteInContext = async appId => {
@@ -38,6 +41,7 @@ function FavoritesProvider() {
   };
 
   const contextValue = {
+    status,
     favorites,
     isFavorite,
     toggleFavorite,

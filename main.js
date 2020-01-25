@@ -43,20 +43,7 @@ app.on('ready', () => {
   globalShortcut.register('CommandOrControl+H', () => mainWindow.isFocused() && showAbout());
 });
 
-ipcMain.on('getSignInStatus', async event => {
-  const { checkSignInStatus } = require('./helpers/account');
-  const isSignedIn = await checkSignInStatus();
-  event.sender.send('onSignInStatusUpdate', isSignedIn);
-});
-
 ipcMain.on('trySignOut', signOut);
-
-ipcMain.on('getEnvironments', async event => {
-  const { ensureUserSettings } = require('./helpers/user-settings');
-  const { getEnvironments } = require('./helpers/environments');
-  const [userSettings, environments] = await Promise.all([ensureUserSettings(), getEnvironments()]);
-  event.sender.send('onEnvironmentsAvailable', { environments, userSettings });
-});
 
 ipcMain.on('downloadUpdate', () => {
   const { downloadUpdate } = require('./helpers/dialogs');

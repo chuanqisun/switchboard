@@ -1,10 +1,13 @@
 import { html } from '../lib/lit-html.js';
-import { component, useEffect, useRef, useState } from '../lib/haunted.js';
-const { ipcRenderer } = require('electron');
+import { component, useEffect, useRef, useState, useContext } from '../lib/haunted.js';
+import { EnvironmentsContext } from './contexts/environments-context.js';
+import { FavoritesContext } from './contexts/favorites-context.js';
 
 function AppRoot() {
   const viewToggleRef = useRef(null);
   const viewCarouselRef = useRef(null);
+  const environmentsContext = useContext(EnvironmentsContext);
+  const favoritesContext = useContext(FavoritesContext);
 
   const [isHeaderElevated, setIsHeaderElevated] = useState(false);
 
@@ -14,59 +17,29 @@ function AppRoot() {
     viewCarouselRef.current = this.shadowRoot.getElementById('view-carousel');
   }, []);
 
+  // Initialize toggle and carousel
   useEffect(() => {
-    // DOM elements
     const root = this.shadowRoot;
 
-    // Handle IPC events
-    ipcRenderer.once('onSignInStatusUpdate', (event, isSignedIn) => {
-      if (isSignedIn) {
-        ipcRenderer.send('getEnvironments');
-        ipcRenderer.send('checkMetadata');
-      } else {
-        document.body.classList.add('pre-sign-in');
+    if (environmentsContext.status === 'loaded' && favoritesContext.status === 'loaded') {
+      if (!favoritesContext.favorites.length) {
+        onViewToggle();
       }
-    });
 
-    ipcRenderer.once('onEnvironmentsAvailable', (event, { environments, userSettings }) => {
-      initializeToggle({ userSettings });
       initializeCarousel();
 
       createObserver(root);
-    });
-
-    // Init
-    ipcRenderer.send('getSignInStatus');
-
-    // Render functions
-    function initializeToggle({ userSettings }) {
-      if (!userSettings.favorites.length) {
-        onViewToggle();
-      } else {
-        updateCarouselFocusTargets();
-      }
     }
+  }, [environmentsContext.status, favoritesContext.status]);
 
-    function initializeCarousel() {
-      setTimeout(() => {
-        [...viewCarouselRef.current.children].forEach(child => (child.dataset.canAnimate = ''));
-      }, 100); // without timeout the scroll bar will be part of the slide-in animation
+  // Handle pre-sign-in state
+  useEffect(() => {
+    if (environmentsContext.status === 'signed-out') {
+      document.body.classList.add('pre-sign-in');
+    } else {
+      document.body.classList.remove('pre-sign-in');
     }
-
-    function createObserver(root) {
-      const scrollAreas = root.querySelectorAll('sb-scroll-observer');
-      const observer = new MutationObserver(() => {
-        setIsHeaderElevated(isAnyAreaScrolled(root));
-      });
-
-      observer.observe(scrollAreas[0], { attributes: true, attributeFilter: ['data-scrolled'] });
-      observer.observe(scrollAreas[1], { attributes: true, attributeFilter: ['data-scrolled'] });
-    }
-
-    function isAnyAreaScrolled(root) {
-      return [...root.querySelectorAll('sb-scroll-observer')].some(observer => observer.getAttribute('data-scrolled') === 'true');
-    }
-  }, []);
+  }, [environmentsContext.status]);
 
   const onViewToggle = () => {
     const viewToggle = viewToggleRef.current;
@@ -91,6 +64,26 @@ function AppRoot() {
 
   const updateCarouselFocusTargets = () => {
     console.log('// TODO prevent focus in unreachable slide');
+  };
+
+  const initializeCarousel = () => {
+    setTimeout(() => {
+      [...viewCarouselRef.current.children].forEach(child => (child.dataset.canAnimate = ''));
+    }, 100); // without timeout the scroll bar will be part of the slide-in animation
+  };
+
+  const createObserver = root => {
+    const scrollAreas = root.querySelectorAll('sb-scroll-observer');
+    const observer = new MutationObserver(() => {
+      setIsHeaderElevated(isAnyAreaScrolled(root));
+    });
+
+    observer.observe(scrollAreas[0], { attributes: true, attributeFilter: ['data-scrolled'] });
+    observer.observe(scrollAreas[1], { attributes: true, attributeFilter: ['data-scrolled'] });
+  };
+
+  const isAnyAreaScrolled = root => {
+    return [...root.querySelectorAll('sb-scroll-observer')].some(observer => observer.getAttribute('data-scrolled') === 'true');
   };
 
   return html`
