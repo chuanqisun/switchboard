@@ -6,9 +6,15 @@
     <link rel="stylesheet" href="styles/critical.css" />
   </head>
   <body>
-    <sb-app-root></sb-app-root>
-
+    <sb-chromium-provider>
+      <sb-environments-provider>
+        <sb-favorites-provider>
+          <sb-app-root></sb-app-root>
+        </sb-favorites-provider>
+      </sb-environments-provider>
+    </sb-chromium-provider>
     <script src="./helpers/focus-visible.js"></script>
+    <script type="module" src="./components/contexts/index.js"></script>
     <script type="module" src="./components/index.js"></script>
   </body>
 </html>

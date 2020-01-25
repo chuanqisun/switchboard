@@ -1,6 +1,6 @@
-import { createContext, useState, component, useEffect } from '../lib/haunted.js';
-import { html } from '../lib/lit-html.js';
-import { ensureUserSettings, addFavorite, removeFavorite, saveUserSettings, isFavorite } from '../helpers/user-settings-v2.js';
+import { createContext, useState, component, useEffect } from '../../lib/haunted.js';
+import { html } from '../../lib/lit-html.js';
+import { ensureUserSettings, addFavorite, removeFavorite, saveUserSettings, isFavorite } from '../../helpers/user-settings-v2.js';
 
 export const FavoritesContext = createContext({
   favorites: [],

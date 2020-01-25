@@ -1,6 +1,6 @@
 import { html } from '../lib/lit-html.js';
 import { component, useContext } from '../lib/haunted.js';
-import { ChromiumContext } from './chromium-context.js';
+import { ChromiumContext } from './contexts/chromium-context.js';
 
 function Notifications() {
   const chromiumContext = useContext(ChromiumContext);

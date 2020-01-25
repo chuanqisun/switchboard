@@ -1,5 +1,5 @@
-import { createContext, useState, component, useEffect } from '../lib/haunted.js';
-import { html } from '../lib/lit-html.js';
+import { createContext, useState, component, useEffect } from '../../lib/haunted.js';
+import { html } from '../../lib/lit-html.js';
 const download = require('download-chromium');
 const path = require('path');
 const { app } = require('electron').remote;

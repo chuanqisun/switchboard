@@ -2,10 +2,10 @@ import { html } from '../lib/lit-html.js';
 import { component, useContext } from '../lib/haunted.js';
 import { useFocusVisible } from './use-focus-visible.js';
 import { Star } from './icons.js';
-import { FavoritesContext } from './favorites-context.js';
-import { EnvironmentsContext } from './environments-context.js';
+import { FavoritesContext } from './contexts/favorites-context.js';
+import { EnvironmentsContext } from './contexts/environments-context.js';
 import { signInDynamicsUCApp } from '../helpers/automation.js';
-import { ChromiumContext } from './chromium-context.js';
+import { ChromiumContext } from './contexts/chromium-context.js';
 
 function Environments({ dataFavoritesOnly, dataEmptyText }) {
   const { FocusVisibleStyle } = useFocusVisible(this.shadowRoot);
