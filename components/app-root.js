@@ -6,6 +6,7 @@ import { FavoritesContext } from './contexts/favorites-context.js';
 function AppRoot() {
   const viewToggleRef = useRef(null);
   const viewCarouselRef = useRef(null);
+  const viewCarouselV2Ref = useRef(null);
   const environmentsContext = useContext(EnvironmentsContext);
   const favoritesContext = useContext(FavoritesContext);
 
@@ -15,6 +16,7 @@ function AppRoot() {
   useEffect(() => {
     viewToggleRef.current = this.shadowRoot.querySelector('sb-view-toggle');
     viewCarouselRef.current = this.shadowRoot.getElementById('view-carousel');
+    viewCarouselV2Ref.current = this.shadowRoot.querySelector('sb-view-carousel');
   }, []);
 
   // Initialize toggle and carousel
@@ -57,6 +59,9 @@ function AppRoot() {
     delete leavingView.dataset.selected;
     enteringView.dataset.selected = '';
     updateCarouselFocusTargets();
+
+    // update carousel v2
+    viewCarouselV2Ref.current.dataset.selected = viewToggle.dataset.selected;
 
     // reset scroll
     leavingView.scrollToTop();
@@ -107,6 +112,11 @@ function AppRoot() {
           <sb-environments data-empty-text="You have no apps."></sb-environments>
         </sb-scroll-observer>
       </div>
+
+      <sb-view-carousel data-left="Favorites" data-right="All" data-selected="Favorites">
+        <h1 slot="Favorites">left</h1>
+        <h1 slot="All">left</h1>
+      </sb-view-carousel>
     </main>
 
     <style>
