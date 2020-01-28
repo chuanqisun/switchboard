@@ -1,9 +1,10 @@
 import { html } from '../lib/lit-html.js';
 import { component, useEffect, useContext } from '../lib/haunted.js';
-import { ScrollContext } from './contexts/index.js';
+import { CarouselContext, ScrollContext } from './contexts/index.js';
 
 function ScrollArea() {
   const scrollContext = useContext(ScrollContext);
+  const carouselContext = useContext(CarouselContext);
 
   useEffect(() => {
     const scrollArea = this.shadowRoot.querySelector('.js-scroll-area');
@@ -25,11 +26,12 @@ function ScrollArea() {
     }, options);
 
     observer.observe(scrollArea.querySelector('.js-sentinel'));
-
-    this.scrollToTop = () => {
-      scrollArea.scrollTop = 0;
-    };
   }, []);
+
+  useEffect(() => {
+    const scrollArea = this.shadowRoot.querySelector('.js-scroll-area');
+    scrollArea.scrollTop = 0;
+  }, [carouselContext.selected]);
 
   return html`
     <div class="js-scroll-area scroll-area">

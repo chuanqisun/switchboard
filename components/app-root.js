@@ -1,5 +1,5 @@
 import { html } from '../lib/lit-html.js';
-import { component, useEffect, useRef, useState, useContext } from '../lib/haunted.js';
+import { component, useEffect, useRef, useContext } from '../lib/haunted.js';
 import { EnvironmentsContext, FavoritesContext, ScrollContext, CarouselContext } from './contexts/index.js';
 
 function AppRoot() {
@@ -39,8 +39,6 @@ function AppRoot() {
     } else {
       carouselContext.setSelected(viewToggle.dataset.left);
     }
-
-    [...this.shadowRoot.querySelectorAll('sb-scroll-area')].forEach(item => item.scrollToTop());
   };
 
   return html`
