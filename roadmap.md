@@ -13,7 +13,3 @@
 9. Eager render environments. Remove Cmd + R hard rest shortcut
 
 ===
-
-## bugs
-
-1. tab key can trigger overflow content

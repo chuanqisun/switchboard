@@ -7,12 +7,14 @@ import { EnvironmentsContext } from './contexts/environments-context.js';
 import { signInDynamicsUCApp } from '../helpers/automation.js';
 import { ChromiumContext } from './contexts/chromium-context.js';
 
-function Environments({ dataFavoritesOnly, dataEmptyText }) {
+function Environments({ dataFavoritesOnly, dataEmptyText, dataIsSelectedView }) {
   const { FocusVisibleStyle } = useFocusVisible(this.shadowRoot);
 
   const environmentsContext = useContext(EnvironmentsContext);
   const favoritesContext = useContext(FavoritesContext);
   const chromiumContext = useContext(ChromiumContext);
+
+  const isSelectedView = dataIsSelectedView === 'true';
 
   let environments = environmentsContext.environments;
   if (dataFavoritesOnly) {
@@ -34,10 +36,11 @@ function Environments({ dataFavoritesOnly, dataEmptyText }) {
   const renderEnvironment = ({ environment }) => {
     return html`
       <div class="environment-card">
-        <button class="main-action" @click=${() => launchEnvironment(environment)}>
+        <button class="main-action" @click=${() => launchEnvironment(environment)} tabindex="${isSelectedView ? 0 : -1}">
           ${environment.appName}
         </button>
         <button
+          tabindex="${isSelectedView ? 0 : -1}"
           class="more${favoritesContext.isFavorite(environment.appId) ? ' more--favorite' : ''}"
           @click=${() => favoritesContext.toggleFavorite(environment.appId)}
         >
@@ -117,6 +120,6 @@ function Environments({ dataFavoritesOnly, dataEmptyText }) {
   `;
 }
 
-Environments.observedAttributes = ['data-favorites-only', 'data-empty-text'];
+Environments.observedAttributes = ['data-favorites-only', 'data-empty-text', 'data-is-selected-view'];
 
 customElements.define('sb-environments', component(Environments));
