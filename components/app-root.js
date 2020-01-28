@@ -6,7 +6,6 @@ import { FavoritesContext } from './contexts/favorites-context.js';
 function AppRoot() {
   const viewToggleRef = useRef(null);
   const viewCarouselRef = useRef(null);
-  const viewCarouselV2Ref = useRef(null);
   const environmentsContext = useContext(EnvironmentsContext);
   const favoritesContext = useContext(FavoritesContext);
 
@@ -15,24 +14,22 @@ function AppRoot() {
   // Cache DOM elements
   useEffect(() => {
     viewToggleRef.current = this.shadowRoot.querySelector('sb-view-toggle');
-    viewCarouselRef.current = this.shadowRoot.getElementById('view-carousel');
-    viewCarouselV2Ref.current = this.shadowRoot.querySelector('sb-view-carousel');
+    viewCarouselRef.current = this.shadowRoot.querySelector('sb-view-carousel');
   }, []);
 
   // Initialize toggle and carousel
   useEffect(() => {
-    const root = this.shadowRoot;
-
     if (environmentsContext.status === 'loaded' && favoritesContext.status === 'loaded') {
       if (!favoritesContext.favorites.length) {
         onViewToggle();
       }
-
-      initializeCarousel();
-
-      createObserver(root);
     }
   }, [environmentsContext.status, favoritesContext.status]);
+
+  // Initialize scroll observer
+  useEffect(() => {
+    createObserver();
+  }, []);
 
   // Handle pre-sign-in state
   useEffect(() => {
@@ -51,33 +48,13 @@ function AppRoot() {
       viewToggle.dataset.selected = viewToggle.dataset.left;
     }
 
-    // update carousel
-    const views = [...viewCarouselRef.current.querySelectorAll(`[data-option]`)];
-    const leavingView = views.filter(view => view.dataset.option !== viewToggle.dataset.selected)[0];
-    const enteringView = views.filter(view => view.dataset.option === viewToggle.dataset.selected)[0];
-
-    delete leavingView.dataset.selected;
-    enteringView.dataset.selected = '';
-    updateCarouselFocusTargets();
-
-    // update carousel v2
-    viewCarouselV2Ref.current.dataset.selected = viewToggle.dataset.selected;
-
-    // reset scroll
-    leavingView.scrollToTop();
+    viewCarouselRef.current.dataset.selected = viewToggle.dataset.selected;
+    [...this.shadowRoot.querySelectorAll('sb-scroll-observer')].forEach(item => item.scrollToTop());
   };
 
-  const updateCarouselFocusTargets = () => {
-    console.log('// TODO prevent focus in unreachable slide');
-  };
+  const createObserver = () => {
+    const root = this.shadowRoot;
 
-  const initializeCarousel = () => {
-    setTimeout(() => {
-      [...viewCarouselRef.current.children].forEach(child => (child.dataset.canAnimate = ''));
-    }, 100); // without timeout the scroll bar will be part of the slide-in animation
-  };
-
-  const createObserver = root => {
     const scrollAreas = root.querySelectorAll('sb-scroll-observer');
     const observer = new MutationObserver(() => {
       setIsHeaderElevated(isAnyAreaScrolled(root));
@@ -104,18 +81,17 @@ function AppRoot() {
         <sb-app-menu></sb-app-menu>
       </div>
 
-      <div id="view-carousel" class="view-carousel">
-        <sb-scroll-observer class="scroll-area view-carousel__item view-carousel__item-left" data-selected data-option="Favorites">
-          <sb-environments data-empty-text="You have no favorite apps." data-favorites-only></sb-environments>
-        </sb-scroll-observer>
-        <sb-scroll-observer class="scroll-area view-carousel__item view-carousel__item-right" data-option="All">
-          <sb-environments data-empty-text="You have no apps."></sb-environments>
-        </sb-scroll-observer>
-      </div>
-
       <sb-view-carousel data-left="Favorites" data-right="All" data-selected="Favorites">
-        <h1 slot="Favorites">left</h1>
-        <h1 slot="All">left</h1>
+        <div slot="Favorites">
+          <sb-scroll-observer class="scroll-area view-carousel__item" data-selected>
+            <sb-environments data-empty-text="You have no favorite apps." data-favorites-only></sb-environments>
+          </sb-scroll-observer>
+        </div>
+        <div slot="All">
+          <sb-scroll-observer class="scroll-area view-carousel__item" data-selected>
+            <sb-environments data-empty-text="You have no apps."></sb-environments>
+          </sb-scroll-observer>
+        </div>
       </sb-view-carousel>
     </main>
 
@@ -303,29 +279,6 @@ function AppRoot() {
 
       sb-sign-in-form[data-active] {
         display: block;
-      }
-
-      .view-carousel {
-        flex: 1 1 auto;
-        display: flex;
-        flex-direction: column;
-        position: relative;
-      }
-
-      .view-carousel__item[data-can-animate] {
-        transition: transform 250ms;
-      }
-
-      .view-carousel__item-left {
-        transform: translate3d(-100%, 0, 0);
-      }
-
-      .view-carousel__item-right {
-        transform: translate3d(100%, 0, 0);
-      }
-
-      .view-carousel__item[data-selected] {
-        transform: translate3d(0, 0, 0);
       }
 
       .scroll-area {

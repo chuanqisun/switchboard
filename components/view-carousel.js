@@ -12,16 +12,24 @@ function ViewCarousel({ dataLeft, dataRight, dataSelected }) {
       </div>
     </div>
     <style>
+      :host {
+        display: contents;
+      }
       .view-carousel {
         flex: 1 1 auto;
         display: flex;
         flex-direction: column;
         position: relative;
       }
-      /* 
-      .item[data-can-animate] {
+
+      .item {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
         transition: transform 250ms;
-      } */
+      }
 
       .item--left {
         transform: translate3d(-100%, 0, 0);
