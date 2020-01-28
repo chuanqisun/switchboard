@@ -82,10 +82,10 @@ function AppRoot() {
       </div>
 
       <sb-view-carousel data-left="Favorites" data-right="All" data-selected="Favorites">
-        <sb-scroll-area class="scroll-area" slot="Favorites">
+        <sb-scroll-area slot="Favorites">
           <sb-environments data-empty-text="You have no favorite apps." data-favorites-only></sb-environments>
         </sb-scroll-area>
-        <sb-scroll-area class="scroll-area" slot="All">
+        <sb-scroll-area slot="All">
           <sb-environments data-empty-text="You have no apps."></sb-environments>
         </sb-scroll-area>
       </sb-view-carousel>
@@ -186,7 +186,7 @@ function AppRoot() {
         display: block;
       }
 
-      .scroll-area {
+      sb-scroll-area {
         overflow: auto;
         flex: 0 1 auto;
         display: flex;
@@ -196,97 +196,6 @@ function AppRoot() {
         left: 0;
         right: 0;
         height: 100%;
-      }
-
-      .scroll-sentinel {
-        flex: 0 0 0px;
-      }
-
-      .no-favorite-message {
-        display: none;
-        color: white;
-        --star-fill: white;
-        --star-stroke: var(--color-off-black);
-        padding: 0 1rem;
-      }
-
-      .no-favorite-message--show {
-        display: initial;
-      }
-
-      .card {
-        background-color: white;
-        border-radius: 4px;
-        padding: 1rem;
-        box-shadow: var(--shadow-2);
-
-        will-change: transform, opacity;
-      }
-
-      .card--animation-enter {
-        animation: card-enter 400ms 400ms;
-        animation-fill-mode: both;
-      }
-
-      .card--animation-enter:nth-child(2) {
-        animation-delay: 500ms;
-      }
-      .card--animation-enter:nth-child(3) {
-        animation-delay: 600ms;
-      }
-      .card--animation-enter:nth-child(4) {
-        animation-delay: 700ms;
-      }
-      .card--animation-enter:nth-child(5) {
-        animation-delay: 800ms;
-      }
-      .card--animation-enter:nth-child(6) {
-        animation-delay: 900ms;
-      }
-      .card--animation-enter:nth-child(7) {
-        animation-delay: 1000ms;
-      }
-      .card--animation-enter:nth-child(8) {
-        animation-delay: 1100ms;
-      }
-      .card--animation-enter:nth-child(9) {
-        animation-delay: 1200ms;
-      }
-
-      .card--animate-exit {
-        animation: card-exit 250ms, just-wait 50ms;
-        animation-timing-function: cubic-bezier(0.4, 0, 1, 1);
-        animation-fill-mode: both;
-        animation-delay: 0ms, 250ms !important;
-      }
-
-      @keyframes card-enter {
-        0% {
-          transform: translate3d(-64px, 0, 0);
-          opacity: 0;
-        }
-        100% {
-          transform: translate3d(0, 0, 0);
-          opacity: 1;
-        }
-      }
-
-      @keyframes card-exit {
-        0% {
-          transform: scale(1);
-          opacity: 1;
-        }
-        100% {
-          transform: scale(0);
-          opacity: 0;
-        }
-      }
-
-      @keyframes just-wait {
-        0% {
-        }
-        100% {
-        }
       }
 
       @keyframes toolbar-enter {
