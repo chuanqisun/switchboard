@@ -82,16 +82,12 @@ function AppRoot() {
       </div>
 
       <sb-view-carousel data-left="Favorites" data-right="All" data-selected="Favorites">
-        <div slot="Favorites">
-          <sb-scroll-observer class="scroll-area view-carousel__item" data-selected>
-            <sb-environments data-empty-text="You have no favorite apps." data-favorites-only></sb-environments>
-          </sb-scroll-observer>
-        </div>
-        <div slot="All">
-          <sb-scroll-observer class="scroll-area view-carousel__item" data-selected>
-            <sb-environments data-empty-text="You have no apps."></sb-environments>
-          </sb-scroll-observer>
-        </div>
+        <sb-scroll-observer class="scroll-area" slot="Favorites">
+          <sb-environments data-empty-text="You have no favorite apps." data-favorites-only></sb-environments>
+        </sb-scroll-observer>
+        <sb-scroll-observer class="scroll-area" slot="All">
+          <sb-environments data-empty-text="You have no apps."></sb-environments>
+        </sb-scroll-observer>
       </sb-view-carousel>
     </main>
 
@@ -168,97 +164,6 @@ function AppRoot() {
 
       .toolbar--with-scroll {
         box-shadow: var(--shadow-3);
-      }
-
-      button {
-        cursor: pointer;
-        -webkit-app-region: no-drag;
-      }
-
-      .button--primary {
-        background-color: white;
-        border: none;
-        border-radius: 4px;
-        color: var(--color-primary);
-        height: 2rem;
-        padding: 0 1rem;
-        font-weight: 600;
-        font-size: 0.85rem;
-        box-shadow: var(--shadow-2);
-        outline-offset: 2px !important;
-      }
-
-      .button--primary:hover,
-      .button--primary.focus-visible {
-        box-shadow: var(--shadow-3);
-      }
-
-      .button--primary:active {
-        box-shadow: var(--shadow-1);
-      }
-
-      .button--favorite {
-        --star-stroke-width: 1.25px;
-        --star-stroke: var(--color-off-black);
-        background-color: transparent;
-        border: none;
-        padding: 0;
-        width: 3rem;
-        height: 3rem;
-        transition: transform 200ms;
-
-        position: absolute;
-        right: -1rem;
-        top: 50%;
-        transform: translateY(-50%);
-      }
-
-      .button--favorite:hover {
-        transform: translateY(-50%) scale(1.2);
-      }
-
-      .button--add-favorite {
-        --star-fill: transparent;
-      }
-
-      .button--remove-favorite {
-        --star-fill: var(--color-yellow);
-      }
-
-      .button--launch {
-        color: white;
-        position: relative;
-        overflow: hidden;
-        transform: perspective(1px) translateZ(0);
-        text-transform: capitalize;
-      }
-
-      .button--launch[data-type='trial'] {
-        background-color: var(--color-orange);
-      }
-
-      .button--launch[data-type='livedrive'] {
-        background-color: var(--color-purple);
-      }
-
-      .button--launching::before {
-        animation: launch 500ms;
-        animation-timing-function: cubic-bezier(0.895, 0.03, 0.685, 0.22);
-        animation-fill-mode: backwards;
-      }
-
-      .button--launch::before {
-        content: '';
-        z-index: -1;
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        left: 0;
-        top: 0;
-        opacity: 1;
-        background-color: rgba(255, 255, 255, 0.5);
-        transform: translateX(-100%);
-        will-change: transform, opacity;
       }
 
       sb-notifications {
