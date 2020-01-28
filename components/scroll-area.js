@@ -1,7 +1,7 @@
 import { html } from '../lib/lit-html.js';
 import { component, useEffect, useState } from '../lib/haunted.js';
 
-function ScrollObserver() {
+function ScrollArea() {
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -47,4 +47,4 @@ function ScrollObserver() {
   `;
 }
 
-customElements.define('sb-scroll-observer', component(ScrollObserver));
+customElements.define('sb-scroll-area', component(ScrollArea));

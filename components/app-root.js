@@ -49,13 +49,13 @@ function AppRoot() {
     }
 
     viewCarouselRef.current.dataset.selected = viewToggle.dataset.selected;
-    [...this.shadowRoot.querySelectorAll('sb-scroll-observer')].forEach(item => item.scrollToTop());
+    [...this.shadowRoot.querySelectorAll('sb-scroll-area')].forEach(item => item.scrollToTop());
   };
 
   const createObserver = () => {
     const root = this.shadowRoot;
 
-    const scrollAreas = root.querySelectorAll('sb-scroll-observer');
+    const scrollAreas = root.querySelectorAll('sb-scroll-area');
     const observer = new MutationObserver(() => {
       setIsHeaderElevated(isAnyAreaScrolled(root));
     });
@@ -65,7 +65,7 @@ function AppRoot() {
   };
 
   const isAnyAreaScrolled = root => {
-    return [...root.querySelectorAll('sb-scroll-observer')].some(observer => observer.getAttribute('data-scrolled') === 'true');
+    return [...root.querySelectorAll('sb-scroll-area')].some(observer => observer.getAttribute('data-scrolled') === 'true');
   };
 
   return html`
@@ -82,12 +82,12 @@ function AppRoot() {
       </div>
 
       <sb-view-carousel data-left="Favorites" data-right="All" data-selected="Favorites">
-        <sb-scroll-observer class="scroll-area" slot="Favorites">
+        <sb-scroll-area class="scroll-area" slot="Favorites">
           <sb-environments data-empty-text="You have no favorite apps." data-favorites-only></sb-environments>
-        </sb-scroll-observer>
-        <sb-scroll-observer class="scroll-area" slot="All">
+        </sb-scroll-area>
+        <sb-scroll-area class="scroll-area" slot="All">
           <sb-environments data-empty-text="You have no apps."></sb-environments>
-        </sb-scroll-observer>
+        </sb-scroll-area>
       </sb-view-carousel>
     </main>
 
