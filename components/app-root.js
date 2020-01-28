@@ -1,18 +1,17 @@
 import { html } from '../lib/lit-html.js';
 import { component, useEffect, useRef, useState, useContext } from '../lib/haunted.js';
-import { EnvironmentsContext, FavoritesContext, ScrollContext } from './contexts/index.js';
+import { EnvironmentsContext, FavoritesContext, ScrollContext, CarouselContext } from './contexts/index.js';
 
 function AppRoot() {
   const viewToggleRef = useRef(null);
-  const viewCarouselRef = useRef(null);
   const environmentsContext = useContext(EnvironmentsContext);
   const favoritesContext = useContext(FavoritesContext);
   const scrollContext = useContext(ScrollContext);
+  const carouselContext = useContext(CarouselContext);
 
   // Cache DOM elements
   useEffect(() => {
     viewToggleRef.current = this.shadowRoot.querySelector('sb-view-toggle');
-    viewCarouselRef.current = this.shadowRoot.querySelector('sb-view-carousel');
   }, []);
 
   // Initialize toggle and carousel
@@ -36,12 +35,11 @@ function AppRoot() {
   const onViewToggle = () => {
     const viewToggle = viewToggleRef.current;
     if (viewToggle.dataset.selected === viewToggle.dataset.left) {
-      viewToggle.dataset.selected = viewToggle.dataset.right;
+      carouselContext.setSelected(viewToggle.dataset.right);
     } else {
-      viewToggle.dataset.selected = viewToggle.dataset.left;
+      carouselContext.setSelected(viewToggle.dataset.left);
     }
 
-    viewCarouselRef.current.dataset.selected = viewToggle.dataset.selected;
     [...this.shadowRoot.querySelectorAll('sb-scroll-area')].forEach(item => item.scrollToTop());
   };
 
@@ -54,11 +52,11 @@ function AppRoot() {
       <sb-notifications></sb-notifications>
 
       <div class="toolbar${scrollContext.scrollCount > 0 ? ' toolbar--with-scroll' : ''}">
-        <sb-view-toggle data-left="Favorites" data-right="All" data-selected="Favorites" @click=${onViewToggle}></sb-view-toggle>
+        <sb-view-toggle data-left="Favorites" data-right="All" data-selected="${carouselContext.selected}" @click=${onViewToggle}></sb-view-toggle>
         <sb-app-menu></sb-app-menu>
       </div>
 
-      <sb-view-carousel data-left="Favorites" data-right="All" data-selected="Favorites">
+      <sb-view-carousel data-left="Favorites" data-right="All" data-selected="${carouselContext.selected}">
         <sb-scroll-area slot="Favorites">
           <sb-environments data-empty-text="You have no favorite apps." data-favorites-only></sb-environments>
         </sb-scroll-area>
