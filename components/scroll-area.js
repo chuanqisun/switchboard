@@ -1,8 +1,9 @@
 import { html } from '../lib/lit-html.js';
-import { component, useEffect, useState } from '../lib/haunted.js';
+import { component, useEffect, useContext } from '../lib/haunted.js';
+import { ScrollContext } from './contexts/index.js';
 
 function ScrollArea() {
-  const [isScrolled, setIsScrolled] = useState(false);
+  const scrollContext = useContext(ScrollContext);
 
   useEffect(() => {
     const scrollArea = this.shadowRoot.querySelector('.js-scroll-area');
@@ -14,7 +15,13 @@ function ScrollArea() {
     };
 
     const observer = new IntersectionObserver(e => {
-      setIsScrolled(!e[0].isIntersecting);
+      const isScrolled = !e[0].isIntersecting;
+
+      if (isScrolled) {
+        scrollContext.increaseScrolledArea();
+      } else {
+        scrollContext.decreaseScrolledArea();
+      }
     }, options);
 
     observer.observe(scrollArea.querySelector('.js-sentinel'));
@@ -23,10 +30,6 @@ function ScrollArea() {
       scrollArea.scrollTop = 0;
     };
   }, []);
-
-  useEffect(() => {
-    this.setAttribute('data-scrolled', isScrolled);
-  }, isScrolled);
 
   return html`
     <div class="js-scroll-area scroll-area">

@@ -1,15 +1,13 @@
 import { html } from '../lib/lit-html.js';
 import { component, useEffect, useRef, useState, useContext } from '../lib/haunted.js';
-import { EnvironmentsContext } from './contexts/environments-context.js';
-import { FavoritesContext } from './contexts/favorites-context.js';
+import { EnvironmentsContext, FavoritesContext, ScrollContext } from './contexts/index.js';
 
 function AppRoot() {
   const viewToggleRef = useRef(null);
   const viewCarouselRef = useRef(null);
   const environmentsContext = useContext(EnvironmentsContext);
   const favoritesContext = useContext(FavoritesContext);
-
-  const [isHeaderElevated, setIsHeaderElevated] = useState(false);
+  const scrollContext = useContext(ScrollContext);
 
   // Cache DOM elements
   useEffect(() => {
@@ -25,11 +23,6 @@ function AppRoot() {
       }
     }
   }, [environmentsContext.status, favoritesContext.status]);
-
-  // Initialize scroll observer
-  useEffect(() => {
-    createObserver();
-  }, []);
 
   // Handle pre-sign-in state
   useEffect(() => {
@@ -52,22 +45,6 @@ function AppRoot() {
     [...this.shadowRoot.querySelectorAll('sb-scroll-area')].forEach(item => item.scrollToTop());
   };
 
-  const createObserver = () => {
-    const root = this.shadowRoot;
-
-    const scrollAreas = root.querySelectorAll('sb-scroll-area');
-    const observer = new MutationObserver(() => {
-      setIsHeaderElevated(isAnyAreaScrolled(root));
-    });
-
-    observer.observe(scrollAreas[0], { attributes: true, attributeFilter: ['data-scrolled'] });
-    observer.observe(scrollAreas[1], { attributes: true, attributeFilter: ['data-scrolled'] });
-  };
-
-  const isAnyAreaScrolled = root => {
-    return [...root.querySelectorAll('sb-scroll-area')].some(observer => observer.getAttribute('data-scrolled') === 'true');
-  };
-
   return html`
     <sb-app-header></sb-app-header>
     <sb-loading-indicator></sb-loading-indicator>
@@ -76,7 +53,7 @@ function AppRoot() {
 
       <sb-notifications></sb-notifications>
 
-      <div class="toolbar${isHeaderElevated ? ' toolbar--with-scroll' : ''}">
+      <div class="toolbar${scrollContext.scrollCount > 0 ? ' toolbar--with-scroll' : ''}">
         <sb-view-toggle data-left="Favorites" data-right="All" data-selected="Favorites" @click=${onViewToggle}></sb-view-toggle>
         <sb-app-menu></sb-app-menu>
       </div>
