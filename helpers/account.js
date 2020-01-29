@@ -4,34 +4,6 @@ const urls = require('../urls');
 const signInBlockerUrlPrefix = 'https://login.microsoftonline.com';
 const signInSuccessUrlPrefix = 'https://microsoft.sharepoint.com';
 
-async function checkSignInStatus() {
-  return new Promise((resolve, reject) => {
-    console.log('[account] check login status: start');
-    const tempWindow = new BrowserWindow({
-      width: 800,
-      height: 600,
-      show: false,
-    });
-
-    tempWindow.loadURL(urls.getEnvironmentsEndpoint);
-
-    tempWindow.webContents.on('dom-ready', () => {
-      const url = tempWindow.webContents.getURL();
-      if (url.indexOf(signInBlockerUrlPrefix) === 0) {
-        tempWindow.destroy();
-        resolve(false);
-        console.log('[account] check sign in status: not signed in');
-      }
-
-      if (url.indexOf(signInSuccessUrlPrefix) === 0) {
-        tempWindow.destroy();
-        resolve(true);
-        console.log('[account] check sign in status: signed in');
-      }
-    });
-  });
-}
-
 async function signOut() {
   return new Promise((resolve, reject) => {
     console.log('[account] sign out: start');
@@ -94,7 +66,6 @@ async function signIn(parentWindow) {
 }
 
 module.exports = {
-  checkSignInStatus,
   signOut,
   signIn,
 };
