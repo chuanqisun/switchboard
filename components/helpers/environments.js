@@ -1,5 +1,5 @@
 const { BrowserWindow, screen } = require('electron').remote;
-import { urls } from '../urls.js';
+import { urls } from '../../urls.js';
 import { getJsonFromUrl } from './get-json-from-url.js';
 export { rejectReasonInvalidJson, rejectReasonSignedOut } from './get-json-from-url.js';
 

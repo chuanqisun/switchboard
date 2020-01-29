@@ -1,10 +1,10 @@
 import { html } from '../lib/lit-html.js';
 import { component, useEffect, useState } from '../lib/haunted.js';
 import { useFocusVisible } from './use-focus-visible.js';
-import { signOut, reloadWindow } from '../helpers/auth.js';
-import { showAbout, downloadUpdate, noUpdates, updateAvailable } from '../helpers/dialogs.js';
-import { editEnvironments } from '../helpers/environments.js';
-import { getVersionSummary } from '../helpers/update.js';
+import { signOut, reloadWindow } from './helpers/auth.js';
+import { showAbout, downloadUpdate, noUpdates, updateAvailable } from './helpers/dialogs.js';
+import { editEnvironments } from './helpers/environments.js';
+import { getVersionSummary } from './helpers/update.js';
 
 function AppMenu() {
   const { FocusVisibleStyle } = useFocusVisible(this.shadowRoot);

@@ -2,7 +2,7 @@ import { html } from '../lib/lit-html.js';
 import { component, useContext, useEffect } from '../lib/haunted.js';
 import { useFocusVisible } from './use-focus-visible.js';
 import { Star } from './icons.js';
-import { signInDynamicsUCApp } from '../helpers/automation.js';
+import { signInDynamicsUCApp } from './helpers/automation.js';
 import { ChromiumContext, EnvironmentsContext, FavoritesContext } from './contexts/index.js';
 
 function Environments({ dataFavoritesOnly, dataEmptyText, dataIsSelectedView }) {

@@ -2,7 +2,7 @@ import { html } from '../lib/lit-html.js';
 import { component, useContext, useEffect } from '../lib/haunted.js';
 import { useFocusVisible } from './use-focus-visible.js';
 import { EnvironmentsContext } from './contexts/environments-context.js';
-import { signIn, reloadWindow } from '../helpers/auth.js';
+import { signIn, reloadWindow } from './helpers/auth.js';
 
 function SignInForm() {
   const { FocusVisibleStyle } = useFocusVisible(this.shadowRoot);
