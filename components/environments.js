@@ -81,7 +81,10 @@ function Environments({ dataFavoritesOnly, dataEmptyText, dataIsSelectedView }) 
         background-color: white;
         display: flex;
         border-radius: 4px;
-        box-shadow: var(--shadow-1);
+        box-shadow: var(--shadow-2);
+      }
+      .environment-card:hover {
+        box-shadow: var(--shadow-3);
       }
       .environment-card:focus-within .more,
       .environment-card:hover .more {
