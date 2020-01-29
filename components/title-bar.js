@@ -3,7 +3,7 @@ import { component } from '../lib/haunted.js';
 import { useFocusVisible } from './use-focus-visible.js';
 import { Minimize, Close } from './icons.js';
 
-function AppHeader() {
+function TitleBar() {
   const { FocusVisibleStyle } = useFocusVisible(this.shadowRoot);
 
   const onMinimize = () => {
@@ -89,4 +89,4 @@ function AppHeader() {
   `;
 }
 
-customElements.define('sb-app-header', component(AppHeader));
+customElements.define('sb-title-bar', component(TitleBar));

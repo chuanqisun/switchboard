@@ -42,7 +42,7 @@ function AppRoot() {
   };
 
   return html`
-    <sb-app-header></sb-app-header>
+    <sb-title-bar></sb-title-bar>
     <sb-loading-indicator></sb-loading-indicator>
     <main class="main body--flex-middle">
       <sb-sign-in-form></sb-sign-in-form>

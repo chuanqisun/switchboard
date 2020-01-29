@@ -1,7 +1,7 @@
 import './app-menu.js';
 import './app-root.js';
 import './environments.js';
-import './header.js';
+import './title-bar.js';
 import './loading-indicator.js';
 import './notifications.js';
 import './scroll-area.js';
