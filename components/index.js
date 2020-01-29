@@ -1,3 +1,4 @@
+import './contexts/index.js';
 import './app-menu.js';
 import './app-root.js';
 import './environments.js';
