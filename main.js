@@ -39,20 +39,9 @@ app.on('activate', function() {
 // Custom logic
 app.on('ready', () => {
   globalShortcut.register('CommandOrControl+E', () => mainWindow.isFocused() && editEnvironments());
-  globalShortcut.register('CommandOrControl+H', () => mainWindow.isFocused() && showAbout());
-});
-
-ipcMain.on('downloadUpdate', () => {
-  const { downloadUpdate } = require('./helpers/dialogs');
-  downloadUpdate();
 });
 
 function editEnvironments() {
   const { editEnvironments } = require('./helpers/environments');
   editEnvironments();
-}
-
-function showAbout() {
-  const { showAbout } = require('./helpers/dialogs');
-  showAbout();
 }

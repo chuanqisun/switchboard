@@ -2,6 +2,7 @@ import { html } from '../lib/lit-html.js';
 import { component } from '../lib/haunted.js';
 import { useFocusVisible } from './use-focus-visible.js';
 import { signOut, reloadWindow } from '../helpers/auth.js';
+import { showAbout, downloadUpdate } from '../helpers/dialogs.js';
 
 function AppMenu() {
   const { FocusVisibleStyle } = useFocusVisible(this.shadowRoot);
@@ -74,7 +75,7 @@ async function createMenu() {
     new MenuItem({
       enabled: isDownloadUpdateEnabled,
       label: 'Get updates',
-      click: () => ipcRenderer.send('downloadUpdate'),
+      click: () => downloadUpdate(),
     })
   );
 
@@ -85,6 +86,13 @@ async function createMenu() {
         await signOut();
         reloadWindow();
       },
+    })
+  );
+
+  menu.append(
+    new MenuItem({
+      label: 'About',
+      click: () => showAbout(),
     })
   );
   return menu;

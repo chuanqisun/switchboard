@@ -1,9 +1,11 @@
-const { app, dialog, nativeImage } = require('electron');
+const { app, dialog, nativeImage } = require('electron').remote;
 const path = require('path');
 const iconPath = path.join(__dirname, '../build/icon.png');
 const messageBoxIcon = nativeImage.createFromPath(iconPath);
+import { urls } from '../urls.js';
+const { shell } = require('electron').remote;
 
-function showAbout() {
+export function showAbout() {
   dialog.showMessageBox({
     buttons: ['Close'],
     title: 'About - Switchboard',
@@ -19,9 +21,7 @@ Electron ${process.versions.electron}
   });
 }
 
-function downloadUpdate() {
-  const urls = require('../urls');
-  const { shell } = require('electron');
+export function downloadUpdate() {
   shell.openExternal(urls.latestReleaseUrl);
 }
 
