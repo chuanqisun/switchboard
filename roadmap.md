@@ -18,3 +18,7 @@
 14. Use service worker to pull render script
 
 ===
+
+## bugs
+
+1. focus-within stuck on favorites

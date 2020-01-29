@@ -34,9 +34,9 @@ function Environments({ dataFavoritesOnly, dataEmptyText, dataIsSelectedView }) 
   const renderEnvironment = ({ environment }) => {
     return html`
       <div class="environment-card card--animation-enter">
-        <img class="app-icon" src="./assets/product-icons/${environment.appIcon}" />
         <button class="main-action" @click=${() => launchEnvironment(environment)} tabindex="${isSelectedView ? 0 : -1}">
-          ${environment.appName}
+          <img class="main-action__icon" src="./assets/product-icons/${environment.appIcon}" />
+          <span class="main-action__app-name">${environment.appName}</span>
         </button>
         <button
           tabindex="${isSelectedView ? 0 : -1}"
@@ -92,28 +92,32 @@ function Environments({ dataFavoritesOnly, dataEmptyText, dataIsSelectedView }) 
       .environment-card:hover .more {
         opacity: 1;
       }
-      .app-icon {
-        width: 2rem;
-        height: 2rem;
-        padding: 0 0.5rem 0 1rem;
-      }
       .main-action {
+        display: flex;
         cursor: pointer;
+        align-items: center;
         text-align: left;
         font-family: var(--font-family-system);
         font-size: 0.85rem;
         font-weight: 600;
-        padding: 0 0.5rem;
+        padding: 0 1rem;
         flex: 1 1 auto;
         border: none;
         background-color: transparent;
+        height: 3rem;
+      }
+      .main-action__icon {
+        flex: 0 0 auto;
+        width: 2rem;
+        height: 2rem;
+        padding: 0 1rem 0 0;
       }
       .more {
         --star-stroke-width: 1.25px;
         --star-stroke: var(--color-off-black);
         --star-fill: transparent;
         opacity: 0;
-        padding: 1rem;
+        padding: 0 1rem;
         flex: 0 0 2rem;
         border: none;
         background-color: transparent;
