@@ -33,7 +33,7 @@ function Environments({ dataFavoritesOnly, dataEmptyText, dataIsSelectedView }) 
 
   const renderEnvironment = ({ environment }) => {
     return html`
-      <div class="environment-card">
+      <div class="environment-card card--animation-enter">
         <button class="main-action" @click=${() => launchEnvironment(environment)} tabindex="${isSelectedView ? 0 : -1}">
           ${environment.appName}
         </button>
@@ -75,18 +75,17 @@ function Environments({ dataFavoritesOnly, dataEmptyText, dataIsSelectedView }) 
       .environment-list {
         margin: 1rem;
         display: grid;
-        overflow: hidden;
-        border-radius: 4px;
+        gap: 1rem;
       }
       .environment-card {
         background-color: white;
         display: flex;
+        border-radius: 4px;
+        box-shadow: var(--shadow-1);
       }
+      .environment-card:focus-within .more,
       .environment-card:hover .more {
         opacity: 1;
-      }
-      .environment-card + .environment-card {
-        border-top: 1px solid rgba(0, 0, 0, 0.21);
       }
       .main-action {
         cursor: pointer;
@@ -117,6 +116,52 @@ function Environments({ dataFavoritesOnly, dataEmptyText, dataIsSelectedView }) 
       .more--favorite {
         opacity: 1;
         --star-fill: var(--color-yellow);
+      }
+
+      .card--animation-enter {
+        animation: card-enter 400ms 400ms;
+        animation-fill-mode: both;
+      }
+
+      .card--animation-enter:nth-child(2) {
+        animation-delay: 500ms;
+      }
+      .card--animation-enter:nth-child(3) {
+        animation-delay: 600ms;
+      }
+      .card--animation-enter:nth-child(4) {
+        animation-delay: 700ms;
+      }
+      .card--animation-enter:nth-child(5) {
+        animation-delay: 800ms;
+      }
+      .card--animation-enter:nth-child(6) {
+        animation-delay: 900ms;
+      }
+      .card--animation-enter:nth-child(7) {
+        animation-delay: 1000ms;
+      }
+      .card--animation-enter:nth-child(8) {
+        animation-delay: 1100ms;
+      }
+      .card--animation-enter:nth-child(9) {
+        animation-delay: 1200ms;
+      }
+      .card--animation-enter:nth-child(10) {
+        animation-delay: 1300ms;
+      }
+      .card--animation-enter:nth-child(11) {
+        animation-delay: 1400ms;
+      }
+      @keyframes card-enter {
+        0% {
+          transform: translate3d(-64px, 0, 0);
+          opacity: 0;
+        }
+        100% {
+          transform: translate3d(0, 0, 0);
+          opacity: 1;
+        }
       }
     </style>
     ${FocusVisibleStyle}
