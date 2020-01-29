@@ -12,10 +12,10 @@
 8. Implement chrome download (visual) progress
 9. Eager render environments. Remove Cmd + R hard rest shortcut
 10. Telemetry
-11. Color icons
-12. Trial vs. Demo badge
-13. Host render script on separate server
-14. Use service worker to pull render script
+11. Trial vs. Demo badge
+12. Host render script on separate server
+13. Use service worker to pull render script
+14. Launch indicator
 
 ===
 
