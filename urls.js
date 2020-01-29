@@ -5,5 +5,3 @@ export const urls = {
   trialAdminPortalUrl: 'https://aka.ms/switchboard-trial-admin-portal',
   latestReleaseUrl: 'https://github.com/chuanqisun/switchboard/releases/latest',
 };
-
-module.exports = urls;
