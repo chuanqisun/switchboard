@@ -100,6 +100,7 @@ function Environments({ dataFavoritesOnly, dataEmptyText, dataIsSelectedView }) 
         animation-play-state: paused;
       }
       .environment-card:hover {
+        color: var(--color-primary);
         box-shadow: var(--shadow-3);
       }
       .environment-card:focus-within .more,
@@ -107,6 +108,7 @@ function Environments({ dataFavoritesOnly, dataEmptyText, dataIsSelectedView }) 
         opacity: 1;
       }
       .main-action {
+        color: inherit;
         display: flex;
         cursor: pointer;
         align-items: center;
