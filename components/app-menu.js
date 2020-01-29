@@ -1,5 +1,5 @@
 import { html } from '../lib/lit-html.js';
-import { component } from '../lib/haunted.js';
+import { component, useEffect, useState } from '../lib/haunted.js';
 import { useFocusVisible } from './use-focus-visible.js';
 import { signOut, reloadWindow } from '../helpers/auth.js';
 import { showAbout, downloadUpdate, noUpdates, updateAvailable } from '../helpers/dialogs.js';
@@ -8,9 +8,24 @@ import { getVersionSummary } from '../helpers/update.js';
 
 function AppMenu() {
   const { FocusVisibleStyle } = useFocusVisible(this.shadowRoot);
+  const [isUpdateIndicatorVisible, setIsUpdateIndicatorVisible] = useState(false);
+
+  useEffect(async () => {
+    const { isUpdatedRequired } = await getVersionSummary();
+    if (isUpdatedRequired) {
+      setIsUpdateIndicatorVisible(true);
+    }
+  }, []);
 
   return html`
-    <button class="menu-button" id="main-menu" @click=${handleMainMenuClick}>Menu</button>
+    <button class="menu-button" id="main-menu" @click=${handleMainMenuClick}>
+      <span>Menu</span>
+      ${isUpdateIndicatorVisible
+        ? html`
+            <span class="menu-button__update-indicator">🎁</span>
+          `
+        : null}
+    </button>
 
     <style>
       .menu-button {
@@ -26,6 +41,12 @@ function AppMenu() {
         font-size: 0.85rem;
         box-shadow: var(--shadow-2);
         outline-offset: 2px !important;
+        display: flex;
+        align-items: center;
+
+        animation: menu-bar-enter 400ms;
+        will-change: transform, opacity;
+        animation-fill-mode: both;
       }
 
       .menu-button:hover,
@@ -37,10 +58,8 @@ function AppMenu() {
         box-shadow: var(--shadow-1);
       }
 
-      .menu-button {
-        animation: menu-bar-enter 400ms;
-        will-change: transform, opacity;
-        animation-fill-mode: both;
+      .menu-button__update-indicator {
+        margin-left: 0.5rem;
       }
 
       @keyframes menu-bar-enter {
@@ -74,7 +93,7 @@ async function createMenu() {
   isUpdatedRequired &&
     menu.append(
       new MenuItem({
-        label: 'Update now 🚀',
+        label: 'Update now 🎁',
         click: () => downloadUpdate(), // TODO implement a separate check for getting the latest version
       })
     );
