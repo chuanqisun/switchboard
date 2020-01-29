@@ -1,4 +1,5 @@
-const { BrowserWindow } = require('electron').remote;
+const { BrowserWindow, screen } = require('electron').remote;
+import { urls } from '../urls.js';
 
 // TODO share url with auth.js
 const signInBlockerUrlPrefix = 'https://login.microsoftonline.com';
@@ -37,4 +38,19 @@ export async function getEnvironments() {
       }
     });
   });
+}
+
+export async function editEnvironments() {
+  const display = screen.getPrimaryDisplay();
+  const { width, height } = display.bounds;
+
+  const tempWindow = new BrowserWindow({
+    width: 800,
+    height: height - 64,
+    x: Math.max(16, width - 16 - 420 - 16 - 800),
+    y: 16,
+  });
+
+  tempWindow.setMenu(null);
+  tempWindow.loadURL(urls.editEnvironmentsEndpoint);
 }

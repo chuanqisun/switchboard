@@ -35,13 +35,3 @@ app.on('window-all-closed', function() {
 app.on('activate', function() {
   if (mainWindow === null) createWindow();
 });
-
-// Custom logic
-app.on('ready', () => {
-  globalShortcut.register('CommandOrControl+E', () => mainWindow.isFocused() && editEnvironments());
-});
-
-function editEnvironments() {
-  const { editEnvironments } = require('./helpers/environments');
-  editEnvironments();
-}

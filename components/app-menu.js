@@ -3,6 +3,7 @@ import { component } from '../lib/haunted.js';
 import { useFocusVisible } from './use-focus-visible.js';
 import { signOut, reloadWindow } from '../helpers/auth.js';
 import { showAbout, downloadUpdate } from '../helpers/dialogs.js';
+import { editEnvironments } from '../helpers/environments-v2.js';
 
 function AppMenu() {
   const { FocusVisibleStyle } = useFocusVisible(this.shadowRoot);
@@ -93,6 +94,13 @@ async function createMenu() {
     new MenuItem({
       label: 'About',
       click: () => showAbout(),
+    })
+  );
+
+  menu.append(
+    new MenuItem({
+      label: 'Manage environments',
+      click: () => editEnvironments(),
     })
   );
   return menu;
