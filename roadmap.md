@@ -22,4 +22,4 @@
 
 ## bugs
 
-1. focus-within stuck on favorites
+1. focus-visible doesn't work async with the favorite stars

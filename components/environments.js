@@ -103,7 +103,8 @@ function Environments({ dataFavoritesOnly, dataEmptyText, dataIsSelectedView }) 
         color: var(--color-primary);
         box-shadow: var(--shadow-3);
       }
-      .environment-card:focus-within .more,
+      .main-action:focus-within .more,
+      .more:focus.focus-visible,
       .environment-card:hover .more {
         opacity: 1;
       }
