@@ -1,5 +1,5 @@
-import { html } from '../lib/lit-html.js';
-import { component } from '../lib/haunted.js';
+import { html } from './lib/lit-html.js';
+import { component } from './lib/haunted.js';
 import { useFocusVisible } from './use-focus-visible.js';
 import { Minimize, Close } from './icons.js';
 

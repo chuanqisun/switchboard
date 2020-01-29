@@ -1,5 +1,4 @@
-import { createContext, useState, component, useEffect } from '../../lib/haunted.js';
-import { html } from '../../lib/lit-html.js';
+import { html, createContext, useState, component, useEffect } from '../lib/index.js';
 
 export const ScrollContext = createContext({
   isScrollToTopRequested: false,

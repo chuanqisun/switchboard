@@ -1,5 +1,5 @@
-import { html } from '../lib/lit-html.js';
-import { component, useEffect, useRef } from '../lib/haunted.js';
+import { html } from './lib/lit-html.js';
+import { component, useEffect, useRef } from './lib/haunted.js';
 import { useFocusVisible } from './use-focus-visible.js';
 
 function ViewToggle({ dataLeft, dataRight, dataSelected }) {

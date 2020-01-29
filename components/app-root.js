@@ -1,5 +1,5 @@
-import { html } from '../lib/lit-html.js';
-import { component, useContext } from '../lib/haunted.js';
+import { html } from './lib/lit-html.js';
+import { component, useContext } from './lib/haunted.js';
 import { CarouselContext } from './contexts/index.js';
 
 function AppRoot() {

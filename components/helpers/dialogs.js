@@ -1,5 +1,5 @@
 const { app, dialog } = require('electron').remote;
-import { urls } from '../../urls.js';
+import { urls } from '../constants.js';
 const { shell } = require('electron').remote;
 
 export function showAbout() {

@@ -1,5 +1,4 @@
-import { createContext, useState, component, useEffect, useContext } from '../../lib/haunted.js';
-import { html } from '../../lib/lit-html.js';
+import { html, createContext, useState, component, useEffect, useContext } from '../lib/index.js';
 import { ensureUserSettings, addFavorite, removeFavorite, saveUserSettings, isFavorite } from '../helpers/user-settings.js';
 import { EnvironmentsContext } from '../contexts/environments-context.js';
 

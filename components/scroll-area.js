@@ -1,5 +1,5 @@
-import { html } from '../lib/lit-html.js';
-import { component, useEffect, useContext } from '../lib/haunted.js';
+import { html } from './lib/lit-html.js';
+import { component, useEffect, useContext } from './lib/haunted.js';
 import { CarouselContext, ScrollContext } from './contexts/index.js';
 
 function ScrollArea() {

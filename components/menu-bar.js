@@ -1,5 +1,5 @@
-import { html } from '../lib/lit-html.js';
-import { component, useContext, useRef, useEffect } from '../lib/haunted.js';
+import { html } from './lib/lit-html.js';
+import { component, useContext, useRef, useEffect } from './lib/haunted.js';
 import { ScrollContext, CarouselContext, EnvironmentsContext, FavoritesContext, ChromiumContext } from './contexts/index.js';
 
 function MenuBar() {

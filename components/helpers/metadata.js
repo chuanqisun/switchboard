@@ -1,4 +1,4 @@
-import { urls } from '../../urls.js';
+import { urls } from '../constants.js';
 import { getJsonFromUrl } from './get-json-from-url.js';
 
 const cachedMetadataPromise = getJsonFromUrl(urls.getMetadataEndpoint).catch(e => {
