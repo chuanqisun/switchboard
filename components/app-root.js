@@ -8,7 +8,7 @@ function AppRoot() {
   return html`
     <sb-title-bar></sb-title-bar>
     <sb-loading-indicator></sb-loading-indicator>
-    <main class="main body--flex-middle">
+    <main class="main">
       <sb-sign-in-form></sb-sign-in-form>
 
       <sb-notifications></sb-notifications>
@@ -37,16 +37,6 @@ function AppRoot() {
         display: contents;
       }
 
-      html {
-        height: 100%;
-        color: var(--color-off-black);
-        box-sizing: border-box;
-      }
-
-      .body--flex-middle {
-        flex: 1 1 auto;
-      }
-
       sb-notifications {
         position: absolute;
         bottom: 0;
@@ -55,6 +45,7 @@ function AppRoot() {
       .main {
         display: flex;
         flex-direction: column;
+        flex: 1 1 auto;
       }
 
       sb-sign-in-form {
