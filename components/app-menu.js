@@ -32,6 +32,23 @@ function AppMenu() {
       .menu-button:active {
         box-shadow: var(--shadow-1);
       }
+
+      .menu-button {
+        animation: menu-bar-enter 400ms;
+        will-change: transform, opacity;
+        animation-fill-mode: both;
+      }
+
+      @keyframes menu-bar-enter {
+        0% {
+          transform: translateY(-16px);
+          opacity: 0;
+        }
+        100% {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
     </style>
     ${FocusVisibleStyle}
   `;

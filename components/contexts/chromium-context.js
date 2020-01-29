@@ -13,6 +13,7 @@ customElements.define('sb-chromium-provider-internal', ChromiumContext.Provider)
 
 function ChromiumProvider() {
   const [status, setStatus] = useState('checking'); // 'checking' | 'downloading' | 'installing' | 'installed'
+  const [downloadProgress, setDownloadProgress] = useState(0); // 0 - 100
   const [exec, setExec] = useState('');
 
   useEffect(() => {
@@ -28,6 +29,7 @@ function ChromiumProvider() {
       onProgress: ({ percent }) => {
         if (percent < 1) {
           setStatus('downloading');
+          setDownloadProgress(Math.round(100 * percent));
           console.log('[chromium] ' + percent);
         }
 
@@ -46,6 +48,7 @@ function ChromiumProvider() {
   const contextValue = {
     status,
     exec,
+    downloadProgress,
   };
 
   return html`

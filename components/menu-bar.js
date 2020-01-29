@@ -1,21 +1,18 @@
 import { html } from '../lib/lit-html.js';
 import { component, useContext, useRef, useEffect } from '../lib/haunted.js';
-import { ScrollContext, CarouselContext, EnvironmentsContext, FavoritesContext } from './contexts/index.js';
+import { ScrollContext, CarouselContext, EnvironmentsContext, FavoritesContext, ChromiumContext } from './contexts/index.js';
 
 function MenuBar() {
-  const viewToggleRef = useRef(null);
-
   const scrollContext = useContext(ScrollContext);
   const carouselContext = useContext(CarouselContext);
   const environmentsContext = useContext(EnvironmentsContext);
   const favoritesContext = useContext(FavoritesContext);
+  const chromiumContext = useContext(ChromiumContext);
+
+  const isMenuBarReady = environmentsContext.status === 'loaded' && favoritesContext.status === 'loaded' && chromiumContext.status === 'installed';
 
   useEffect(() => {
-    viewToggleRef.current = this.shadowRoot.querySelector('sb-view-toggle');
-  }, []);
-
-  useEffect(() => {
-    if (environmentsContext.status === 'loaded' && favoritesContext.status === 'loaded') {
+    if (isMenuBarReady) {
       if (!favoritesContext.favorites.length) {
         onViewToggle();
       }
@@ -23,7 +20,7 @@ function MenuBar() {
   }, [environmentsContext.status, favoritesContext.status]);
 
   const onViewToggle = () => {
-    const viewToggle = viewToggleRef.current;
+    const viewToggle = this.shadowRoot.querySelector('sb-view-toggle');
     if (viewToggle.dataset.selected === viewToggle.dataset.left) {
       carouselContext.setSelected(viewToggle.dataset.right);
     } else {
@@ -33,13 +30,19 @@ function MenuBar() {
 
   return html`
     <div class="menu-bar${scrollContext.scrollCount > 0 ? ' menu-bar--with-scroll' : ''}">
-      <sb-view-toggle data-left="Favorites" data-right="All" data-selected="${carouselContext.selected}" @click=${onViewToggle}></sb-view-toggle>
+      ${isMenuBarReady
+        ? html`
+            <sb-view-toggle data-left="Favorites" data-right="All" data-selected="${carouselContext.selected}" @click=${onViewToggle}></sb-view-toggle>
+          `
+        : html`
+            <div></div>
+          `}
       <sb-app-menu></sb-app-menu>
     </div>
 
     <style>
       .menu-bar {
-        display: none;
+        display: flex;
         flex: 0 0 auto;
         height: var(--menu-bar-height);
         align-items: center;
@@ -48,27 +51,10 @@ function MenuBar() {
         background: var(--gradient-menu-bar);
         position: relative;
         z-index: var(--z-toolbar);
-
-        display: flex;
-
-        animation: menu-bar-enter 400ms;
-        will-change: transform, opacity;
-        animation-fill-mode: both;
       }
 
       .menu-bar--with-scroll {
         box-shadow: var(--shadow-3);
-      }
-
-      @keyframes menu-bar-enter {
-        0% {
-          transform: translateY(-16px);
-          opacity: 0;
-        }
-        100% {
-          transform: translateX(0);
-          opacity: 1;
-        }
       }
     </style>
   `;

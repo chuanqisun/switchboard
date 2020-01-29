@@ -3,7 +3,6 @@ import './app-root.js';
 import './environments.js';
 import './loading-indicator.js';
 import './menu-bar.js';
-import './notifications.js';
 import './scroll-area.js';
 import './sign-in-form.js';
 import './title-bar.js';

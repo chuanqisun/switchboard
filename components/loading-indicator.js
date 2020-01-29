@@ -1,28 +1,37 @@
 import { html } from '../lib/lit-html.js';
-import { component, useEffect, useContext } from '../lib/haunted.js';
-import { EnvironmentsContext } from './contexts/environments-context.js';
+import { component, useEffect, useContext, useState } from '../lib/haunted.js';
+import { EnvironmentsContext, ChromiumContext } from './contexts/index.js';
 
 function LoadingIndicator() {
   const environmentsContext = useContext(EnvironmentsContext);
+  const chromiumContext = useContext(ChromiumContext);
+
+  const [loadingMessage, setLoadingMessage] = useState(null); // null means no message to show
 
   useEffect(() => {
-    const loadingIndicator = this.shadowRoot.querySelector('#loading-indicator');
-
-    switch (environmentsContext.status) {
-      case 'loaded':
-      case 'signed-out':
-      case 'error':
-        loadingIndicator.dataset.state = 'done';
-        break;
+    if (environmentsContext.status === 'loading') {
+      setLoadingMessage('Loading environments…');
+    } else if (environmentsContext.status === 'signed-out') {
+      setLoadingMessage(null);
+    } else if (environmentsContext.status === 'error') {
+      setLoadingMessage('Sorry, something went wrong. Please close and open the app to try again.');
+    } else if (environmentsContext.status === 'loaded') {
+      if (chromiumContext.status === 'checking') {
+        setLoadingMessage('Checking browser version…');
+      } else if (chromiumContext.status === 'downloading') {
+        setLoadingMessage(`Downloading Chromium browser… ${chromiumContext.downloadProgress}%`);
+      } else if (chromiumContext.status === 'installing') {
+        setLoadingMessage('Installing Chromium browser…');
+      } else if (chromiumContext.status === 'installed') {
+        setLoadingMessage(null);
+      }
     }
-  }, [environmentsContext.status]);
+  }, [environmentsContext.status, chromiumContext.status, chromiumContext.downloadProgress]);
 
   return html`
-    <div id="loading-indicator" class="loading-indicator" data-state="get-environments">
+    <div id="loading-indicator" class="loading-indicator${loadingMessage === null ? '' : ' active'}">
       <img class="loading-image" src="./assets/bolt.svg" />
-      <div class="loading-message" data-for-state="get-environments">
-        Checking sign-in status…
-      </div>
+      <div class="loading-message">${loadingMessage}</div>
     </div>
     <style>
       .loading-indicator {
@@ -31,7 +40,7 @@ function LoadingIndicator() {
         left: 0;
         right: 0;
         bottom: 0;
-        display: flex;
+        display: none;
         align-items: center;
         justify-content: center;
         flex-direction: column;
@@ -45,15 +54,10 @@ function LoadingIndicator() {
       .loading-message {
         margin-top: 1rem;
         color: white;
-        display: none;
       }
 
-      .loading-indicator[data-state='get-environments'] [data-for-state='get-environments'] {
-        display: initial;
-      }
-
-      .loading-indicator[data-state='done'] {
-        display: none;
+      .loading-indicator.active {
+        display: flex;
       }
 
       @keyframes pulse {

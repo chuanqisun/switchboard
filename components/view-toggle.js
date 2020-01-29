@@ -1,5 +1,5 @@
 import { html } from '../lib/lit-html.js';
-import { component, useState, useEffect, useRef } from '../lib/haunted.js';
+import { component, useEffect, useRef } from '../lib/haunted.js';
 import { useFocusVisible } from './use-focus-visible.js';
 
 function ViewToggle({ dataLeft, dataRight, dataSelected }) {
@@ -69,6 +69,9 @@ function ViewToggle({ dataLeft, dataRight, dataSelected }) {
         height: 1.6rem;
         padding: 0;
         position: relative;
+        animation: menu-bar-enter 400ms;
+        will-change: transform, opacity;
+        animation-fill-mode: both;
       }
       .option-text {
         color: white;
@@ -95,6 +98,17 @@ function ViewToggle({ dataLeft, dataRight, dataSelected }) {
         transform: translateX(var(--x-translate, 0));
         width: var(--knob-width, auto);
         transition: width 250ms, transform 250ms;
+      }
+
+      @keyframes menu-bar-enter {
+        0% {
+          transform: translateY(-16px);
+          opacity: 0;
+        }
+        100% {
+          transform: translateX(0);
+          opacity: 1;
+        }
       }
     </style>
     ${FocusVisibleStyle}

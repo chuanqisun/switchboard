@@ -2,10 +2,8 @@ import { html } from '../lib/lit-html.js';
 import { component, useContext } from '../lib/haunted.js';
 import { useFocusVisible } from './use-focus-visible.js';
 import { Star } from './icons.js';
-import { FavoritesContext } from './contexts/favorites-context.js';
-import { EnvironmentsContext } from './contexts/environments-context.js';
 import { signInDynamicsUCApp } from '../helpers/automation.js';
-import { ChromiumContext } from './contexts/chromium-context.js';
+import { ChromiumContext, EnvironmentsContext, FavoritesContext } from './contexts/index.js';
 
 function Environments({ dataFavoritesOnly, dataEmptyText, dataIsSelectedView }) {
   const { FocusVisibleStyle } = useFocusVisible(this.shadowRoot);
@@ -15,13 +13,13 @@ function Environments({ dataFavoritesOnly, dataEmptyText, dataIsSelectedView }) 
   const chromiumContext = useContext(ChromiumContext);
 
   const isSelectedView = dataIsSelectedView === 'true';
+  const areEnvironmentsReady = favoritesContext.status === 'loaded' && environmentsContext.status === 'loaded' && chromiumContext.status === 'installed';
 
   let environments = environmentsContext.environments;
-  if (dataFavoritesOnly) {
+  if (dataFavoritesOnly && areEnvironmentsReady) {
     environments = environmentsContext.environments.filter(environment => favoritesContext.favorites.includes(environment.appId));
   }
-
-  const isEmptyState = environmentsContext.status === 'loaded' && environments.length === 0;
+  const isEmptyState = areEnvironmentsReady && environments.length === 0;
 
   const launchEnvironment = async environment => {
     const { url, username, password } = environment;
@@ -54,68 +52,73 @@ function Environments({ dataFavoritesOnly, dataEmptyText, dataIsSelectedView }) 
 
   return html`
     ${Star}
-    <div class="environment-list">
-      ${isEmptyState
-        ? html`
-            <div class="empty-text">${dataEmptyText}</div>
-          `
-        : null}
-      ${environments.map(environment => renderEnvironment({ environment }))}
-      <style>
-        .empty-text {
-          color: white;
-          --star-fill: white;
-          --star-stroke: var(--color-off-black);
-          padding: 0 1rem;
-        }
-        .environment-list {
-          margin: 1rem;
-          display: grid;
-          overflow: hidden;
-          border-radius: 4px;
-        }
-        .environment-card {
-          background-color: white;
-          display: flex;
-        }
-        .environment-card:hover .more {
-          opacity: 1;
-        }
-        .environment-card + .environment-card {
-          border-top: 1px solid rgba(0, 0, 0, 0.21);
-        }
-        .main-action {
-          cursor: pointer;
-          text-align: left;
-          font-family: var(--font-family-system);
-          font-size: 0.85rem;
-          font-weight: 600;
-          padding: 1rem 1rem;
-          flex: 1 0 auto;
-          border: none;
-          background-color: transparent;
-        }
-        .more {
-          --star-stroke-width: 1.25px;
-          --star-stroke: var(--color-off-black);
-          --star-fill: transparent;
-          opacity: 0;
-          padding: 1rem;
-          flex: 0 0 2rem;
-          border: none;
-          background-color: transparent;
-          cursor: pointer;
-        }
-        .more:hover {
-          transform: scale(1.2);
-        }
+    ${areEnvironmentsReady
+      ? html`
+          <div class="environment-list">
+            ${isEmptyState
+              ? html`
+                  <div class="empty-text">${dataEmptyText}</div>
+                `
+              : null}
+            ${environments.map(environment => renderEnvironment({ environment }))}
+          </div>
+        `
+      : null}
 
-        .more--favorite {
-          opacity: 1;
-          --star-fill: var(--color-yellow);
-        }
-      </style>
-    </div>
+    <style>
+      .empty-text {
+        color: white;
+        --star-fill: white;
+        --star-stroke: var(--color-off-black);
+        padding: 0 1rem;
+      }
+      .environment-list {
+        margin: 1rem;
+        display: grid;
+        overflow: hidden;
+        border-radius: 4px;
+      }
+      .environment-card {
+        background-color: white;
+        display: flex;
+      }
+      .environment-card:hover .more {
+        opacity: 1;
+      }
+      .environment-card + .environment-card {
+        border-top: 1px solid rgba(0, 0, 0, 0.21);
+      }
+      .main-action {
+        cursor: pointer;
+        text-align: left;
+        font-family: var(--font-family-system);
+        font-size: 0.85rem;
+        font-weight: 600;
+        padding: 1rem 1rem;
+        flex: 1 0 auto;
+        border: none;
+        background-color: transparent;
+      }
+      .more {
+        --star-stroke-width: 1.25px;
+        --star-stroke: var(--color-off-black);
+        --star-fill: transparent;
+        opacity: 0;
+        padding: 1rem;
+        flex: 0 0 2rem;
+        border: none;
+        background-color: transparent;
+        cursor: pointer;
+      }
+      .more:hover {
+        transform: scale(1.2);
+      }
+
+      .more--favorite {
+        opacity: 1;
+        --star-fill: var(--color-yellow);
+      }
+    </style>
     ${FocusVisibleStyle}
   `;
 }

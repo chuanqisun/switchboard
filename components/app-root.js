@@ -11,8 +11,6 @@ function AppRoot() {
     <main class="main">
       <sb-sign-in-form></sb-sign-in-form>
 
-      <sb-notifications></sb-notifications>
-
       <sb-menu-bar></sb-menu-bar>
 
       <sb-view-carousel data-left="Favorites" data-right="All" data-selected="${carouselContext.selected}">
