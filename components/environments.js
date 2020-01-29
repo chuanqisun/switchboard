@@ -34,6 +34,7 @@ function Environments({ dataFavoritesOnly, dataEmptyText, dataIsSelectedView }) 
   const renderEnvironment = ({ environment }) => {
     return html`
       <div class="environment-card card--animation-enter">
+        <img class="app-icon" src="./assets/product-icons/${environment.appIcon}" />
         <button class="main-action" @click=${() => launchEnvironment(environment)} tabindex="${isSelectedView ? 0 : -1}">
           ${environment.appName}
         </button>
@@ -80,6 +81,7 @@ function Environments({ dataFavoritesOnly, dataEmptyText, dataIsSelectedView }) 
       .environment-card {
         background-color: white;
         display: flex;
+        align-items: center;
         border-radius: 4px;
         box-shadow: var(--shadow-2);
       }
@@ -90,14 +92,19 @@ function Environments({ dataFavoritesOnly, dataEmptyText, dataIsSelectedView }) 
       .environment-card:hover .more {
         opacity: 1;
       }
+      .app-icon {
+        width: 2rem;
+        height: 2rem;
+        padding: 0 0.5rem 0 1rem;
+      }
       .main-action {
         cursor: pointer;
         text-align: left;
         font-family: var(--font-family-system);
         font-size: 0.85rem;
         font-weight: 600;
-        padding: 1rem 1rem;
-        flex: 1 0 auto;
+        padding: 0 0.5rem;
+        flex: 1 1 auto;
         border: none;
         background-color: transparent;
       }
