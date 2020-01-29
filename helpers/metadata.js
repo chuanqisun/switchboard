@@ -1,10 +1,11 @@
-const urls = require('../urls');
-const { getJsonFromSharepointUrl } = require('./sharepoint');
+import { urls } from '../urls.js';
+import { getJsonFromUrl } from './get-json-from-url.js';
 
-async function getMetadata() {
-  return getJsonFromSharepointUrl(urls.getMetadataEndpoint);
+const cachedMetadataPromise = getJsonFromUrl(urls.getMetadataEndpoint).catch(e => {
+  console.log('[metadata] get metadata failed. Error reason: ');
+  console.dir(e);
+});
+
+export async function getMetadata() {
+  return cachedMetadataPromise;
 }
-
-module.exports = {
-  getMetadata,
-};

@@ -1,16 +1,10 @@
-const { app } = require('electron');
+const { app } = require('electron').remote;
+import { getMetadata } from './metadata.js';
 
-async function isUpdateAvailable() {
-  // const { getMetadata } = require('./metadata');
-  // const metadata = await getMetadata();
-  // const { supportedAppVersions } = metadata;
-  // const currentVersion = app.getVersion();
+export async function isVersionSupported() {
+  const metadata = await getMetadata();
+  const { supportedAppVersions } = metadata;
+  const currentVersion = app.getVersion();
 
-  // return supportedAppVersions.includes(currentVersion);
-
-  return true;
+  return supportedAppVersions.includes(currentVersion);
 }
-
-module.exports = {
-  isUpdateAvailable,
-};

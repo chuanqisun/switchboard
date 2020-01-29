@@ -1,5 +1,5 @@
 import { createContext, useState, component, useEffect } from '../../lib/haunted.js';
-import { getEnvironments, rejectReasonSignedOut, rejectReasonInvalidEnvironmentsJson } from '../../helpers/environments.js';
+import { getEnvironments, rejectReasonSignedOut, rejectReasonInvalidJson } from '../../helpers/environments.js';
 import { html } from '../../lib/lit-html.js';
 
 export const EnvironmentsContext = createContext({
@@ -29,7 +29,7 @@ function EnvironmentsProvider() {
           console.log('[environments-context] not signed in');
           setStatus('signed-out');
           break;
-        case rejectReasonInvalidEnvironmentsJson:
+        case rejectReasonInvalidJson:
           console.log('[environments-context] parse environments json failed');
           setStatus('error');
           break;

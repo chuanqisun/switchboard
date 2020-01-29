@@ -4,6 +4,7 @@ import { useFocusVisible } from './use-focus-visible.js';
 import { signOut, reloadWindow } from '../helpers/auth.js';
 import { showAbout, downloadUpdate } from '../helpers/dialogs.js';
 import { editEnvironments } from '../helpers/environments.js';
+import { isVersionSupported } from '../helpers/update.js';
 
 function AppMenu() {
   const { FocusVisibleStyle } = useFocusVisible(this.shadowRoot);
@@ -66,17 +67,37 @@ async function handleMainMenuClick() {
 
 async function createMenu() {
   const { Menu, MenuItem } = require('electron').remote;
-  const { ipcRenderer } = require('electron');
   const menu = new Menu();
-  const { isUpdateAvailable } = require('./helpers/update');
 
-  const isDownloadUpdateEnabled = await isUpdateAvailable();
+  const isImmediateUpdateNecessary = !(await isVersionSupported());
+
+  isImmediateUpdateNecessary &&
+    menu.append(
+      new MenuItem({
+        label: 'Update now 🚀',
+        click: () => downloadUpdate(), // TODO implement a separate check for getting the latest version
+      })
+    );
+
+  !isImmediateUpdateNecessary &&
+    menu.append(
+      new MenuItem({
+        label: 'Check for updates…',
+        click: () => downloadUpdate(),
+      })
+    );
 
   menu.append(
     new MenuItem({
-      enabled: isDownloadUpdateEnabled,
-      label: 'Get updates',
-      click: () => downloadUpdate(),
+      label: 'Manage in SharePoint',
+      click: () => editEnvironments(),
+    })
+  );
+
+  menu.append(
+    new MenuItem({
+      label: 'About',
+      click: () => showAbout(),
     })
   );
 
@@ -90,19 +111,6 @@ async function createMenu() {
     })
   );
 
-  menu.append(
-    new MenuItem({
-      label: 'About',
-      click: () => showAbout(),
-    })
-  );
-
-  menu.append(
-    new MenuItem({
-      label: 'Manage environments',
-      click: () => editEnvironments(),
-    })
-  );
   return menu;
 }
 
