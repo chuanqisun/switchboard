@@ -16,6 +16,7 @@
 12. Host render script on separate server
 13. Use service worker to pull render script
 14. Launch indicator
+15. Title bar color tweak
 
 ===
 
