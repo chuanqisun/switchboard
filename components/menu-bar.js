@@ -9,10 +9,11 @@ function MenuBar() {
   const favoritesContext = useContext(FavoritesContext);
   const chromiumContext = useContext(ChromiumContext);
 
-  const isMenuBarReady = environmentsContext.status === 'loaded' && favoritesContext.status === 'loaded' && chromiumContext.status === 'installed';
+  const isToggleReady = environmentsContext.status === 'loaded' && favoritesContext.status === 'loaded' && chromiumContext.status === 'installed';
+  const isMenuButtonReady = environmentsContext.status !== 'signed-out';
 
   useEffect(() => {
-    if (isMenuBarReady) {
+    if (isToggleReady) {
       if (!favoritesContext.favorites.length) {
         onViewToggle();
       }
@@ -30,14 +31,18 @@ function MenuBar() {
 
   return html`
     <div class="menu-bar${scrollContext.scrollCount > 0 ? ' menu-bar--with-scroll' : ''}">
-      ${isMenuBarReady
+      ${isToggleReady
         ? html`
             <sb-view-toggle data-left="Favorites" data-right="All" data-selected="${carouselContext.selected}" @click=${onViewToggle}></sb-view-toggle>
           `
         : html`
             <div></div>
           `}
-      <sb-app-menu></sb-app-menu>
+      ${isMenuButtonReady
+        ? html`
+            <sb-app-menu></sb-app-menu>
+          `
+        : null}
     </div>
 
     <style>

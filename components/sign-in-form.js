@@ -65,6 +65,8 @@ function SignInForm() {
       }
 
       .sign-in-container {
+        padding: 1rem;
+        box-sizing: border-box;
         display: none;
         height: 100%;
         justify-content: center;

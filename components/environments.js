@@ -112,13 +112,13 @@ function Environments({ dataFavoritesOnly, dataEmptyText, dataIsSelectedView }) 
         align-items: center;
         text-align: left;
         font-family: var(--font-family-system);
-        font-size: 0.85rem;
+        font-size: 1rem;
         font-weight: 600;
         padding: 0 1rem;
         flex: 1 1 auto;
         border: none;
         background-color: transparent;
-        height: 3rem;
+        height: 4rem;
       }
       .main-action__icon {
         flex: 0 0 auto;
