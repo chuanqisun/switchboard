@@ -1,5 +1,5 @@
-import { useEffect } from './lib/haunted.js';
-import { html } from './lib/lit-html.js';
+import { useEffect } from '../lib/haunted.js';
+import { html } from '../lib/lit-html.js';
 
 export function useFocusVisible(shadowRoot) {
   useEffect(() => {

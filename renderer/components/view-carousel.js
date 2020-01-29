@@ -1,5 +1,4 @@
-import { html } from './lib/lit-html.js';
-import { component } from './lib/haunted.js';
+import { html, component } from '../lib/index.js';
 
 function ViewCarousel({ dataLeft, dataRight, dataSelected }) {
   return html`

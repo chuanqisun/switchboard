@@ -1,9 +1,8 @@
-import { html } from './lib/lit-html.js';
-import { component, useContext, useEffect } from './lib/haunted.js';
-import { useFocusVisible } from './use-focus-visible.js';
-import { Star } from './icons.js';
-import { signInDynamicsUCApp } from './helpers/automation.js';
-import { ChromiumContext, EnvironmentsContext, FavoritesContext } from './contexts/index.js';
+import { html, component, useEffect, useContext } from '../lib/index.js';
+import { useFocusVisible } from '../hooks/use-focus-visible.js';
+import { Star } from '../icons.js';
+import { signInDynamicsUCApp } from '../helpers/automation.js';
+import { ChromiumContext, EnvironmentsContext, FavoritesContext } from '../contexts/index.js';
 
 function Environments({ dataFavoritesOnly, dataEmptyText, dataIsSelectedView }) {
   const { FocusVisibleStyle } = useFocusVisible(this.shadowRoot);

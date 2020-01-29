@@ -1,6 +1,5 @@
-import { html } from './lib/lit-html.js';
-import { component, useEffect, useContext, useState } from './lib/haunted.js';
-import { EnvironmentsContext, ChromiumContext } from './contexts/index.js';
+import { html, component, useEffect, useContext, useState } from '../lib/index.js';
+import { EnvironmentsContext, ChromiumContext } from '../contexts/index.js';
 
 function LoadingIndicator() {
   const environmentsContext = useContext(EnvironmentsContext);

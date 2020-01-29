@@ -1,6 +1,5 @@
-import { html } from './lib/lit-html.js';
-import { component, useEffect, useRef } from './lib/haunted.js';
-import { useFocusVisible } from './use-focus-visible.js';
+import { html, component, useEffect, useRef } from '../lib/index.js';
+import { useFocusVisible } from '../hooks/use-focus-visible.js';
 
 function ViewToggle({ dataLeft, dataRight, dataSelected }) {
   const { FocusVisibleStyle } = useFocusVisible(this.shadowRoot);

@@ -1,7 +1,6 @@
-import { html } from './lib/lit-html.js';
-import { component } from './lib/haunted.js';
-import { useFocusVisible } from './use-focus-visible.js';
-import { Minimize, Close } from './icons.js';
+import { html, component } from '../lib/index.js';
+import { useFocusVisible } from '../hooks/use-focus-visible.js';
+import { Minimize, Close } from '../icons.js';
 
 function TitleBar() {
   const { FocusVisibleStyle } = useFocusVisible(this.shadowRoot);
