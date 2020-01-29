@@ -52,6 +52,12 @@ function ViewToggle({ dataLeft, dataRight, dataSelected }) {
       <div class="option-text option-text--right${isToggleOnRight ? ' option-text--active' : ''}">${dataRight}</div>
     </button>
     <style>
+      :host {
+        display: inline-flex;
+        height: 32px;
+        cursor: pointer;
+        align-items: center;
+      }
       .toggle {
         font-family: var(--font-family-system);
         background-color: var(--color-primary-dark);

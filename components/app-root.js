@@ -1,18 +1,11 @@
 import { html } from '../lib/lit-html.js';
-import { component, useEffect, useRef, useContext } from '../lib/haunted.js';
-import { EnvironmentsContext, FavoritesContext, ScrollContext, CarouselContext } from './contexts/index.js';
+import { component, useEffect, useContext } from '../lib/haunted.js';
+import { EnvironmentsContext, FavoritesContext, CarouselContext } from './contexts/index.js';
 
 function AppRoot() {
-  const viewToggleRef = useRef(null);
   const environmentsContext = useContext(EnvironmentsContext);
   const favoritesContext = useContext(FavoritesContext);
-  const scrollContext = useContext(ScrollContext);
   const carouselContext = useContext(CarouselContext);
-
-  // Cache DOM elements
-  useEffect(() => {
-    viewToggleRef.current = this.shadowRoot.querySelector('sb-view-toggle');
-  }, []);
 
   // Initialize toggle and carousel
   useEffect(() => {
@@ -32,15 +25,6 @@ function AppRoot() {
     }
   }, [environmentsContext.status]);
 
-  const onViewToggle = () => {
-    const viewToggle = viewToggleRef.current;
-    if (viewToggle.dataset.selected === viewToggle.dataset.left) {
-      carouselContext.setSelected(viewToggle.dataset.right);
-    } else {
-      carouselContext.setSelected(viewToggle.dataset.left);
-    }
-  };
-
   return html`
     <sb-title-bar></sb-title-bar>
     <sb-loading-indicator></sb-loading-indicator>
@@ -49,10 +33,7 @@ function AppRoot() {
 
       <sb-notifications></sb-notifications>
 
-      <div class="toolbar${scrollContext.scrollCount > 0 ? ' toolbar--with-scroll' : ''}">
-        <sb-view-toggle data-left="Favorites" data-right="All" data-selected="${carouselContext.selected}" @click=${onViewToggle}></sb-view-toggle>
-        <sb-app-menu></sb-app-menu>
-      </div>
+      <sb-menu-bar></sb-menu-bar>
 
       <sb-view-carousel data-left="Favorites" data-right="All" data-selected="${carouselContext.selected}">
         <sb-scroll-area slot="Favorites">
@@ -76,21 +57,6 @@ function AppRoot() {
         display: contents;
       }
 
-      .js-focus-visible :focus:not(.focus-visible) {
-        outline: none;
-      }
-
-      .js-focus-visible :focus.focus-visible {
-        outline: 2px solid orange;
-        outline-offset: -2px;
-      }
-
-      * {
-        color: inherit;
-        box-sizing: inherit;
-        font-family: inherit;
-      }
-
       html {
         height: 100%;
         color: var(--color-off-black);
@@ -104,9 +70,9 @@ function AppRoot() {
         height: 100%;
         display: flex;
         flex-direction: column;
-        background: var(--gradient-app-toolbar), var(--gradient-app-background);
-        background-size: 100% calc(var(--app-background-offset-post-signin)), 100% calc(100% - var(--app-header-height) - var(--app-toolbar-height));
-        background-position: top left, top calc(var(--app-header-height) + var(--app-toolbar-height)) left;
+        background: var(--gradient-menu-bar), var(--gradient-app-background);
+        background-size: 100% calc(var(--app-background-offset-post-signin)), 100% calc(100% - var(--app-header-height) - var(--menu-bar-height));
+        background-position: top left, top calc(var(--app-header-height) + var(--menu-bar-height)) left;
         background-repeat: no-repeat, no-repeat;
         overflow: hidden;
       }
@@ -118,32 +84,6 @@ function AppRoot() {
 
       .body--flex-middle {
         flex: 1 1 auto;
-      }
-
-      * {
-        box-sizing: inherit;
-      }
-
-      .toolbar {
-        display: none;
-        flex: 0 0 auto;
-        height: var(--app-toolbar-height);
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 1rem;
-        background: var(--gradient-app-toolbar);
-        position: relative;
-        z-index: var(--z-toolbar);
-
-        display: flex;
-
-        animation: toolbar-enter 400ms;
-        will-change: transform, opacity;
-        animation-fill-mode: both;
-      }
-
-      .toolbar--with-scroll {
-        box-shadow: var(--shadow-3);
       }
 
       sb-notifications {
@@ -176,32 +116,6 @@ function AppRoot() {
         left: 0;
         right: 0;
         height: 100%;
-      }
-
-      @keyframes toolbar-enter {
-        0% {
-          transform: translateY(-16px);
-          opacity: 0;
-        }
-        100% {
-          transform: translateX(0);
-          opacity: 1;
-        }
-      }
-
-      @keyframes launch {
-        0% {
-          transform: translateX(-100%);
-          opacity: 1;
-        }
-        40% {
-          transform: translateX(0);
-          opacity: 1;
-        }
-        100% {
-          transform: translateX(0);
-          opacity: 0;
-        }
       }
     </style>
   `;
