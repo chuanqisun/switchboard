@@ -1,16 +1,26 @@
 import { html } from '../lib/lit-html.js';
 import { component, useContext, useRef, useEffect } from '../lib/haunted.js';
-import { ScrollContext, CarouselContext } from './contexts/index.js';
+import { ScrollContext, CarouselContext, EnvironmentsContext, FavoritesContext } from './contexts/index.js';
 
 function MenuBar() {
   const viewToggleRef = useRef(null);
 
   const scrollContext = useContext(ScrollContext);
   const carouselContext = useContext(CarouselContext);
+  const environmentsContext = useContext(EnvironmentsContext);
+  const favoritesContext = useContext(FavoritesContext);
 
   useEffect(() => {
     viewToggleRef.current = this.shadowRoot.querySelector('sb-view-toggle');
   }, []);
+
+  useEffect(() => {
+    if (environmentsContext.status === 'loaded' && favoritesContext.status === 'loaded') {
+      if (!favoritesContext.favorites.length) {
+        onViewToggle();
+      }
+    }
+  }, [environmentsContext.status, favoritesContext.status]);
 
   const onViewToggle = () => {
     const viewToggle = viewToggleRef.current;

@@ -20,15 +20,6 @@
   --z-toolbar: 1;
 }
 
-.js-focus-visible :focus:not(.focus-visible) {
-  outline: none;
-}
-
-.js-focus-visible :focus.focus-visible {
-  outline: 2px solid orange;
-  outline-offset: -2px;
-}
-
 * {
   color: inherit;
   box-sizing: inherit;
@@ -53,9 +44,4 @@ body {
   background-position: top left, top calc(var(--app-header-height) + var(--menu-bar-height)) left;
   background-repeat: no-repeat, no-repeat;
   overflow: hidden;
-}
-
-body.pre-sign-in {
-  background: url('../assets/sitting-3.svg') bottom right no-repeat, var(--gradient-app-background);
-  background-size: 65%, 100% 100%;
 }

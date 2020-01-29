@@ -69,6 +69,8 @@ function SignInForm() {
         height: 100%;
         justify-content: center;
         align-items: center;
+        background: url('./assets/sitting-3.svg') bottom right no-repeat, var(--gradient-app-background);
+        background-size: 65%, 100% 100%;
       }
 
       .sign-in-container--active {

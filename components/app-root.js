@@ -1,29 +1,9 @@
 import { html } from '../lib/lit-html.js';
-import { component, useEffect, useContext } from '../lib/haunted.js';
-import { EnvironmentsContext, FavoritesContext, CarouselContext } from './contexts/index.js';
+import { component, useContext } from '../lib/haunted.js';
+import { CarouselContext } from './contexts/index.js';
 
 function AppRoot() {
-  const environmentsContext = useContext(EnvironmentsContext);
-  const favoritesContext = useContext(FavoritesContext);
   const carouselContext = useContext(CarouselContext);
-
-  // Initialize toggle and carousel
-  useEffect(() => {
-    if (environmentsContext.status === 'loaded' && favoritesContext.status === 'loaded') {
-      if (!favoritesContext.favorites.length) {
-        onViewToggle();
-      }
-    }
-  }, [environmentsContext.status, favoritesContext.status]);
-
-  // Handle pre-sign-in state
-  useEffect(() => {
-    if (environmentsContext.status === 'signed-out') {
-      document.body.classList.add('pre-sign-in');
-    } else {
-      document.body.classList.remove('pre-sign-in');
-    }
-  }, [environmentsContext.status]);
 
   return html`
     <sb-title-bar></sb-title-bar>
@@ -61,25 +41,6 @@ function AppRoot() {
         height: 100%;
         color: var(--color-off-black);
         box-sizing: border-box;
-      }
-
-      body {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
-        box-sizing: border-box;
-        margin: 0;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        background: var(--gradient-menu-bar), var(--gradient-app-background);
-        background-size: 100% calc(var(--app-background-offset-post-signin)), 100% calc(100% - var(--app-header-height) - var(--menu-bar-height));
-        background-position: top left, top calc(var(--app-header-height) + var(--menu-bar-height)) left;
-        background-repeat: no-repeat, no-repeat;
-        overflow: hidden;
-      }
-
-      body.pre-sign-in {
-        background: url('../assets/sitting-3.svg') bottom right no-repeat, var(--gradient-app-background);
-        background-size: 65%, 100% 100%;
       }
 
       .body--flex-middle {
