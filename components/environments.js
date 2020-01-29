@@ -1,5 +1,5 @@
 import { html } from '../lib/lit-html.js';
-import { component, useContext } from '../lib/haunted.js';
+import { component, useContext, useEffect } from '../lib/haunted.js';
 import { useFocusVisible } from './use-focus-visible.js';
 import { Star } from './icons.js';
 import { signInDynamicsUCApp } from '../helpers/automation.js';
@@ -33,7 +33,7 @@ function Environments({ dataFavoritesOnly, dataEmptyText, dataIsSelectedView }) 
 
   const renderEnvironment = ({ environment }) => {
     return html`
-      <div class="environment-card card--animation-enter">
+      <div class="environment-card js-stagger-animate">
         <button class="main-action" @click=${() => launchEnvironment(environment)} tabindex="${isSelectedView ? 0 : -1}">
           <img class="main-action__icon" src="./assets/product-icons/${environment.appIcon}" />
           <span class="main-action__app-name">${environment.appName}</span>
@@ -50,6 +50,15 @@ function Environments({ dataFavoritesOnly, dataEmptyText, dataIsSelectedView }) 
       </div>
     `;
   };
+
+  useEffect(() => {
+    if (areEnvironmentsReady) {
+      [...this.shadowRoot.querySelectorAll('.js-stagger-animate')].forEach((item, index) => {
+        item.style['animation-delay'] = `${index * 100 + 400}ms`;
+        item.style['animation-play-state'] = `running`;
+      });
+    }
+  }, [areEnvironmentsReady]);
 
   return html`
     ${Star}
@@ -84,6 +93,10 @@ function Environments({ dataFavoritesOnly, dataEmptyText, dataIsSelectedView }) 
         align-items: center;
         border-radius: 4px;
         box-shadow: var(--shadow-2);
+
+        animation: card-enter 400ms 400ms;
+        animation-fill-mode: both;
+        animation-play-state: paused;
       }
       .environment-card:hover {
         box-shadow: var(--shadow-3);
@@ -132,41 +145,6 @@ function Environments({ dataFavoritesOnly, dataEmptyText, dataIsSelectedView }) 
         --star-fill: var(--color-yellow);
       }
 
-      .card--animation-enter {
-        animation: card-enter 400ms 400ms;
-        animation-fill-mode: both;
-      }
-
-      .card--animation-enter:nth-child(2) {
-        animation-delay: 500ms;
-      }
-      .card--animation-enter:nth-child(3) {
-        animation-delay: 600ms;
-      }
-      .card--animation-enter:nth-child(4) {
-        animation-delay: 700ms;
-      }
-      .card--animation-enter:nth-child(5) {
-        animation-delay: 800ms;
-      }
-      .card--animation-enter:nth-child(6) {
-        animation-delay: 900ms;
-      }
-      .card--animation-enter:nth-child(7) {
-        animation-delay: 1000ms;
-      }
-      .card--animation-enter:nth-child(8) {
-        animation-delay: 1100ms;
-      }
-      .card--animation-enter:nth-child(9) {
-        animation-delay: 1200ms;
-      }
-      .card--animation-enter:nth-child(10) {
-        animation-delay: 1300ms;
-      }
-      .card--animation-enter:nth-child(11) {
-        animation-delay: 1400ms;
-      }
       @keyframes card-enter {
         0% {
           transform: translate3d(-64px, 0, 0);
