@@ -1,5 +1,5 @@
 import { createContext, useState, component, useEffect } from '../../lib/haunted.js';
-import { getEnvironments, rejectReasonSignedOut, rejectReasonInvalidEnvironmentsJson } from '../../helpers/environments-v2.js';
+import { getEnvironments, rejectReasonSignedOut, rejectReasonInvalidEnvironmentsJson } from '../../helpers/environments.js';
 import { html } from '../../lib/lit-html.js';
 
 export const EnvironmentsContext = createContext({

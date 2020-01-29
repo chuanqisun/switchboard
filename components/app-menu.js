@@ -3,7 +3,7 @@ import { component } from '../lib/haunted.js';
 import { useFocusVisible } from './use-focus-visible.js';
 import { signOut, reloadWindow } from '../helpers/auth.js';
 import { showAbout, downloadUpdate } from '../helpers/dialogs.js';
-import { editEnvironments } from '../helpers/environments-v2.js';
+import { editEnvironments } from '../helpers/environments.js';
 
 function AppMenu() {
   const { FocusVisibleStyle } = useFocusVisible(this.shadowRoot);

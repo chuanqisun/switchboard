@@ -1,6 +1,6 @@
 import { createContext, useState, component, useEffect } from '../../lib/haunted.js';
 import { html } from '../../lib/lit-html.js';
-import { ensureUserSettings, addFavorite, removeFavorite, saveUserSettings, isFavorite } from '../../helpers/user-settings-v2.js';
+import { ensureUserSettings, addFavorite, removeFavorite, saveUserSettings, isFavorite } from '../../helpers/user-settings.js';
 
 export const FavoritesContext = createContext({
   status: 'loading',
