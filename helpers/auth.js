@@ -65,7 +65,7 @@ export async function signIn() {
   });
 }
 
-export function reloadAfterSignIn() {
+export function reloadWindow() {
   const currentWindow = getCurrentWindow();
   currentWindow.reload();
 }

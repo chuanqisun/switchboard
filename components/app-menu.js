@@ -1,6 +1,7 @@
 import { html } from '../lib/lit-html.js';
 import { component } from '../lib/haunted.js';
 import { useFocusVisible } from './use-focus-visible.js';
+import { signOut, reloadWindow } from '../helpers/auth.js';
 
 function AppMenu() {
   const { FocusVisibleStyle } = useFocusVisible(this.shadowRoot);
@@ -80,7 +81,10 @@ async function createMenu() {
   menu.append(
     new MenuItem({
       label: 'Sign out',
-      click: () => ipcRenderer.send('trySignOut'),
+      click: async () => {
+        await signOut();
+        reloadWindow();
+      },
     })
   );
   return menu;

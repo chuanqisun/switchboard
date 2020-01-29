@@ -38,23 +38,14 @@ app.on('activate', function() {
 
 // Custom logic
 app.on('ready', () => {
-  globalShortcut.register('CommandOrControl+R', () => mainWindow.isFocused() && signOut());
   globalShortcut.register('CommandOrControl+E', () => mainWindow.isFocused() && editEnvironments());
   globalShortcut.register('CommandOrControl+H', () => mainWindow.isFocused() && showAbout());
 });
-
-ipcMain.on('trySignOut', signOut);
 
 ipcMain.on('downloadUpdate', () => {
   const { downloadUpdate } = require('./helpers/dialogs');
   downloadUpdate();
 });
-
-async function signOut() {
-  const { signOut } = require('./helpers/account');
-  await signOut();
-  mainWindow.reload();
-}
 
 function editEnvironments() {
   const { editEnvironments } = require('./helpers/environments');
