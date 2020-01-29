@@ -55,8 +55,9 @@ function Environments({ dataFavoritesOnly, dataEmptyText, dataIsSelectedView }) 
     if (areEnvironmentsReady) {
       [...this.shadowRoot.querySelectorAll('.js-stagger-animate')].forEach((item, index) => {
         item.style['animation-delay'] = `${index * 100 + 400}ms`;
-        item.style['animation-play-state'] = `running`;
       });
+
+      this.shadowRoot.querySelector('.js-stagger-container').classList.add('animate');
     }
   }, [areEnvironmentsReady]);
 
@@ -64,7 +65,7 @@ function Environments({ dataFavoritesOnly, dataEmptyText, dataIsSelectedView }) 
     ${Star}
     ${areEnvironmentsReady
       ? html`
-          <div class="environment-list">
+          <div class="environment-list js-stagger-container">
             ${isEmptyState
               ? html`
                   <div class="empty-text">${dataEmptyText}</div>
@@ -143,6 +144,10 @@ function Environments({ dataFavoritesOnly, dataEmptyText, dataIsSelectedView }) 
       .more--favorite {
         opacity: 1;
         --star-fill: var(--color-yellow);
+      }
+
+      .js-stagger-container.animate .js-stagger-animate {
+        animation-play-state: running;
       }
 
       @keyframes card-enter {

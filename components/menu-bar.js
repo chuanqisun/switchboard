@@ -17,7 +17,7 @@ function MenuBar() {
         onViewToggle();
       }
     }
-  }, [environmentsContext.status, favoritesContext.status]);
+  }, [environmentsContext.status, favoritesContext.status, chromiumContext.status]);
 
   const onViewToggle = () => {
     const viewToggle = this.shadowRoot.querySelector('sb-view-toggle');
