@@ -1,0 +1,15 @@
+{
+  "name": "@switchboard/web",
+  "version": "0.0.1",
+  "description": "Instanly launch multiple Dynamics demo environments",
+  "type": "module",
+  "main": "index.js",
+  "repository": "https://github.com/chuanqisun/switchboard",
+  "keywords": [],
+  "author": "Chuanqi Sun",
+  "license": "MIT",
+  "dependencies": {
+    "haunted": "^4.7.0",
+    "lit-html": "^1.1.2"
+  }
+}
