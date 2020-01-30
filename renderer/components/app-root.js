@@ -2,6 +2,29 @@ import { html, component, useContext } from '../lib/index.js';
 import { CarouselContext } from '../contexts/index.js';
 
 function AppRoot() {
+  return html`
+    <sb-chromium-provider>
+      <sb-environments-provider>
+        <sb-favorites-provider>
+          <sb-carousel-provider data-selected="Favorites">
+            <sb-scroll-provider>
+              <sb-app-root-internal></sb-app-root-internal>
+            </sb-scroll-provider>
+          </sb-carousel-provider>
+        </sb-favorites-provider>
+      </sb-environments-provider>
+    </sb-chromium-provider>
+    <style>
+      :host {
+        display: contents;
+      }
+    </style>
+  `;
+}
+
+customElements.define('sb-app-root', component(AppRoot));
+
+function AppRootInternal() {
   const carouselContext = useContext(CarouselContext);
 
   return html`
@@ -70,4 +93,4 @@ function AppRoot() {
   `;
 }
 
-customElements.define('sb-app-root', component(AppRoot));
+customElements.define('sb-app-root-internal', component(AppRootInternal));
