@@ -17,6 +17,7 @@
 13. Use service worker to pull render script
 14. Launch indicator
 15. Title bar color tweak
+16. Move product icons to static host
 
 ===
 
