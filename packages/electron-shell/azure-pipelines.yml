@@ -17,19 +17,13 @@ jobs:
           versionSpec: '10.x'
         displayName: 'Install Node.js'
       - script: |
-          npm install
-          npm run dist:osx
-          pwd
-        workingDirectory: packages/electron-shell
-        displayName: 'entry directory, npm install, pack, and dist'
-      - script: |
-          pwd
-        workingDirectory: $(Build.SourcesDirectory)
-        displayName: 'go back'
-
+          npm --prefix packages/electron-shell install packages/electron-shell
+          npm --prefix packages/electron-shell run dist:osx
+        workingDirectory:
+        displayName: 'npm install, pack, and dist'
       - task: CopyFiles@2
         inputs:
-          Contents: '**/*.dmg'
+          Contents: 'packages/electron-shell/dist/**/*.dmg'
           TargetFolder: 'drop'
           flattenFolders: true
       - task: PublishPipelineArtifact@0
@@ -37,31 +31,31 @@ jobs:
           artifactName: 'drop-osx'
           targetPath: drop
 
-  # - job: win_build
-  #   pool:
-  #     vmImage: 'windows-2019'
-  #   steps:
-  #     - task: NodeTool@0
-  #       inputs:
-  #         versionSpec: '10.x'
-  #       displayName: 'Install Node.js'
-  #     - script: npm install && npm run dist:win
-  #       workingDirectory: packages\electron-shell
-  #       displayName: 'npm install, pack, and dist'
-  #     - task: CopyFiles@2
-  #       inputs:
-  #         Contents: 'dist\**\*.exe'
-  #         TargetFolder: 'drop'
-  #         flattenFolders: true
-  #     - task: PublishPipelineArtifact@0
-  #       inputs:
-  #         artifactName: 'drop-win'
-  #         targetPath: drop
+  - job: win_build
+    pool:
+      vmImage: 'windows-2019'
+    steps:
+      - task: NodeTool@0
+        inputs:
+          versionSpec: '10.x'
+        displayName: 'Install Node.js'
+      - script: |
+          npm --prefix packages/electron-shell install packages/electron-shell
+          npm --prefix packages/electron-shell run dist:win
+      - task: CopyFiles@2
+        inputs:
+          Contents: 'packages\electron-shell\dist\**\*.exe'
+          TargetFolder: 'drop'
+          flattenFolders: true
+      - task: PublishPipelineArtifact@0
+        inputs:
+          artifactName: 'drop-win'
+          targetPath: drop
 
   - job: github_release
     dependsOn:
       - osx_build
-      # - win_build
+      - win_build
     pool:
       vmImage: 'windows-2019'
     steps:
