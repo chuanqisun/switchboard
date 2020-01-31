@@ -42,7 +42,7 @@ jobs:
         inputs:
           artifactName: $(Agent.OS)
           targetPath: drop
-          displayName: Publish artifacts on $(Agent.OS)
+        displayName: Publish artifacts on $(Agent.OS)
 
   - job: github_release
     dependsOn:
