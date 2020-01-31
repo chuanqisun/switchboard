@@ -7,8 +7,8 @@
   "scripts": {
     "start": "electron .",
     "pack": "electron-builder --dir",
-    "dist:win": "electron-builder --windows --publish=never",
-    "dist:osx": "electron-builder --macos --publish=never"
+    "dist:Windows_NT": "electron-builder --windows --publish=never",
+    "dist:Darwin": "electron-builder --macos --publish=never"
   },
   "repository": "https://github.com/chuanqisun/switchboard",
   "keywords": [],

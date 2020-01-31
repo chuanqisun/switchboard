@@ -27,16 +27,9 @@ jobs:
           npm --prefix packages/electron-shell install packages/electron-shell
         displayName: npm install
 
-      # macOS
       - bash: |
-          npm --prefix packages/electron-shell run dist:osx
-        condition: eq( variables['Agent.OS'], 'Darwin' )
-        displayName: npm run dist:osx
-      # Windows
-      - bash: |
-          npm --prefix packages/electron-shell run dist:win
-        condition: eq( variables['Agent.OS'], 'Windows_NT' )
-        displayName: npm run dist:win
+          npm --prefix packages/electron-shell run dist:$(Agent.OS)
+        displayName: npm run dist:$(Agent.OS)
 
       - task: CopyFiles@2
         inputs:
@@ -47,9 +40,9 @@ jobs:
 
       - task: PublishPipelineArtifact@1
         inputs:
-          artifactName: ${Agent.OS}
+          artifactName: $(Agent.OS)
           targetPath: drop
-          displayName: Publish artifacts cross platform
+          displayName: Publish artifacts on $(Agent.OS)
 
   - job: github_release
     dependsOn:
