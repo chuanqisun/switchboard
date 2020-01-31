@@ -1,5 +1,6 @@
 import { html, component, useEffect, useContext, useState } from '../lib/index.js';
 import { EnvironmentsContext, ChromiumContext } from '../contexts/index.js';
+import { urls } from '../constants.js';
 
 function LoadingIndicator() {
   const environmentsContext = useContext(EnvironmentsContext);
@@ -29,7 +30,7 @@ function LoadingIndicator() {
 
   return html`
     <div id="loading-indicator" class="loading-indicator${loadingMessage === null ? '' : ' active'}">
-      <img class="loading-image" src="./assets/bolt.svg" />
+      <img class="loading-image" src="${urls.assetsRoot}/bolt.svg" />
       <div class="loading-message">${loadingMessage}</div>
     </div>
     <style>

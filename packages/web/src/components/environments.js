@@ -3,6 +3,7 @@ import { useFocusVisible } from '../hooks/use-focus-visible.js';
 import { Star } from '../icons.js';
 import { signInDynamicsUCApp } from '../helpers/automation.js';
 import { ChromiumContext, EnvironmentsContext, FavoritesContext } from '../contexts/index.js';
+import { urls } from '../constants.js';
 
 function Environments({ dataFavoritesOnly, dataEmptyText, dataIsSelectedView }) {
   const { FocusVisibleStyle } = useFocusVisible(this.shadowRoot);
@@ -34,7 +35,7 @@ function Environments({ dataFavoritesOnly, dataEmptyText, dataIsSelectedView }) 
     return html`
       <div class="environment-card js-stagger-animate">
         <button class="main-action" @click=${() => launchEnvironment(environment)} tabindex="${isSelectedView ? 0 : -1}">
-          <img class="main-action__icon" src="./assets/product-icons/${environment.appIcon}" />
+          <img class="main-action__icon" src="${urls.assetsRoot}/product-icons/${environment.appIcon}" />
           <span class="main-action__app-name">${environment.appName}</span>
         </button>
         <button

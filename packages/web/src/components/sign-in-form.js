@@ -2,6 +2,7 @@ import { html, component, useEffect, useContext } from '../lib/index.js';
 import { useFocusVisible } from '../hooks/use-focus-visible.js';
 import { EnvironmentsContext } from '../contexts/environments-context.js';
 import { signIn, reloadWindow } from '../helpers/auth.js';
+import { urls } from '../constants.js';
 
 function SignInForm() {
   const { FocusVisibleStyle } = useFocusVisible(this.shadowRoot);
@@ -70,7 +71,7 @@ function SignInForm() {
         height: 100%;
         justify-content: center;
         align-items: center;
-        background: url('./assets/sitting-3.svg') bottom right no-repeat, var(--gradient-app-background);
+        background: url('${urls.assetsRoot}/sitting-3.svg') bottom right no-repeat, var(--gradient-app-background);
         background-size: 65%, 100% 100%;
       }
 

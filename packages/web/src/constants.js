@@ -11,4 +11,5 @@ export const urls = {
     'https://microsoft.sharepoint.com/teams/Live.Drive.Repeat2/Shared%20Documents/Forms/AllItems.aspx?FolderCTID=0x0120000E164B167C03A34684DF87C19D94BF49&id=%2Fteams%2FLive%2EDrive%2ERepeat2%2FShared%20Documents%2FGeneral%2FEnvironments%2Fenvironments%2Dv2%2Etxt&parent=%2Fteams%2FLive%2EDrive%2ERepeat2%2FShared%20Documents%2FGeneral%2FEnvironments&p=5',
   getMetadataEndpoint: 'https://microsoft.sharepoint.com/teams/Live.Drive.Repeat2/Shared%20Documents/General/Metadata/metadata.txt',
   latestRelease: 'https://github.com/chuanqisun/switchboard/releases/latest',
+  assetsRoot: 'https://switchboard-assets.netlify.com',
 };
