@@ -23,7 +23,7 @@ jobs:
         displayName: 'entry directory, npm install, pack, and dist'
       - task: CopyFiles@2
         inputs:
-          Contents: 'packages/electron-shell/dist/*.dmg'
+          Contents: 'dist/@switchboard/*.dmg'
           TargetFolder: 'drop'
           flattenFolders: true
       - task: PublishPipelineArtifact@0
@@ -44,7 +44,7 @@ jobs:
         displayName: 'npm install, pack, and dist'
       - task: CopyFiles@2
         inputs:
-          Contents: 'packages\electron-shell\dist\*.exe'
+          Contents: 'dist\@switchboard\*.exe'
           TargetFolder: 'drop'
           flattenFolders: true
       - task: PublishPipelineArtifact@0
