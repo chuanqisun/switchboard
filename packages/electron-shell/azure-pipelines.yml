@@ -17,6 +17,7 @@ jobs:
           versionSpec: '10.x'
         displayName: 'Install Node.js'
       - script: |
+          cd packages/electron-shell
           npm install
           npm run dist:osx
         displayName: 'npm install, pack, and dist'
@@ -38,6 +39,8 @@ jobs:
         inputs:
           versionSpec: '10.x'
         displayName: 'Install Node.js'
+      - script: cd packages\electron-shell\
+        displayName: 'change directory to electron-shell'
       - script: npm install && npm run dist:win
         displayName: 'npm install, pack, and dist'
       - task: CopyFiles@2
