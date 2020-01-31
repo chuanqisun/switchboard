@@ -61,7 +61,7 @@ jobs:
   - job: github_release
     dependsOn:
       - osx_build
-      - win_build
+      # - win_build
     pool:
       vmImage: 'windows-2019'
     steps:
