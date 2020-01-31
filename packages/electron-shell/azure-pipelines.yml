@@ -39,7 +39,7 @@ jobs:
 
       - task: CopyFiles@2
         inputs:
-          Contents: 'packages/electron-shell/dist/**/*.?(dmg|exe)'
+          Contents: 'packages/electron-shell/dist/*.?(dmg|exe)'
           TargetFolder: 'drop'
           flattenFolders: true
         displayName: Copy files to drop folder
