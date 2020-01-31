@@ -1,6 +1,5 @@
 const { app, dialog } = require('electron').remote;
-import { urls } from '../constants.js';
-const { shell } = require('electron').remote;
+import { downloadUpdate } from './shell.js';
 
 export function showAbout() {
   dialog.showMessageBox({
@@ -43,9 +42,4 @@ export function noUpdates({ currentVersion }) {
     noLink: true,
     buttons: ['OK'],
   });
-}
-
-// TODO refactor this to separate util
-export function downloadUpdate() {
-  shell.openExternal(urls.latestReleaseUrl);
 }

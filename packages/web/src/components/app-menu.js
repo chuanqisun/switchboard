@@ -1,9 +1,10 @@
 import { html, component, useEffect, useState } from '../lib/index.js';
 import { useFocusVisible } from '../hooks/use-focus-visible.js';
 import { signOut, reloadWindow } from '../helpers/auth.js';
-import { showAbout, downloadUpdate, noUpdates, updateAvailable } from '../helpers/dialogs.js';
+import { showAbout, noUpdates, updateAvailable } from '../helpers/dialogs.js';
 import { editEnvironments } from '../helpers/environments.js';
 import { getVersionSummary } from '../helpers/update.js';
+import { getHelp, downloadUpdate, openDocumentation, viewAllReleases } from '../helpers/shell.js';
 
 function AppMenu() {
   const { FocusVisibleStyle } = useFocusVisible(this.shadowRoot);
@@ -89,6 +90,31 @@ async function createMenu() {
 
   const { isUpdatedRequired, isUpdateAvailable, currentVersion, latestVersion } = await getVersionSummary();
 
+  menu.append(
+    new MenuItem({
+      label: 'Report issue',
+      click: () => getHelp(),
+    })
+  );
+
+  menu.append(
+    new MenuItem({
+      label: 'Documentation',
+      click: () => openDocumentation(),
+    })
+  );
+
+  menu.append(new MenuItem({ type: 'separator' }));
+
+  menu.append(
+    new MenuItem({
+      label: 'Edit environments',
+      click: () => editEnvironments(),
+    })
+  );
+
+  menu.append(new MenuItem({ type: 'separator' }));
+
   isUpdatedRequired &&
     menu.append(
       new MenuItem({
@@ -107,17 +133,12 @@ async function createMenu() {
 
   menu.append(
     new MenuItem({
-      label: 'Manage in SharePoint',
-      click: () => editEnvironments(),
+      label: 'All releases',
+      click: () => viewAllReleases(),
     })
   );
 
-  menu.append(
-    new MenuItem({
-      label: 'About',
-      click: () => showAbout(),
-    })
-  );
+  menu.append(new MenuItem({ type: 'separator' }));
 
   menu.append(
     new MenuItem({
@@ -126,6 +147,15 @@ async function createMenu() {
         await signOut();
         reloadWindow();
       },
+    })
+  );
+
+  menu.append(new MenuItem({ type: 'separator' }));
+
+  menu.append(
+    new MenuItem({
+      label: 'About',
+      click: () => showAbout(),
     })
   );
 
