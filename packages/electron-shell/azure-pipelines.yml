@@ -31,12 +31,12 @@ jobs:
       - bash: |
           npm --prefix packages/electron-shell run dist:osx
         condition: eq( variables['Agent.OS'], 'Darwin' )
-        displayName: Build on ${Agent.OS}
+        displayName: npm run dist:osx
       # Windows
       - bash: |
           npm --prefix packages/electron-shell run dist:win
         condition: eq( variables['Agent.OS'], 'Windows_NT' )
-        displayName: Build on ${Agent.OS}
+        displayName: npm run dist:win
 
       - task: CopyFiles@2
         inputs:
@@ -47,9 +47,9 @@ jobs:
 
       - task: PublishPipelineArtifact@1
         inputs:
-          artifactName: drop-${Agent.OS}
+          artifactName: ${Agent.OS}
           targetPath: drop
-          displayName: Publish artifacts for ${Agent.OS}
+          displayName: Publish artifacts cross platform
 
   - job: github_release
     dependsOn:
