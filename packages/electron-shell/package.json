@@ -1,5 +1,5 @@
 {
-  "name": "@switchboard/electron-shell",
+  "name": "switchboard",
   "version": "2.0.0",
   "description": "Instanly launch multiple Dynamics demo environments",
   "private": true,
