@@ -19,7 +19,6 @@ jobs:
       - script: |
           npm --prefix packages/electron-shell install packages/electron-shell
           npm --prefix packages/electron-shell run dist:osx
-        workingDirectory:
         displayName: 'npm install, pack, and dist'
       - task: CopyFiles@2
         inputs:
@@ -42,6 +41,7 @@ jobs:
       - script: |
           npm --prefix packages/electron-shell install packages/electron-shell
           npm --prefix packages/electron-shell run dist:win
+        displayName: 'npm install, pack, and dist'
       - task: CopyFiles@2
         inputs:
           Contents: 'packages\electron-shell\dist\**\*.exe'
