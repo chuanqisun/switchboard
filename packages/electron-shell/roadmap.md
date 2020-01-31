@@ -18,6 +18,9 @@
 14. Launch indicator
 15. Title bar color tweak
 16. Move product icons to static host
+17. Hard reset on Chromium
+18. Add wiki for maintainers: how to renew and update environments
+19. Display UI version on About dialog
 
 ===
 
