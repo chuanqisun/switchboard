@@ -19,11 +19,12 @@ jobs:
       - script: |
           npm install
           npm run dist:osx
+          pwd
         workingDirectory: packages/electron-shell
         displayName: 'entry directory, npm install, pack, and dist'
       - task: CopyFiles@2
         inputs:
-          Contents: 'dist/@switchboard/*.dmg'
+          Contents: 'dist/**/*.dmg'
           TargetFolder: 'drop'
           flattenFolders: true
       - task: PublishPipelineArtifact@0
