@@ -45,7 +45,7 @@ jobs:
         displayName: 'npm install, pack, and dist'
       - task: CopyFiles@2
         inputs:
-          Contents: 'dist\@switchboard\*.exe'
+          Contents: 'dist\**\*.exe'
           TargetFolder: 'drop'
           flattenFolders: true
       - task: PublishPipelineArtifact@0
