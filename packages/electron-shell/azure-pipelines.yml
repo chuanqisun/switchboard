@@ -5,6 +5,7 @@
 
 trigger:
   - master
+  - releases/*
 
 jobs:
   - job: cross_plat_build
