@@ -7,55 +7,96 @@ trigger:
   - master
 
 jobs:
-  - job: osx_build
+  - job: cross_plat_build
+    strategy:
+      matrix:
+        mac:
+          imageName: 'macos-10.14'
+        windows:
+          imageName: 'windows-2019'
     pool:
-      vmImage: 'macOS-10.14'
-
+      vmImage: $(imageName)
     steps:
       - task: NodeTool@0
         inputs:
           versionSpec: '10.x'
         displayName: 'Install Node.js'
+
       - script: |
-          npm --prefix packages/electron-shell install packages/electron-shell
+        npm --prefix packages/electron-shell install packages/electron-shell
+        displayName: 'npm install'
+
+      # macOS
+      - bash: |
           npm --prefix packages/electron-shell run dist:osx
-        displayName: 'npm install, pack, and dist'
+        condition: eq( variables['Agent.OS'], 'Darwin' )
+        displayName: Build on macOS
+      # Windows
+      - bash: |
+          npm --prefix packages/electron-shell run dist:win
+        condition: eq( variables['Agent.OS'], 'Windows_NT' )
+        displayName: Build on Windows
+
       - task: CopyFiles@2
         inputs:
           Contents: 'packages/electron-shell/dist/**/*.dmg'
           TargetFolder: 'drop'
           flattenFolders: true
+
       - task: PublishPipelineArtifact@0
         inputs:
           artifactName: 'drop-osx'
           targetPath: drop
+  # - job: osx_build
+  #   pool:
+  #     vmImage: 'macOS-10.14'
 
-  - job: win_build
-    pool:
-      vmImage: 'windows-2019'
-    steps:
-      - task: NodeTool@0
-        inputs:
-          versionSpec: '10.x'
-        displayName: 'Install Node.js'
-      - script: |
-          npm --prefix packages/electron-shell install packages/electron-shell
-          npm --prefix packages/electron-shell run dist:win
-        displayName: 'npm install, pack, and dist'
-      - task: CopyFiles@2
-        inputs:
-          Contents: 'packages\electron-shell\dist\**\*.exe'
-          TargetFolder: 'drop'
-          flattenFolders: true
-      - task: PublishPipelineArtifact@0
-        inputs:
-          artifactName: 'drop-win'
-          targetPath: drop
+  #   steps:
+  #     - task: NodeTool@0
+  #       inputs:
+  #         versionSpec: '10.x'
+  #       displayName: 'Install Node.js'
+  #     - script: |
+  #         npm --prefix packages/electron-shell install packages/electron-shell
+  #         npm --prefix packages/electron-shell run dist:osx
+  #       displayName: 'npm install, pack, and dist'
+  #     - task: CopyFiles@2
+  #       inputs:
+  #         Contents: 'packages/electron-shell/dist/**/*.dmg'
+  #         TargetFolder: 'drop'
+  #         flattenFolders: true
+  #     - task: PublishPipelineArtifact@0
+  #       inputs:
+  #         artifactName: 'drop-osx'
+  #         targetPath: drop
+
+  # - job: win_build
+  #   pool:
+  #     vmImage: 'windows-2019'
+  #   steps:
+  #     - task: NodeTool@0
+  #       inputs:
+  #         versionSpec: '10.x'
+  #       displayName: 'Install Node.js'
+  #     - script: |
+  #         npm --prefix packages/electron-shell install packages/electron-shell
+  #         npm --prefix packages/electron-shell run dist:win
+  #       displayName: 'npm install, pack, and dist'
+  #     - task: CopyFiles@2
+  #       inputs:
+  #         Contents: 'packages\electron-shell\dist\**\*.exe'
+  #         TargetFolder: 'drop'
+  #         flattenFolders: true
+  #     - task: PublishPipelineArtifact@0
+  #       inputs:
+  #         artifactName: 'drop-win'
+  #         targetPath: drop
 
   - job: github_release
     dependsOn:
-      - osx_build
-      - win_build
+      - cross_plat_build
+      # - osx_build
+      # - win_build
     pool:
       vmImage: 'windows-2019'
     steps:
