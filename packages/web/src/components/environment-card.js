@@ -1,6 +1,6 @@
 import { urls } from '../constants.js';
 import { ChromiumContext, FavoritesContext } from '../contexts/index.js';
-import { signInDynamicsUCApp } from '../helpers/automation.js';
+import { autoSignIn } from '../helpers/automation.js';
 import { useFocusVisible } from '../hooks/use-focus-visible.js';
 import { Star } from '../icons.js';
 import { component, html, useContext, useState } from '../lib/index.js';
@@ -25,9 +25,9 @@ function EnvironmentCard({ environment, focusable, animationDelay }) {
   const launchEnvironment = async (event, environment) => {
     setIsLaunching(true);
 
-    const { url, username, password } = environment;
+    const { url, username, password, signInStrategy } = environment;
     try {
-      await signInDynamicsUCApp(chromiumContext.exec, url, username, password);
+      await autoSignIn({ signInStrategy, exec: chromiumContext.exec, url, username, password });
     } catch (e) {
       console.dir(e);
       console.log('[environments] automation runtime error');

@@ -1,4 +1,3 @@
-3. Special sign in flow for market insight
 4. Add Chromium version and support matrix to metadata
 5. Hard reset on Chromium
 6. Add wiki for maintainers: how to renew and update environments
