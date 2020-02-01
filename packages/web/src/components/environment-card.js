@@ -1,0 +1,159 @@
+import { urls } from '../constants.js';
+import { ChromiumContext, FavoritesContext } from '../contexts/index.js';
+import { signInDynamicsUCApp } from '../helpers/automation.js';
+import { useFocusVisible } from '../hooks/use-focus-visible.js';
+import { Star } from '../icons.js';
+import { component, html, useContext } from '../lib/index.js';
+
+const badgeTooltips = new Map([
+  ['demo', ['DEMO', 'Demo environments come with customizations and extensions. They showcase possibilities to customers.']],
+  ['dev', ['DEV', 'Dev environments come with bugs and experiments. They help developement and testing.']],
+  ['viewonly', ['VIEW-ONLY', "Changes in this environment may break other people's work. Please don't make changes even if you can."]],
+]);
+
+function EnvironmentCard({ environment, focusable, animationDelay }) {
+  const { FocusVisibleStyle } = useFocusVisible(this.shadowRoot);
+
+  const chromiumContext = useContext(ChromiumContext);
+  const favoritesContext = useContext(FavoritesContext);
+
+  const launchEnvironment = async environment => {
+    const { url, username, password } = environment;
+    try {
+      await signInDynamicsUCApp(chromiumContext.exec, url, username, password);
+    } catch (e) {
+      console.dir(e);
+      console.log('[environments] automation runtime error');
+    }
+  };
+
+  const getDecoratorDisplayText = key => (badgeTooltips.has(key) ? badgeTooltips.get(key)[0] : key.toLocaleUpperCase());
+
+  const getDecoratorTooltip = key => (badgeTooltips.has(key) ? badgeTooltips.get(key)[1] : '');
+
+  return html`
+    ${Star}
+    <div class="environment-card">
+      <button class="main-action" @click=${() => launchEnvironment(environment)} tabindex="${focusable ? 0 : -1}">
+        <img class="main-action__icon" src="${urls.assetsRoot}/product-icons/${environment.appIcon}" />
+        <span class="main-action__app-name"
+          >${environment.appName}
+          ${environment.decorators
+            ? html`
+                <sup class="main-action__badges"
+                  >${environment.decorators.map(
+                    (decorator, index) =>
+                      html`
+                        ${index > 0
+                          ? html`
+                              <span>·</span>
+                            `
+                          : null}
+                        <span class="main-action__badge" title="${getDecoratorTooltip(decorator)}">${getDecoratorDisplayText(decorator)}</span>
+                      `
+                  )}</sup
+                >
+              `
+            : null}</span
+        >
+      </button>
+      <button
+        tabindex="${focusable ? 0 : -1}"
+        class="more${favoritesContext.isFavorite(environment.appId) ? ' more--favorite' : ''}"
+        @click=${() => favoritesContext.toggleFavorite(environment.appId)}
+      >
+        <svg class="star" width="16" height="15">
+          <use xlink:href="#svg-star" />
+        </svg>
+      </button>
+    </div>
+    <style>
+      .environment-card {
+        --badge-color: #666;
+
+        background-color: white;
+        display: flex;
+        align-items: center;
+        border-radius: 4px;
+        box-shadow: var(--shadow-2);
+
+        animation: card-enter 400ms 400ms;
+        animation-fill-mode: both;
+        animation-delay: ${animationDelay}ms;
+      }
+      .environment-card:hover {
+        color: var(--color-primary);
+        box-shadow: var(--shadow-3);
+        --badge-color: var(--color-primary);
+      }
+      .environment-card:focus-within .more:not(:focus),
+      .environment-card:hover .more,
+      .more:focus-visible {
+        opacity: 1;
+      }
+      .main-action {
+        color: inherit;
+        display: flex;
+        cursor: pointer;
+        align-items: center;
+        text-align: left;
+        font-family: var(--font-family-system);
+        font-size: 1rem;
+        font-weight: 600;
+        padding: 0 1rem;
+        flex: 1 1 auto;
+        border: none;
+        background-color: transparent;
+        height: 4rem;
+      }
+      .main-action__icon {
+        flex: 0 0 auto;
+        width: 2rem;
+        height: 2rem;
+        padding: 0 1rem 0 0;
+      }
+      .main-action__badge {
+        color: var(--badge-color);
+        font-size: 0.7rem;
+        font-weight: 600;
+      }
+      .main-action__badge[title]:not([title='']):hover {
+        cursor: help;
+        text-decoration: underline dotted;
+      }
+      .more {
+        --star-stroke-width: 1.25px;
+        --star-stroke: var(--color-off-black);
+        --star-fill: transparent;
+        opacity: 0;
+        padding: 1rem;
+        flex: 0 0 2rem;
+        border: none;
+        background-color: transparent;
+        cursor: pointer;
+      }
+      .more:hover {
+        transform: scale(1.2);
+      }
+
+      .more--favorite {
+        opacity: 1;
+        --star-fill: var(--color-yellow);
+      }
+
+      @keyframes card-enter {
+        0% {
+          transform: translate3d(-64px, 0, 0);
+          opacity: 0;
+        }
+        100% {
+          transform: translate3d(0, 0, 0);
+          opacity: 1;
+        }
+      }
+    </style>
+    ${FocusVisibleStyle}
+  `;
+}
+
+customElements.define('sb-environment-card', component(EnvironmentCard));

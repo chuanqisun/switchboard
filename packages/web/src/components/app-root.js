@@ -37,17 +37,17 @@ function AppRootInternal() {
 
       <sb-view-carousel data-left="Favorites" data-right="All" data-selected="${carouselContext.selected}">
         <sb-scroll-area slot="Favorites">
-          <sb-environments
+          <sb-environment-list
             data-empty-text="You have no favorite apps."
             data-favorites-only
             data-is-selected-view="${carouselContext.selected === 'Favorites' ? 'true' : 'false'}"
-          ></sb-environments>
+          ></sb-environment-list>
         </sb-scroll-area>
         <sb-scroll-area slot="All">
-          <sb-environments
+          <sb-environment-list
             data-empty-text="You have no apps."
             data-is-selected-view="${carouselContext.selected === 'All' ? 'true' : 'false'}"
-          ></sb-environments>
+          ></sb-environment-list>
         </sb-scroll-area>
       </sb-view-carousel>
     </main>

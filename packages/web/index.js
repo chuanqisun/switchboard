@@ -1,6 +1,7 @@
 import './src/contexts/index.js';
 import './src/components/app-menu.js';
 import './src/components/app-root.js';
+import './src/components/environment-card.js';
 import './src/components/environments.js';
 import './src/components/loading-indicator.js';
 import './src/components/menu-bar.js';
