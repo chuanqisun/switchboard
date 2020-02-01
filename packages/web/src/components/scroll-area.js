@@ -33,7 +33,8 @@ function ScrollArea() {
   }, [carouselContext.selected]);
 
   return html`
-    <div class="js-scroll-area scroll-area">
+    <!-- use tab index to resolve a bug where unwanted focus is added by chrome -->
+    <div class="js-scroll-area scroll-area" tabindex="-1">
       <div class="js-sentinel"></div>
       <slot></slot>
 
