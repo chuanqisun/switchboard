@@ -13,7 +13,6 @@
   --shadow-3: 0 6.4px 14.4px 0 rgba(0, 0, 0, 0.132), 0 1.2px 3.6px 0 rgba(0, 0, 0, 0.108);
   --gradient-app-background: linear-gradient(var(--color-primary-light) 0%, var(--color-primary-dark) 100%) 100% 100%;
   --gradient-menu-bar: linear-gradient(var(--color-primary-light) 0%, var(--color-primary-light) 100%) 100% 100%;
-  --app-header-height: 1.75rem;
   --menu-bar-height: 4rem;
   --app-background-offset-post-signin: var(--app-header-height) + var(--menu-bar-height);
   --z-app-header: 2;
