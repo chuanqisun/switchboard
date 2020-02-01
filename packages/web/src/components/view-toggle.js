@@ -74,6 +74,7 @@ function ViewToggle({ dataLeft, dataRight, dataSelected }) {
       }
       .option-text {
         color: white;
+        font-size: 0.85rem;
         font-weight: 600;
         position: relative;
         padding: 0 1rem;

@@ -36,7 +36,21 @@ function Environments({ dataFavoritesOnly, dataEmptyText, dataIsSelectedView }) 
       <div class="environment-card js-stagger-animate">
         <button class="main-action" @click=${() => launchEnvironment(environment)} tabindex="${isSelectedView ? 0 : -1}">
           <img class="main-action__icon" src="${urls.assetsRoot}/product-icons/${environment.appIcon}" />
-          <span class="main-action__app-name">${environment.appName}</span>
+          <span class="main-action__app-name"
+            >${environment.appName}
+            ${environment.decorators
+              ? html`
+                  <span class="main-action__badges"
+                    >${environment.decorators.map(
+                      decorator =>
+                        html`
+                          <span class="main-action__badge">${decorator}</span>
+                        `
+                    )}</span
+                  >
+                `
+              : null}</span
+          >
         </button>
         <button
           tabindex="${isSelectedView ? 0 : -1}"
@@ -128,6 +142,13 @@ function Environments({ dataFavoritesOnly, dataEmptyText, dataIsSelectedView }) 
         width: 2rem;
         height: 2rem;
         padding: 0 1rem 0 0;
+      }
+      .main-action__badge {
+        background-color: #eee;
+        padding: 0.1rem 0.5rem 0.1rem;
+        font-size: 0.725rem;
+        border-radius: 2rem;
+        text-transform: uppercase;
       }
       .more {
         --star-stroke-width: 1.25px;

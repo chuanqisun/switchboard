@@ -21,6 +21,8 @@
 17. Hard reset on Chromium
 18. Add wiki for maintainers: how to renew and update environments
 19. Display UI version on About dialog
+20. Add status badge
+21. Special sign in flow for market insight
 
 ===
 
