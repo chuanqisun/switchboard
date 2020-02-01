@@ -2,6 +2,7 @@ const { app } = require('electron').remote;
 const fs = require('fs');
 const path = require('path');
 const userDataPath = app.getPath('userData');
+import { reloadWindow } from './window.js';
 const userSettingsFilename = 'user-settings.json';
 const userSettingsPath = path.join(userDataPath, userSettingsFilename);
 
@@ -61,6 +62,11 @@ export function saveUserSettings(userSettings) {
       resolve(userSettings);
     });
   });
+}
+
+export function resetFavorites() {
+  fs.unlinkSync(userSettingsPath);
+  reloadWindow();
 }
 
 function ensureUserSettingsSchema(userSettings) {

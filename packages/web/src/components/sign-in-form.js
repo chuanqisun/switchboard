@@ -1,7 +1,8 @@
 import { html, component, useEffect, useContext } from '../lib/index.js';
 import { useFocusVisible } from '../hooks/use-focus-visible.js';
 import { EnvironmentsContext } from '../contexts/environments-context.js';
-import { signIn, reloadWindow } from '../helpers/auth.js';
+import { signIn } from '../helpers/auth.js';
+import { reloadWindow } from '../helpers/window.js';
 import { urls } from '../constants.js';
 
 function SignInForm() {

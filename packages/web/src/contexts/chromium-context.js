@@ -1,8 +1,6 @@
 import { html, createContext, useState, component, useEffect } from '../lib/index.js';
 const download = require('download-chromium');
-const path = require('path');
-import { chromium } from '../constants.js';
-const { app } = require('electron').remote;
+import { getChromiumInstallPath, getChromiumRevision } from '../helpers/chromium.js';
 
 export const ChromiumContext = createContext({
   status: 'checking',
@@ -18,14 +16,14 @@ function ChromiumProvider() {
 
   useEffect(() => {
     // version comes from latest pupeeter release: https://github.com/puppeteer/puppeteer/releases
-    const revision = chromium.revision;
-    const userDataPath = app.getPath('userData');
-    console.log(userDataPath);
+    const revision = getChromiumRevision();
+    const installPath = getChromiumInstallPath();
     console.log('[chromium] will download ' + revision);
+    console.log('[chromium] will save in ' + installPath);
 
     download({
       revision,
-      installPath: path.join(userDataPath, '/local-chromium'),
+      installPath,
       onProgress: ({ percent }) => {
         if (percent < 1) {
           setStatus('downloading');

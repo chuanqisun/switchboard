@@ -64,8 +64,3 @@ export async function signIn() {
     });
   });
 }
-
-export function reloadWindow() {
-  const currentWindow = getCurrentWindow();
-  currentWindow.reload();
-}

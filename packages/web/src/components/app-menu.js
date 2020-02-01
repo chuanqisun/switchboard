@@ -1,9 +1,12 @@
 import { html, component, useEffect, useState } from '../lib/index.js';
 import { useFocusVisible } from '../hooks/use-focus-visible.js';
-import { signOut, reloadWindow } from '../helpers/auth.js';
+import { signOut } from '../helpers/auth.js';
+import { reloadWindow } from '../helpers/window.js';
 import { showAbout, noUpdates, updateAvailable } from '../helpers/dialogs.js';
+import { resetChromium } from '../helpers/chromium.js';
 import { editEnvironments } from '../helpers/environments.js';
 import { getVersionSummary } from '../helpers/update.js';
+import { resetFavorites } from '../helpers/user-settings.js';
 import { getHelp, downloadUpdate, openDocumentation, viewAllReleases } from '../helpers/shell.js';
 
 function AppMenu() {
@@ -109,7 +112,7 @@ async function createMenu() {
   isUpdatedRequired &&
     menu.append(
       new MenuItem({
-        label: 'Get latest release 🎁',
+        label: 'Update now 🎁',
         click: () => downloadUpdate(), // TODO implement a separate check for getting the latest version
       })
     );
@@ -124,7 +127,7 @@ async function createMenu() {
 
   menu.append(
     new MenuItem({
-      label: 'All releases',
+      label: 'All downloads',
       click: () => viewAllReleases(),
     })
   );
@@ -150,6 +153,11 @@ async function createMenu() {
         {
           label: 'Diagnostics',
           click: () => showAbout(),
+        },
+        { label: 'Reset favorites', click: () => resetFavorites() },
+        {
+          label: 'Reset Chromium',
+          click: () => resetChromium(),
         },
       ],
     })
