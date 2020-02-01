@@ -9,7 +9,6 @@ export function showAbout() {
     message: `
 Version ${app.getVersion()}
 Platform ${process.platform}
------------------
 Node ${process.versions.node}
 Chrome ${process.versions.chrome}
 Electron ${process.versions.electron}
