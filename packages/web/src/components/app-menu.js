@@ -106,19 +106,10 @@ async function createMenu() {
 
   menu.append(new MenuItem({ type: 'separator' }));
 
-  menu.append(
-    new MenuItem({
-      label: 'Edit environments',
-      click: () => editEnvironments(),
-    })
-  );
-
-  menu.append(new MenuItem({ type: 'separator' }));
-
   isUpdatedRequired &&
     menu.append(
       new MenuItem({
-        label: 'Update now 🎁',
+        label: 'Get latest release 🎁',
         click: () => downloadUpdate(), // TODO implement a separate check for getting the latest version
       })
     );
@@ -142,11 +133,25 @@ async function createMenu() {
 
   menu.append(
     new MenuItem({
-      label: 'Sign out',
-      click: async () => {
-        await signOut();
-        reloadWindow();
-      },
+      label: 'Admin tools',
+      submenu: [
+        {
+          label: 'Edit environments',
+          click: () => editEnvironments(),
+        },
+      ],
+    })
+  );
+
+  menu.append(
+    new MenuItem({
+      label: 'Dev tools',
+      submenu: [
+        {
+          label: 'Diagnostics',
+          click: () => showAbout(),
+        },
+      ],
     })
   );
 
@@ -154,8 +159,11 @@ async function createMenu() {
 
   menu.append(
     new MenuItem({
-      label: 'About',
-      click: () => showAbout(),
+      label: 'Sign out',
+      click: async () => {
+        await signOut();
+        reloadWindow();
+      },
     })
   );
 
