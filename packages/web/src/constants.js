@@ -13,3 +13,12 @@ export const urls = {
   latestRelease: 'https://github.com/chuanqisun/switchboard/releases/latest',
   assetsRoot: 'https://switchboard-assets.netlify.com',
 };
+
+/**
+ * https://github.com/puppeteer/puppeteer/releases
+ * TODO: based on the installed version of puppeteer, get matching version of chromium
+ */
+export const chromium = {
+  revision: '722234',
+  publicVersion: '80.0.3987.0',
+};
