@@ -26,6 +26,9 @@ function createWindow() {
   });
 }
 
+// enable flag for using ":focus-visible"
+app.commandLine.appendSwitch('enable-experimental-web-platform-features');
+
 app.on('ready', createWindow);
 
 app.on('window-all-closed', function() {

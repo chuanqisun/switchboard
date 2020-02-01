@@ -10,11 +10,11 @@ export function useFocusVisible(shadowRoot) {
 
   const FocusVisibleStyle = html`
     <style>
-      :focus:not(.focus-visible) {
+      :focus:not(:focus-visible) {
         outline: none;
       }
 
-      :focus.focus-visible {
+      :focus-visible {
         outline: 2px solid orange;
         outline-offset: -2px;
       }

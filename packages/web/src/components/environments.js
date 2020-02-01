@@ -5,6 +5,11 @@ import { signInDynamicsUCApp } from '../helpers/automation.js';
 import { ChromiumContext, EnvironmentsContext, FavoritesContext } from '../contexts/index.js';
 import { urls } from '../constants.js';
 
+const badgeTooltips = new Map([
+  ['demo', ['DEMO', 'Demo environments come with customizations and extensions. They showcase possibilities to customers.']],
+  ['dev', ['DEV', 'Dev environments come with bugs and experiments. They are used by engineering team for developement and testing.']],
+]);
+
 function Environments({ dataFavoritesOnly, dataEmptyText, dataIsSelectedView }) {
   const { FocusVisibleStyle } = useFocusVisible(this.shadowRoot);
 
@@ -40,13 +45,13 @@ function Environments({ dataFavoritesOnly, dataEmptyText, dataIsSelectedView }) 
             >${environment.appName}
             ${environment.decorators
               ? html`
-                  <span class="main-action__badges"
+                  <sup class="main-action__badges"
                     >${environment.decorators.map(
                       decorator =>
                         html`
-                          <span class="main-action__badge">${decorator}</span>
+                          <span class="main-action__badge" title="${badgeTooltips.get(decorator)[1]}">${badgeTooltips.get(decorator)[0]}</span>
                         `
-                    )}</span
+                    )}</sup
                   >
                 `
               : null}</span
@@ -103,6 +108,8 @@ function Environments({ dataFavoritesOnly, dataEmptyText, dataIsSelectedView }) 
         gap: 1rem;
       }
       .environment-card {
+        --badge-color: #666;
+
         background-color: white;
         display: flex;
         align-items: center;
@@ -116,6 +123,7 @@ function Environments({ dataFavoritesOnly, dataEmptyText, dataIsSelectedView }) 
       .environment-card:hover {
         color: var(--color-primary);
         box-shadow: var(--shadow-3);
+        --badge-color: var(--color-primary);
       }
       .main-action:focus-within .more,
       .more:focus.focus-visible,
@@ -144,18 +152,17 @@ function Environments({ dataFavoritesOnly, dataEmptyText, dataIsSelectedView }) 
         padding: 0 1rem 0 0;
       }
       .main-action__badge {
-        background-color: #eee;
-        padding: 0.1rem 0.5rem 0.1rem;
-        font-size: 0.725rem;
-        border-radius: 2rem;
-        text-transform: uppercase;
+        color: var(--badge-color);
+        font-size: 0.7rem;
+        font-weight: 600;
+        cursor: help;
       }
       .more {
         --star-stroke-width: 1.25px;
         --star-stroke: var(--color-off-black);
         --star-fill: transparent;
         opacity: 0;
-        padding: 0 1rem;
+        padding: 1rem;
         flex: 0 0 2rem;
         border: none;
         background-color: transparent;
