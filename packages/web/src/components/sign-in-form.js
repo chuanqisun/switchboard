@@ -6,7 +6,7 @@ import { reloadWindow } from '../helpers/window.js';
 import { urls } from '../constants.js';
 
 function SignInForm() {
-  const { FocusVisibleStyle } = useFocusVisible(this.shadowRoot);
+  const { FocusVisibleStyle } = useFocusVisible();
   const environmentsContext = useContext(EnvironmentsContext);
 
   useEffect(() => {

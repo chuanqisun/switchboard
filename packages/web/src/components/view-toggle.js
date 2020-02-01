@@ -2,7 +2,7 @@ import { html, component, useEffect, useRef } from '../lib/index.js';
 import { useFocusVisible } from '../hooks/use-focus-visible.js';
 
 function ViewToggle({ dataLeft, dataRight, dataSelected }) {
-  const { FocusVisibleStyle } = useFocusVisible(this.shadowRoot);
+  const { FocusVisibleStyle } = useFocusVisible();
   const isToggleOnLeft = dataSelected === dataLeft;
   const isToggleOnRight = dataSelected === dataRight;
 

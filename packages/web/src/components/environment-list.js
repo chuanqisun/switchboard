@@ -3,7 +3,7 @@ import { useFocusVisible } from '../hooks/use-focus-visible.js';
 import { component, html, useContext } from '../lib/index.js';
 
 function EnvironmentList({ dataFavoritesOnly, dataEmptyText, dataIsSelectedView }) {
-  const { FocusVisibleStyle } = useFocusVisible(this.shadowRoot);
+  const { FocusVisibleStyle } = useFocusVisible();
 
   const environmentsContext = useContext(EnvironmentsContext);
   const favoritesContext = useContext(FavoritesContext);

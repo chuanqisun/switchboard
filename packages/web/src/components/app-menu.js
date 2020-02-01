@@ -10,7 +10,7 @@ import { resetFavorites } from '../helpers/user-settings.js';
 import { getHelp, downloadUpdate, openDocumentation, viewAllReleases } from '../helpers/shell.js';
 
 function AppMenu() {
-  const { FocusVisibleStyle } = useFocusVisible(this.shadowRoot);
+  const { FocusVisibleStyle } = useFocusVisible();
   const [isUpdateIndicatorVisible, setIsUpdateIndicatorVisible] = useState(false);
 
   useEffect(async () => {

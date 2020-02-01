@@ -3,7 +3,7 @@ import { useFocusVisible } from '../hooks/use-focus-visible.js';
 import { Minimize, Close } from '../icons.js';
 
 function TitleBar() {
-  const { FocusVisibleStyle } = useFocusVisible(this.shadowRoot);
+  const { FocusVisibleStyle } = useFocusVisible();
 
   const onMinimize = () => {
     const { remote } = require('electron');

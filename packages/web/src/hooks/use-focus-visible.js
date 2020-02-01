@@ -1,13 +1,6 @@
-import { useEffect } from '../lib/haunted.js';
 import { html } from '../lib/lit-html.js';
 
-export function useFocusVisible(shadowRoot) {
-  useEffect(() => {
-    if (window.applyFocusVisiblePolyfill != null) {
-      window.applyFocusVisiblePolyfill(shadowRoot);
-    }
-  }, []);
-
+export function useFocusVisible() {
   const FocusVisibleStyle = html`
     <style>
       :focus:not(:focus-visible) {

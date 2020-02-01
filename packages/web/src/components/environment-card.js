@@ -14,7 +14,7 @@ const badgeTooltips = new Map([
 const indicatorColors = ['#d83b01', '#ffb900', '#107c10', '#008575', '#0078d4', '#8661c5'];
 
 function EnvironmentCard({ environment, focusable, animationDelay }) {
-  const { FocusVisibleStyle } = useFocusVisible(this.shadowRoot);
+  const { FocusVisibleStyle } = useFocusVisible();
 
   const chromiumContext = useContext(ChromiumContext);
   const favoritesContext = useContext(FavoritesContext);
