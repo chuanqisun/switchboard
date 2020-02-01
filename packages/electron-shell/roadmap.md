@@ -1,5 +1,3 @@
-1. Title bar color tweak
-2. Launch indicator
 3. Special sign in flow for market insight
 4. Add Chromium version and support matrix to metadata
 5. Hard reset on Chromium

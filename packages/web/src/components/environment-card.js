@@ -3,7 +3,7 @@ import { ChromiumContext, FavoritesContext } from '../contexts/index.js';
 import { signInDynamicsUCApp } from '../helpers/automation.js';
 import { useFocusVisible } from '../hooks/use-focus-visible.js';
 import { Star } from '../icons.js';
-import { component, html, useContext } from '../lib/index.js';
+import { component, html, useContext, useState } from '../lib/index.js';
 
 const badgeTooltips = new Map([
   ['demo', ['DEMO', 'Demo environments come with customizations and extensions. They showcase possibilities to customers.']],
@@ -11,13 +11,20 @@ const badgeTooltips = new Map([
   ['viewonly', ['VIEW-ONLY', "Changes in this environment may break other people's work. Please don't make changes even if you can."]],
 ]);
 
+const indicatorColors = ['#d83b01', '#ffb900', '#107c10', '#008575', '#0078d4', '#8661c5'];
+
 function EnvironmentCard({ environment, focusable, animationDelay }) {
   const { FocusVisibleStyle } = useFocusVisible(this.shadowRoot);
 
   const chromiumContext = useContext(ChromiumContext);
   const favoritesContext = useContext(FavoritesContext);
 
-  const launchEnvironment = async environment => {
+  const [isLaunching, setIsLaunching] = useState(false);
+  const [currentIndicatorColorIndex, setCurrentIndicatorColorIndex] = useState(indicatorColors.length - 1);
+
+  const launchEnvironment = async (event, environment) => {
+    setIsLaunching(true);
+
     const { url, username, password } = environment;
     try {
       await signInDynamicsUCApp(chromiumContext.exec, url, username, password);
@@ -31,10 +38,15 @@ function EnvironmentCard({ environment, focusable, animationDelay }) {
 
   const getDecoratorTooltip = key => (badgeTooltips.has(key) ? badgeTooltips.get(key)[1] : '');
 
+  const onAnimationEnd = () => {
+    setIsLaunching(false);
+    setCurrentIndicatorColorIndex(Math.floor(Math.random() * Math.floor(indicatorColors.length)));
+  };
+
   return html`
     ${Star}
     <div class="environment-card">
-      <button class="main-action" @click=${() => launchEnvironment(environment)} tabindex="${focusable ? 0 : -1}">
+      <button class="main-action" @click=${e => launchEnvironment(e, environment)} tabindex="${focusable ? 0 : -1}">
         <img class="main-action__icon" src="${urls.assetsRoot}/product-icons/${environment.appIcon}" />
         <span class="main-action__app-name"
           >${environment.appName}
@@ -66,16 +78,20 @@ function EnvironmentCard({ environment, focusable, animationDelay }) {
           <use xlink:href="#svg-star" />
         </svg>
       </button>
+      <div class="launch-indicator${isLaunching ? ' animating' : ''}" @animationend=${onAnimationEnd}></div>
     </div>
     <style>
       .environment-card {
         --badge-color: #666;
+        --launch-btn-indicator-color: ${indicatorColors[currentIndicatorColorIndex]};
 
         background-color: white;
         display: flex;
         align-items: center;
         border-radius: 4px;
         box-shadow: var(--shadow-2);
+        position: relative;
+        overflow: hidden;
 
         animation: card-enter 400ms 400ms;
         animation-fill-mode: both;
@@ -86,6 +102,10 @@ function EnvironmentCard({ environment, focusable, animationDelay }) {
         box-shadow: var(--shadow-3);
         --badge-color: var(--color-primary);
       }
+      .environment-card:active {
+        box-shadow: var(--shadow-1);
+      }
+
       .environment-card:focus-within .more:not(:focus),
       .environment-card:hover .more,
       .more:focus-visible {
@@ -139,6 +159,38 @@ function EnvironmentCard({ environment, focusable, animationDelay }) {
       .more--favorite {
         opacity: 1;
         --star-fill: var(--color-yellow);
+      }
+
+      .launch-indicator {
+        height: 4px;
+        background-color: var(--launch-btn-indicator-color);
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        will-change: transform, opacity;
+        transform: translateX(-100%);
+      }
+
+      .launch-indicator.animating {
+        animation: launch 500ms;
+        animation-timing-function: cubic-bezier(0.895, 0.03, 0.685, 0.22);
+        animation-fill-mode: backwards;
+      }
+
+      @keyframes launch {
+        0% {
+          transform: translateX(-100%);
+          opacity: 1;
+        }
+        40% {
+          transform: translateX(0);
+          opacity: 1;
+        }
+        100% {
+          transform: translateX(0);
+          opacity: 0;
+        }
       }
 
       @keyframes card-enter {
