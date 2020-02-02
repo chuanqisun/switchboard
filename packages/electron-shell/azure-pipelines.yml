@@ -1,0 +1,69 @@
+# Node.js
+# Build a general Node.js project with npm.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+trigger:
+  - master
+
+jobs:
+  - job: cross_plat_build
+    strategy:
+      matrix:
+        mac:
+          imageName: macos-10.14
+        windows:
+          imageName: windows-2019
+    pool:
+      vmImage: $(imageName)
+    steps:
+      - task: NodeTool@0
+        inputs:
+          versionSpec: 10.x
+        displayName: Install Node.js
+
+      - bash: |
+          npm --prefix packages/electron-shell install packages/electron-shell
+        displayName: npm install
+
+      - bash: |
+          npm --prefix packages/electron-shell run dist:$(Agent.OS)
+        displayName: npm run dist:$(Agent.OS)
+
+      - task: CopyFiles@2
+        inputs:
+          Contents: packages/electron-shell/dist/*.?(dmg|exe)
+          TargetFolder: drop
+          flattenFolders: true
+        displayName: Copy files to drop folder
+
+      - task: PublishPipelineArtifact@1
+        inputs:
+          artifactName: $(Agent.OS)
+          targetPath: drop
+        displayName: Publish artifacts on $(Agent.OS)
+
+  - job: github_release
+    dependsOn:
+      - cross_plat_build
+    pool:
+      vmImage: windows-2019
+    steps:
+      - task: DownloadPipelineArtifact@2
+        inputs:
+          buildType: current
+          targetPath: .\github-release-assets
+      - task: GitHubRelease@0
+        inputs:
+          gitHubConnection: chuanqisun
+          repositoryName: $(Build.Repository.Name)
+          action: create
+          target: $(Build.SourceVersion)
+          tagSource: manual
+          tag: vX.Y.Z
+          assets: .\github-release-assets\**\*
+          releaseNotesSource: input
+          releaseNotes: |
+            === Replace me with release notes ===
+          isDraft: true
+          addChangeLog: false
