@@ -47,7 +47,7 @@ export async function signIn() {
 
     tempWindow.setMenu(null);
 
-    tempWindow.loadURL(getEnvironmentsEndpoint);
+    tempWindow.loadURL(urls.viewEnvironments);
 
     tempWindow.webContents.on('dom-ready', () => {
       const url = tempWindow.webContents.getURL();
