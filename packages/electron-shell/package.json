@@ -15,12 +15,12 @@
   "author": "Chuanqi Sun",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^7.1.8",
-    "electron-builder": "^21.2.0"
+    "electron": "^7.1.11",
+    "electron-builder": "^22.3.2"
   },
   "dependencies": {
     "download-chromium": "^2.2.0",
-    "puppeteer-core": "^2.0.0"
+    "puppeteer-core": "^2.1.0"
   },
   "build": {
     "artifactName": "${name}-${version}.${ext}",
