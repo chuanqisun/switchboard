@@ -11,8 +11,6 @@ const badgeTooltips = new Map([
   ['viewonly', ['VIEW-ONLY', "Changes in this environment may break other people's work. Please don't make changes even if you can."]],
 ]);
 
-const indicatorColors = ['#d83b01', '#ffb900', '#107c10', '#008575', '#0078d4', '#8661c5'];
-
 function EnvironmentCard({ environment, focusable, animationDelay }) {
   const { FocusVisibleStyle } = useFocusVisible();
 
@@ -20,7 +18,6 @@ function EnvironmentCard({ environment, focusable, animationDelay }) {
   const favoritesContext = useContext(FavoritesContext);
 
   const [isLaunching, setIsLaunching] = useState(false);
-  const [currentIndicatorColorIndex, setCurrentIndicatorColorIndex] = useState(indicatorColors.length - 1);
 
   const launchEnvironment = async (event, environment) => {
     setIsLaunching(true);
@@ -42,12 +39,11 @@ function EnvironmentCard({ environment, focusable, animationDelay }) {
 
   const onAnimationEnd = () => {
     setIsLaunching(false);
-    setCurrentIndicatorColorIndex(Math.floor(Math.random() * Math.floor(indicatorColors.length)));
   };
 
   return html`
     ${Star}
-    <div class="environment-card">
+    <div class="environment-card${environment.primary ? ` environment-card--${environment.primary}` : ''}">
       <button class="main-action" @click=${e => launchEnvironment(e, environment)} tabindex="${focusable ? 0 : -1}">
         <img class="main-action__icon" src="${urls.assetsRoot}/product-icons/${environment.appIcon}" />
         <span class="main-action__app-name"
@@ -85,7 +81,7 @@ function EnvironmentCard({ environment, focusable, animationDelay }) {
     <style>
       .environment-card {
         --badge-color: #666;
-        --launch-btn-indicator-color: ${indicatorColors[currentIndicatorColorIndex]};
+        --launch-btn-indicator-color: var(--color-primary);
 
         background-color: white;
         display: flex;
@@ -98,6 +94,24 @@ function EnvironmentCard({ environment, focusable, animationDelay }) {
         animation: card-enter 400ms 400ms;
         animation-fill-mode: both;
         animation-delay: ${animationDelay}ms;
+      }
+      .environment-card--red {
+        --launch-btn-indicator-color: #ff9349; /** use organge to avoid the "error" connotation of red */
+      }
+      .environment-card--yellow {
+        --launch-btn-indicator-color: #ffb900;
+      }
+      .environment-card--green {
+        --launch-btn-indicator-color: #107c10;
+      }
+      .environment-card--cyan {
+        --launch-btn-indicator-color: #008575;
+      }
+      .environment-card--blue {
+        --launch-btn-indicator-color: #0078d4;
+      }
+      .environment-card--purple {
+        --launch-btn-indicator-color: #8661c5;
       }
       .environment-card:hover {
         color: var(--color-primary);
