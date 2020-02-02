@@ -1,8 +1,8 @@
 const { BrowserWindow, screen, getCurrentWindow } = require('electron').remote;
+import { urls } from '../constants.js';
 
 const signInBlockerUrlPrefix = 'https://login.microsoftonline.com';
 const signInSuccessUrlPrefix = 'https://microsoft.sharepoint.com';
-const getEnvironmentsEndpoint = 'https://aka.ms/switchboard-environments-v2';
 
 export async function signOut() {
   return new Promise((resolve, reject) => {
@@ -14,7 +14,7 @@ export async function signOut() {
       show: false,
     });
 
-    tempWindow.loadURL(getEnvironmentsEndpoint);
+    tempWindow.loadURL(urls.viewEnvironments);
 
     tempWindow.webContents.on('dom-ready', () => {
       tempWindow.webContents.session.clearStorageData();

@@ -3,11 +3,8 @@ import { urls } from '../constants.js';
 import { getJsonFromUrl } from './get-json-from-url.js';
 export { rejectReasonInvalidJson, rejectReasonSignedOut } from './get-json-from-url.js';
 
-// TODO share url with auth.js
-const getEnvironmentsEndpoint = 'https://aka.ms/switchboard-environments-v2';
-
 export function getEnvironments() {
-  return getJsonFromUrl(getEnvironmentsEndpoint);
+  return getJsonFromUrl(urls.viewEnvironments);
 }
 
 export async function editEnvironments() {

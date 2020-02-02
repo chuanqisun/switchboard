@@ -1,4 +1,4 @@
-import { svg } from './lib/lit-html.js';
+import { svg } from './lib/index.js';
 
 export const Minimize = svg`
 <symbol id="svg-minimize" viewBox="0 0 16 16">

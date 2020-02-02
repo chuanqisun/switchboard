@@ -26,8 +26,10 @@ function EnvironmentCard({ environment, focusable, animationDelay }) {
     setIsLaunching(true);
 
     const { url, username, password, signInStrategy } = environment;
+    const { exec } = chromiumContext;
+
     try {
-      await autoSignIn({ signInStrategy, exec: chromiumContext.exec, url, username, password });
+      await autoSignIn({ signInStrategy, exec, url, username, password });
     } catch (e) {
       console.dir(e);
       console.log('[environments] automation runtime error');

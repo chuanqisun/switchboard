@@ -64,7 +64,7 @@ export function saveUserSettings(userSettings) {
   });
 }
 
-export function resetFavorites() {
+export function deleteUserSettings() {
   fs.unlinkSync(userSettingsPath);
   reloadWindow();
 }

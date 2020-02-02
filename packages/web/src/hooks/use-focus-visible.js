@@ -1,4 +1,4 @@
-import { html } from '../lib/lit-html.js';
+import { html } from '../lib/index.js';
 
 export function useFocusVisible() {
   const FocusVisibleStyle = html`
