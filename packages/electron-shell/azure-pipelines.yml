@@ -61,7 +61,6 @@ jobs:
           target: $(Build.SourceVersion)
           tagSource: manual
           tag: vX.Y.Z
-          title: vX.Y.Z
           assets: .\github-release-assets\**\*
           releaseNotesSource: input
           releaseNotes: |
