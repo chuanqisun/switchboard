@@ -96,7 +96,7 @@ function EnvironmentCard({ environment, focusable, animationDelay }) {
         animation-delay: ${animationDelay}ms;
       }
       .environment-card--red {
-        --launch-btn-indicator-color: #ff9349; /** use organge to avoid the "error" connotation of red */
+        --launch-btn-indicator-color: #ff9349; /** use orange to avoid the "error" connotation of red */
       }
       .environment-card--yellow {
         --launch-btn-indicator-color: #ffb900;
