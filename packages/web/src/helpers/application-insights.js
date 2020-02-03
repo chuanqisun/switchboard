@@ -61,7 +61,9 @@ var aiName = window[sdkInstance],
     })({
       instrumentationKey: applicationInsights.instrumentationKey,
     });
-(window[aiName] = aisdk).queue && 0 === aisdk.queue.length && aisdk.trackPageView({});
+/** disable tracking of first page view */
+// (window[aiName] = aisdk).queue && 0 === aisdk.queue.length && aisdk.trackPageView({});
+(window[aiName] = aisdk).queue && 0 === aisdk.queue.length;
 
-/** @type { import('@microsoft/applicationinsights-analytics-js').ApplicationInsights} */
+/** @type { import('@microsoft/applicationinsights-web').ApplicationInsights} */
 export const appInsights = window.appInsights;

@@ -9,6 +9,8 @@
   "author": "Chuanqi Sun",
   "license": "MIT",
   "devDependencies": {
+    "@microsoft/applicationinsights-web": "^2.4.3",
+    "electron": "^7.1.11",
     "haunted": "^4.7.0",
     "lit-html": "^1.1.2"
   }
