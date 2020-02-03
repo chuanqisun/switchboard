@@ -1,22 +1,30 @@
 const puppeteer = require('puppeteer-core');
 
+const signInStrategies = {
+  aadSingleFactor: 'aad1fa',
+  marketInsight: 'mi',
+  fraudProtection: 'dfp',
+};
+
 /**
  *
  * automation strategy:
  *   aad1fa - basic aad flow
  *   mi - market insight flow
  */
-export async function autoSignIn({ signInStrategy = 'aad1fa', exec, url, username, password }) {
+export async function autoSignIn({ signInStrategy = signInStrategies.aadSingleFactor, exec, url, username, password }) {
   console.log('[automation] sign in with strategy: ' + signInStrategy);
   const browser = await puppeteer.launch({ headless: false, defaultViewport: null, executablePath: exec });
   const page = (await browser.pages())[0];
   page.goto(url);
 
   switch (signInStrategy) {
-    case 'mi':
+    case signInStrategies.marketInsight:
       return signInMarketInsight({ page, exec, url, username, password });
-    case 'aad1fa':
+    case signInStrategies.aadSingleFactor:
       return signInAADSingleFactor({ page, exec, url, username, password });
+    case signInStrategies.fraudProtection:
+      return singInFraudProtection({ page, exec, url, username, password });
     default:
       console.log('unknown automation strategy');
   }
@@ -24,6 +32,11 @@ export async function autoSignIn({ signInStrategy = 'aad1fa', exec, url, usernam
 
 async function signInMarketInsight({ page, exec, url, username, password }) {
   await clickButton(page, 'button#AzureADExchange');
+  await signInAADSingleFactor({ page, exec, url, username, password });
+}
+
+async function singInFraudProtection({ page, exec, url, username, password }) {
+  await clickButton(page, 'button[data-test-id="login-button"]');
   await signInAADSingleFactor({ page, exec, url, username, password });
 }
 
