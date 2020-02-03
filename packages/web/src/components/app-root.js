@@ -1,7 +1,12 @@
-import { html, component, useContext } from '../lib/index.js';
+import { html, component, useContext, useEffect } from '../lib/index.js';
 import { CarouselContext } from '../contexts/index.js';
+import { trackOpenApp } from '../helpers/analytics.js';
 
 function AppRoot() {
+  useEffect(() => {
+    trackOpenApp();
+  }, []);
+
   return html`
     <sb-chromium-provider>
       <sb-environments-provider>

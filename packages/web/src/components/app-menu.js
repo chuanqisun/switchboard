@@ -10,6 +10,7 @@ import { useFocusVisible } from '../hooks/use-focus-visible.js';
 import { EnvironmentsContext, ChromiumContext } from '../contexts/index.js';
 import { autoSignIn } from '../helpers/automation.js';
 import { urls } from '../constants.js';
+import { getUserRole } from '../helpers/auth.js';
 import { component, html, useEffect, useState, useContext } from '../lib/index.js';
 
 function AppMenu() {
@@ -75,6 +76,7 @@ function AppMenu() {
     const menu = new Menu();
 
     const { isUpdatedRequired, isUpdateAvailable, currentVersion, latestVersion } = await getVersionSummary();
+    const userRole = await getUserRole();
 
     menu.append(
       new MenuItem({
@@ -119,37 +121,7 @@ function AppMenu() {
 
     menu.append(
       new MenuItem({
-        label: 'Admin tools',
-        submenu: [
-          {
-            label: 'Edit environments',
-            click: () => editEnvironments(),
-          },
-          {
-            type: 'separator',
-          },
-          {
-            label: 'Manage trials',
-            enabled: !!adminEnvironmentCRM,
-            click: () => manageTrials(),
-          },
-          {
-            label: 'Create CRM trial',
-            enabled: !!adminEnvironmentCRM,
-            click: () => createTrialCRM(),
-          },
-          {
-            label: 'Create Marketing trial',
-            enabled: !!adminEnvironmentMarketing,
-            click: () => createTrialMarketing(),
-          },
-        ],
-      })
-    );
-
-    menu.append(
-      new MenuItem({
-        label: 'Dev tools',
+        label: 'User tools',
         submenu: [
           { label: 'Reset favorites', click: () => deleteUserSettings() },
           {
@@ -168,6 +140,39 @@ function AppMenu() {
     );
 
     menu.append(new MenuItem({ type: 'separator' }));
+
+    userRole === 'admin' &&
+      menu.append(
+        new MenuItem({
+          label: 'Admin tools',
+          submenu: [
+            {
+              label: 'Edit environments',
+              click: () => editEnvironments(),
+            },
+            {
+              type: 'separator',
+            },
+            {
+              label: 'Manage trials',
+              enabled: !!adminEnvironmentCRM,
+              click: () => manageTrials(),
+            },
+            {
+              label: 'Create CRM trial',
+              enabled: !!adminEnvironmentCRM,
+              click: () => createTrialCRM(),
+            },
+            {
+              label: 'Create Marketing trial',
+              enabled: !!adminEnvironmentMarketing,
+              click: () => createTrialMarketing(),
+            },
+          ],
+        })
+      );
+
+    userRole === 'admin' && menu.append(new MenuItem({ type: 'separator' }));
 
     menu.append(
       new MenuItem({

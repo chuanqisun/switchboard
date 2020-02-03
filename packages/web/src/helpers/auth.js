@@ -1,8 +1,41 @@
-const { BrowserWindow, screen, getCurrentWindow } = require('electron').remote;
-import { urls } from '../constants.js';
+const { BrowserWindow, screen, getCurrentWindow, session } = require('electron').remote;
+import { urls, adminUsers } from '../constants.js';
 
 const signInBlockerUrlPrefix = 'https://login.microsoftonline.com';
 const signInSuccessUrlPrefix = 'https://microsoft.sharepoint.com';
+
+export async function getUserRole() {
+  const userEmail = await getUserEmail();
+  if (userEmail === 'guest') {
+    return 'guest';
+  } else if (userEmail === 'unknown') {
+    return 'unknown';
+  } else if (adminUsers.find(adminEmail => adminEmail === userEmail)) {
+    return 'admin';
+  } else {
+    return 'member';
+  }
+}
+
+export async function getUserEmail() {
+  const authCookie = await session.defaultSession.cookies.get({ url: 'https://microsoft.sharepoint.com', name: 'FedAuth' });
+  if (!authCookie.length) {
+    return 'guest';
+  }
+
+  try {
+    const email = atob(authCookie[0].value)
+      .split(',')
+      .filter(item => item.includes('@microsoft'))[0]
+      .split('|')
+      .pop();
+
+    return email;
+  } catch (e) {
+    console.log('[auth] cannot parse user email from cookie');
+    return 'unknown';
+  }
+}
 
 export async function signOut() {
   return new Promise((resolve, reject) => {
