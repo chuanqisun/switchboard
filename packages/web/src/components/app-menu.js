@@ -119,6 +119,28 @@ function AppMenu() {
 
     menu.append(new MenuItem({ type: 'separator' }));
 
+    menu.append(
+      new MenuItem({
+        label: 'User tools',
+        submenu: [
+          { label: 'Reset favorites', click: () => deleteUserSettings() },
+          {
+            label: 'Reset Chromium',
+            click: () => resetChromium(),
+          },
+          {
+            type: 'separator',
+          },
+          {
+            label: 'Diagnostics',
+            click: () => showAbout(),
+          },
+        ],
+      })
+    );
+
+    menu.append(new MenuItem({ type: 'separator' }));
+
     userRole === 'admin' &&
       menu.append(
         new MenuItem({
@@ -151,28 +173,6 @@ function AppMenu() {
       );
 
     userRole === 'admin' && menu.append(new MenuItem({ type: 'separator' }));
-
-    menu.append(
-      new MenuItem({
-        label: 'User tools',
-        submenu: [
-          { label: 'Reset favorites', click: () => deleteUserSettings() },
-          {
-            label: 'Reset Chromium',
-            click: () => resetChromium(),
-          },
-          {
-            type: 'separator',
-          },
-          {
-            label: 'Diagnostics',
-            click: () => showAbout(),
-          },
-        ],
-      })
-    );
-
-    menu.append(new MenuItem({ type: 'separator' }));
 
     menu.append(
       new MenuItem({
