@@ -19,6 +19,7 @@ export const urls = {
   /** Keep this one for fallback. The one above seems to have more predictable behavior */
   createTrialMarketingAlt: 'https://trials.dynamics.com/Dynamics365/marketing',
   cdxDemos: 'https://cdx.transform.microsoft.com/experiences?products=Dynamics%20365',
+  changeTrialUserPassword: 'https://account.activedirectory.windowsazure.com/ChangePassword.aspx',
 };
 
 /**

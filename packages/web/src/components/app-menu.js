@@ -53,6 +53,10 @@ function AppMenu() {
     signInEnvironment({ ...adminEnvironmentMarketing, url: urls.createTrialCRM });
   };
 
+  const openTrialUserAccount = () => {
+    signInEnvironment({ ...adminEnvironmentCRM, url: urls.changeTrialUserPassword });
+  };
+
   const signInEnvironment = async environment => {
     const { url, username, password, signInStrategy } = environment;
     const { exec } = chromiumContext;
@@ -174,6 +178,14 @@ function AppMenu() {
               label: 'Create Marketing trial',
               enabled: !!adminEnvironmentMarketing,
               click: () => createTrialMarketing(),
+            },
+            {
+              type: 'separator',
+            },
+            {
+              label: 'Change trial user password',
+              enabled: !!adminEnvironmentCRM,
+              click: () => openTrialUserAccount(),
             },
           ],
         })
