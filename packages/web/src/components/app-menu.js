@@ -2,7 +2,7 @@ import { signOut } from '../helpers/auth.js';
 import { resetChromium } from '../helpers/chromium.js';
 import { noUpdates, showAbout, updateAvailable } from '../helpers/dialogs.js';
 import { editEnvironments } from '../helpers/environments.js';
-import { openLatestRelease, openHelp, openDocumentation, openAllReleases } from '../helpers/open-external.js';
+import { openLatestRelease, openHelp, openDocumentation, openAllReleases, openCustomerDigitalExperience } from '../helpers/open-external.js';
 import { getVersionSummary } from '../helpers/update.js';
 import { deleteUserSettings } from '../helpers/user-settings.js';
 import { reloadWindow } from '../helpers/window.js';
@@ -149,6 +149,13 @@ function AppMenu() {
             {
               label: 'Edit environments',
               click: () => editEnvironments(),
+            },
+            {
+              type: 'separator',
+            },
+            {
+              label: 'Manage demos',
+              click: () => openCustomerDigitalExperience(),
             },
             {
               type: 'separator',

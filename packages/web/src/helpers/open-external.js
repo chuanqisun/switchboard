@@ -19,3 +19,8 @@ export function openAllReleases() {
   const { shell } = require('electron').remote;
   shell.openExternal(urls.release);
 }
+
+export function openCustomerDigitalExperience() {
+  const { shell } = require('electron').remote;
+  shell.openExternal(urls.cdxDemos);
+}

@@ -18,6 +18,7 @@ export const urls = {
     'https://port.crm.dynamics.com/G/Setup/ConfigureNewEmailTrialInstance.aspx?country=US&lang=en-US&skipConfigure=False&isSmb=True&userScenarioRole=SmbMarketing',
   /** Keep this one for fallback. The one above seems to have more predictable behavior */
   createTrialMarketingAlt: 'https://trials.dynamics.com/Dynamics365/marketing',
+  cdxDemos: 'https://cdx.transform.microsoft.com/experiences?products=Dynamics%20365',
 };
 
 /**
