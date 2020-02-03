@@ -28,3 +28,7 @@ export const chromium = {
   revision: '722234',
   publicVersion: '80.0.3987.0',
 };
+
+export const applicationInsights = {
+  instrumentationKey: '34fe2d3e-e166-4544-b608-130d49bad0db',
+};

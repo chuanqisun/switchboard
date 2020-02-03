@@ -3,6 +3,7 @@ import { ChromiumContext, FavoritesContext } from '../contexts/index.js';
 import { autoSignIn } from '../helpers/automation.js';
 import { useFocusVisible } from '../hooks/use-focus-visible.js';
 import { Star } from '../icons.js';
+import { trackLaunchEnvironment } from '../helpers/analytics.js';
 import { component, html, useContext, useState } from '../lib/index.js';
 
 const badgeTooltips = new Map([
@@ -26,6 +27,8 @@ function EnvironmentCard({ environment, focusable, animationDelay }) {
     const { exec } = chromiumContext;
 
     try {
+      trackLaunchEnvironment({ appId: environment.appId, isFavorite: favoritesContext.isFavorite(environment.appId) });
+
       await autoSignIn({ signInStrategy, exec, url, username, password });
     } catch (e) {
       console.dir(e);
