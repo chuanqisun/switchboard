@@ -58,6 +58,7 @@ function ViewToggle({ dataLeft, dataRight, dataSelected }) {
         align-items: center;
       }
       .toggle {
+        user-select: none;
         font-family: var(--font-family-system);
         background-color: var(--color-primary-dark);
         border-radius: 0.8rem;
