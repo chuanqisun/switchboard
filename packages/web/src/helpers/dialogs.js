@@ -1,5 +1,5 @@
 const { app, dialog } = require('electron').remote;
-import { downloadUpdate } from './shell.js';
+import { openLatestRelease } from './open-external.js';
 import { chromium } from '../constants.js';
 
 export function showAbout() {
@@ -44,7 +44,7 @@ export async function updateAvailable({ latestVersion, currentVersion }) {
   });
 
   if (dialogResult.response === 0) {
-    downloadUpdate();
+    openLatestRelease();
   }
 }
 

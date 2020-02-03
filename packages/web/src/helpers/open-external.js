@@ -1,11 +1,11 @@
 import { urls } from '../constants.js';
 
-export function downloadUpdate() {
+export function openLatestRelease() {
   const { shell } = require('electron').remote;
   shell.openExternal(urls.latestRelease);
 }
 
-export function getHelp() {
+export function openHelp() {
   const { shell } = require('electron').remote;
   shell.openExternal(urls.help);
 }
@@ -15,7 +15,7 @@ export function openDocumentation() {
   shell.openExternal(urls.documentation);
 }
 
-export function viewAllReleases() {
+export function openAllReleases() {
   const { shell } = require('electron').remote;
   shell.openExternal(urls.release);
 }

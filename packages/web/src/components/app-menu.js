@@ -2,7 +2,7 @@ import { signOut } from '../helpers/auth.js';
 import { resetChromium } from '../helpers/chromium.js';
 import { noUpdates, showAbout, updateAvailable } from '../helpers/dialogs.js';
 import { editEnvironments } from '../helpers/environments.js';
-import { downloadUpdate, getHelp, openDocumentation, viewAllReleases } from '../helpers/shell.js';
+import { openLatestRelease, openHelp, openDocumentation, openAllReleases } from '../helpers/open-external.js';
 import { getVersionSummary } from '../helpers/update.js';
 import { deleteUserSettings } from '../helpers/user-settings.js';
 import { reloadWindow } from '../helpers/window.js';
@@ -81,7 +81,7 @@ function AppMenu() {
     menu.append(
       new MenuItem({
         label: 'Report issue',
-        click: () => getHelp(),
+        click: () => openHelp(),
       })
     );
 
@@ -98,7 +98,7 @@ function AppMenu() {
       menu.append(
         new MenuItem({
           label: 'Update now 🎁',
-          click: () => downloadUpdate(), // TODO implement a separate check for getting the latest version
+          click: () => openLatestRelease(), // TODO implement a separate check for getting the latest version
         })
       );
 
@@ -113,7 +113,7 @@ function AppMenu() {
     menu.append(
       new MenuItem({
         label: 'All downloads',
-        click: () => viewAllReleases(),
+        click: () => openAllReleases(),
       })
     );
 
