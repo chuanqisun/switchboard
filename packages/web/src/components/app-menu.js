@@ -109,7 +109,7 @@ function AppMenu() {
     !isUpdatedRequired &&
       menu.append(
         new MenuItem({
-          label: 'Check for updates…',
+          label: 'Check for updates',
           click: () => (isUpdateAvailable ? updateAvailable({ latestVersion, currentVersion }) : noUpdates({ currentVersion })),
         })
       );
