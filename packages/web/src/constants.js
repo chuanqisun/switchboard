@@ -35,4 +35,4 @@ export const applicationInsights = {
   instrumentationKey: '34fe2d3e-e166-4544-b608-130d49bad0db',
 };
 
-export const adminUsers = ['chusun@microsoft.com', 'zalin@microsoft.com'];
+export const adminUsers = ['chusun@microsoft.com', 'zalin@microsoft.com', 'janey@microsoft.com'];
