@@ -41,6 +41,10 @@ function AppMenu() {
     }
   }, [environmentsContext.status]);
 
+  const manageAllEnvironments = () => {
+    signInEnvironment({ ...adminEnvironmentCRM, url: urls.manageEnvironments });
+  };
+
   const manageTrials = () => {
     signInEnvironment({ ...adminEnvironmentCRM, url: urls.manageInstances });
   };
@@ -165,6 +169,11 @@ function AppMenu() {
               type: 'separator',
             },
             {
+              label: 'Manage all environments',
+              enabled: !!adminEnvironmentCRM,
+              click: () => manageAllEnvironments(),
+            },
+            {
               label: 'Manage trials',
               enabled: !!adminEnvironmentCRM,
               click: () => manageTrials(),
@@ -216,10 +225,10 @@ function AppMenu() {
     <button class="menu-button" id="main-menu" @click=${handleMainMenuClick}>
       <span>Menu</span>
       ${isUpdateIndicatorVisible
-        ? html`
+      ? html`
             <span class="menu-button__update-indicator">🎁</span>
           `
-        : null}
+      : null}
     </button>
 
     <style>
