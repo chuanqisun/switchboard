@@ -1,17 +1,17 @@
-import { signOut } from '../helpers/auth.js';
+import { urls } from '../constants.js';
+import { ChromiumContext, EnvironmentsContext } from '../contexts/index.js';
+import { getUserRole, signOut } from '../helpers/auth.js';
+import { autoSignIn } from '../helpers/automation.js';
 import { resetChromium } from '../helpers/chromium.js';
 import { noUpdates, showAbout, updateAvailable } from '../helpers/dialogs.js';
 import { editEnvironments } from '../helpers/environments.js';
-import { openLatestRelease, openHelp, openDocumentation, openAllReleases, openCustomerDigitalExperience } from '../helpers/open-external.js';
+import { openAllReleases, openCustomerDigitalExperience, openDocumentation, openHelp, openLatestRelease } from '../helpers/open-external.js';
+import { resetApp } from '../helpers/reset.js';
 import { getVersionSummary } from '../helpers/update.js';
 import { deleteUserSettings } from '../helpers/user-settings.js';
 import { reloadWindow } from '../helpers/window.js';
 import { useFocusVisible } from '../hooks/use-focus-visible.js';
-import { EnvironmentsContext, ChromiumContext } from '../contexts/index.js';
-import { autoSignIn } from '../helpers/automation.js';
-import { urls } from '../constants.js';
-import { getUserRole } from '../helpers/auth.js';
-import { component, html, useEffect, useState, useContext } from '../lib/index.js';
+import { component, html, useContext, useEffect, useState } from '../lib/index.js';
 
 function AppMenu() {
   const { FocusVisibleStyle } = useFocusVisible();
@@ -135,6 +135,9 @@ function AppMenu() {
           {
             label: 'Reset Chromium',
             click: () => resetChromium(),
+          },
+          {
+            label: 'Reset Switchboard', click: () => resetApp(),
           },
           {
             type: 'separator',
