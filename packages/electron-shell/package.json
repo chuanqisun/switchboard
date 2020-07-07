@@ -15,7 +15,7 @@
   "author": "Chuanqi Sun",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^7.1.11",
+    "electron": "^7.2.4",
     "electron-builder": "^22.3.2"
   },
   "dependencies": {
