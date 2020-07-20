@@ -3,7 +3,7 @@ import { useEffect, useRef } from '../lib/index.js';
 /**
  * Invoke the callback functino at an interval
  * @param {() => any} callback
- * @param {number | null} interval in ms
+ * @param {number | null} interval in ms, when set to null, callback won't be executed
  */
 export function useInterval(callback, interval) {
   const savedCallback = useRef();

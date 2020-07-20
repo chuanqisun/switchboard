@@ -38,25 +38,28 @@ function EnvironmentsProvider() {
   }, []);
 
   // try refresh environments every 60 seconds. Avoid updating states or unstable network connection may affect UI
-  useInterval(async () => {
-    try {
-      const environments = await getEnvironments();
-      if (Array.isArray(environments)) {
-        setEnvironments(environments);
-      } else {
-        console.log('[environments-context] parse environments json is not an array');
+  useInterval(
+    async () => {
+      try {
+        const environments = await getEnvironments();
+        if (Array.isArray(environments)) {
+          setEnvironments(environments);
+        } else {
+          console.log('[environments-context] parse environments json is not an array');
+        }
+      } catch (e) {
+        switch (e) {
+          case rejectReasonSignedOut:
+            console.log('[environments-context] not signed in');
+            break;
+          case rejectReasonInvalidJson:
+            console.log('[environments-context] parse environments json failed');
+            break;
+        }
       }
-    } catch (e) {
-      switch (e) {
-        case rejectReasonSignedOut:
-          console.log('[environments-context] not signed in');
-          break;
-        case rejectReasonInvalidJson:
-          console.log('[environments-context] parse environments json failed');
-          break;
-      }
-    }
-  }, 60 * 1000);
+    },
+    status === 'loaded' ? 60 * 1000 : null
+  );
 
   const contextValue = {
     status,
