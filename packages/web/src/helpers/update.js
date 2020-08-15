@@ -17,13 +17,13 @@ export async function getVersionSummary() {
       isUpdateAvailable,
       isUpdatedRequired,
     };
-  } catch(e) {
-    console.log('[update] get version summary failed');
+  } catch (e) {
+    console.log('[update] get version summary failed', e);
     return {
       currentVersion: 'unknown',
       latestVersion: 'unknown',
       isUpdateAvailable: false,
       isUpdatedRequired: false,
-    }
+    };
   }
 }

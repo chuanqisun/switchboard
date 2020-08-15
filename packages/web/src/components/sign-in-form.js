@@ -1,12 +1,10 @@
 import { html, component, useEffect, useContext } from '../lib/index.js';
 import { useFocusVisible } from '../hooks/use-focus-visible.js';
 import { EnvironmentsContext } from '../contexts/environments-context.js';
-import { signIn } from '../helpers/auth.js';
-import { reloadWindow } from '../helpers/window.js';
 import { urls } from '../constants.js';
+import { getJsonFromUrl } from '../helpers/get-json-from-url-v2.js';
 
 import { ChromiumContext } from '../contexts/chromium-context.js';
-import { msftSignIn } from '../helpers/automation.js';
 
 function SignInForm() {
   const { FocusVisibleStyle } = useFocusVisible();
@@ -22,7 +20,12 @@ function SignInForm() {
   }, [environmentsContext.status]);
 
   const onSignIn = async () => {
-    msftSignIn({ exec });
+    const result = await getJsonFromUrl({
+      exec,
+      url: 'https://microsoft.sharepoint.com/teams/Live.Drive.Repeat2/Shared%20Documents/General/Environments/environments-v2.txt',
+    });
+
+    console.log(result);
     // await signIn();
     // reloadWindow();
   };

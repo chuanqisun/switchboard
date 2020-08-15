@@ -10,7 +10,7 @@ export async function getUserRole() {
     return 'guest';
   } else if (userEmail === 'unknown') {
     return 'unknown';
-  } else if (adminUsers.find(adminEmail => adminEmail === userEmail)) {
+  } else if (adminUsers.find((adminEmail) => adminEmail === userEmail)) {
     return 'admin';
   } else {
     return 'member';
@@ -26,7 +26,7 @@ export async function getUserEmail() {
   try {
     const email = atob(authCookie[0].value)
       .split(',')
-      .filter(item => item.includes('@microsoft'))[0]
+      .filter((item) => item.includes('@microsoft'))[0]
       .split('|')
       .pop();
 

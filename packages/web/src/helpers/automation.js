@@ -21,9 +21,6 @@ export async function msftSignIn({ exec }) {
     const resultObject = JSON.parse(string);
     return resultObject;
   });
-
-  console.log(result);
-  browser.close();
 }
 
 /**

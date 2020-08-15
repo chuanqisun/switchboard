@@ -1,5 +1,6 @@
-import { html, createContext, useState, component, useEffect } from '../lib/index.js';
+import { html, createContext, useState, component, useEffect, useContext } from '../lib/index.js';
 import { getEnvironments, rejectReasonSignedOut, rejectReasonInvalidJson } from '../helpers/environments.js';
+import { ChromiumContext } from '../contexts/chromium-context.js';
 import { useInterval } from '../hooks/use-interval.js';
 
 export const EnvironmentsContext = createContext({
@@ -12,10 +13,13 @@ customElements.define('sb-environments-provider-internal', EnvironmentsContext.P
 function EnvironmentsProvider() {
   const [environments, setEnvironments] = useState([]);
   const [status, setStatus] = useState('loading'); // 'loading' | 'signed-out' | 'loaded' | 'error'
+  const chromiumContext = useContext(ChromiumContext);
 
   useEffect(async () => {
+    if (!status === 'installed') return;
+
     try {
-      const environments = await getEnvironments();
+      const environments = await getEnvironments({ exec: chromiumContext.exec });
       if (Array.isArray(environments)) {
         setEnvironments(environments);
         setStatus('loaded');
@@ -35,31 +39,7 @@ function EnvironmentsProvider() {
           break;
       }
     }
-  }, []);
-
-  // try refresh environments every 60 seconds. Avoid updating states or unstable network connection may affect UI
-  useInterval(
-    async () => {
-      try {
-        const environments = await getEnvironments();
-        if (Array.isArray(environments)) {
-          setEnvironments(environments);
-        } else {
-          console.log('[environments-context] parse environments json is not an array');
-        }
-      } catch (e) {
-        switch (e) {
-          case rejectReasonSignedOut:
-            console.log('[environments-context] not signed in');
-            break;
-          case rejectReasonInvalidJson:
-            console.log('[environments-context] parse environments json failed');
-            break;
-        }
-      }
-    },
-    status === 'loaded' ? 60 * 1000 : null
-  );
+  }, [chromiumContext.status]);
 
   const contextValue = {
     status,
