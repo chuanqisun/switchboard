@@ -26,6 +26,9 @@ function createWindow() {
 // enable flag for using ":focus-visible"
 app.commandLine.appendSwitch('enable-experimental-web-platform-features');
 
+// or ctrl + R will break node integration
+app.allowRendererProcessReuse = false;
+
 app.whenReady().then(() => {
   createWindow();
 
