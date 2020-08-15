@@ -28,8 +28,8 @@ export const urls = {
  * TODO: based on the installed version of puppeteer, get matching version of chromium
  */
 export const chromium = {
-  revision: '722234',
-  publicVersion: '80.0.3987.0',
+  revision: '782078',
+  publicVersion: '85.0.4182.0',
 };
 
 export const applicationInsights = {
