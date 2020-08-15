@@ -9,7 +9,8 @@ function MenuBar() {
   const chromiumContext = useContext(ChromiumContext);
 
   const isToggleReady = environmentsContext.status === 'loaded' && favoritesContext.status === 'loaded' && chromiumContext.status === 'installed';
-  const isMenuButtonReady = environmentsContext.status !== 'signed-out';
+  // const isMenuButtonReady = environmentsContext.status !== 'signed-out';
+  const isMenuButtonReady = true;
 
   useEffect(() => {
     if (isToggleReady) {
@@ -31,17 +32,9 @@ function MenuBar() {
   return html`
     <div class="menu-bar${scrollContext.scrollCount > 0 ? ' menu-bar--with-scroll' : ''}">
       ${isToggleReady
-        ? html`
-            <sb-view-toggle data-left="Favorites" data-right="All" data-selected="${carouselContext.selected}" @click=${onViewToggle}></sb-view-toggle>
-          `
-        : html`
-            <div></div>
-          `}
-      ${isMenuButtonReady
-        ? html`
-            <sb-app-menu></sb-app-menu>
-          `
-        : null}
+        ? html` <sb-view-toggle data-left="Favorites" data-right="All" data-selected="${carouselContext.selected}" @click=${onViewToggle}></sb-view-toggle> `
+        : html` <div></div> `}
+      ${isMenuButtonReady ? html` <sb-app-menu></sb-app-menu> ` : null}
     </div>
 
     <style>
@@ -52,9 +45,14 @@ function MenuBar() {
         align-items: center;
         justify-content: space-between;
         padding: 0 1rem;
-        background: var(--gradient-menu-bar);
         position: relative;
         z-index: var(--z-toolbar);
+
+        background: transparent;
+        position: absolute;
+        top: var(--title-bar-height);
+        left: 0;
+        right: 0;
       }
 
       .menu-bar--with-scroll {

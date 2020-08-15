@@ -1,6 +1,6 @@
 {
   "name": "@switchboard/web",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "Instanly launch multiple Dynamics demo environments",
   "type": "module",
   "main": "index.js",
@@ -9,9 +9,9 @@
   "author": "Chuanqi Sun",
   "license": "MIT",
   "devDependencies": {
-    "@microsoft/applicationinsights-web": "^2.4.3",
-    "electron": "^7.1.11",
+    "@microsoft/applicationinsights-web": "^2.5.7",
+    "electron": "^9.2.0",
     "haunted": "^4.7.0",
-    "lit-html": "^1.1.2"
+    "lit-html": "^1.2.1"
   }
 }

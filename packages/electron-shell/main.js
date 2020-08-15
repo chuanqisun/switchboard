@@ -16,25 +16,27 @@ function createWindow() {
     frame: false,
     webPreferences: {
       nodeIntegration: true,
+      enableRemoteModule: true,
     },
   });
 
   mainWindow.loadFile('index.html');
-
-  mainWindow.on('closed', function() {
-    mainWindow = null;
-  });
 }
 
 // enable flag for using ":focus-visible"
 app.commandLine.appendSwitch('enable-experimental-web-platform-features');
 
-app.on('ready', createWindow);
+// or ctrl + R will break node integration
+app.allowRendererProcessReuse = false;
 
-app.on('window-all-closed', function() {
-  if (process.platform !== 'darwin') app.quit();
+app.whenReady().then(() => {
+  createWindow();
+
+  app.on('activate', function () {
+    if (BrowserWindow.getAllWindows().length === 0) createWindow();
+  });
 });
 
-app.on('activate', function() {
-  if (mainWindow === null) createWindow();
+app.on('window-all-closed', function () {
+  if (process.platform !== 'darwin') app.quit();
 });

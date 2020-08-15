@@ -8,7 +8,7 @@ export function getChromiumInstallPath() {
   const userDataPath = app.getPath('userData');
   const path = require('path');
 
-  return path.join(userDataPath, '/local-chromium');
+  return path.join(userDataPath, 'local-chromium');
 }
 
 export function getChromiumRevision() {

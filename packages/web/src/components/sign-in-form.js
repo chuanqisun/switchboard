@@ -1,13 +1,16 @@
-import { html, component, useEffect, useContext } from '../lib/index.js';
+import { html, component, useEffect, useContext, useCallback } from '../lib/index.js';
 import { useFocusVisible } from '../hooks/use-focus-visible.js';
 import { EnvironmentsContext } from '../contexts/environments-context.js';
-import { signIn } from '../helpers/auth.js';
-import { reloadWindow } from '../helpers/window.js';
 import { urls } from '../constants.js';
+import { reloadWindow } from '../helpers/window.js';
+import { signOut } from '../helpers/auth.js';
+
+import { ChromiumContext } from '../contexts/chromium-context.js';
 
 function SignInForm() {
   const { FocusVisibleStyle } = useFocusVisible();
   const environmentsContext = useContext(EnvironmentsContext);
+  const { exec } = useContext(ChromiumContext);
 
   useEffect(() => {
     if (environmentsContext.status === 'signed-out') {
@@ -17,14 +20,25 @@ function SignInForm() {
     }
   }, [environmentsContext.status]);
 
-  const onSignIn = async () => {
-    await signIn();
+  const handleSignIn = useCallback(async () => {
+    await environmentsContext.signIn({ exec });
     reloadWindow();
-  };
+  }, [environmentsContext, exec]);
+
+  const handleRetry = useCallback(async () => {
+    await environmentsContext.abortSignIn();
+    await signOut({ exec });
+    reloadWindow();
+  }, [environmentsContext, exec]);
 
   return html`
     <div class="sign-in-container main__pre-sign-in-container${environmentsContext.status === 'signed-out' ? ' sign-in-container--active' : ''}">
-      <button class="button button--primary button--extra-wide button--sign-in" @click=${onSignIn}>Sign in</button>
+      ${environmentsContext.isSigningIn
+        ? html` <div class="sign-in-message">
+            <p>Sign in with your work account in the popped-up window.</p>
+            <p>Something went wrong? <button class="button button--inline" @click=${handleRetry}>Try again here</button>.</p>
+          </div>`
+        : html`<button class="button button--primary button--extra-wide button--sign-in" @click=${handleSignIn}>Sign in</button>`}
     </div>
     <style>
       button {
@@ -63,6 +77,20 @@ function SignInForm() {
         animation-fill-mode: both;
         will-change: transform, opacity;
         box-sizing: border-box;
+      }
+
+      .button--inline {
+        display: inline;
+        background: none;
+        border: none;
+        text-decoration: underline;
+        padding: 0;
+        color: inherit;
+        font: inherit;
+      }
+
+      .sign-in-message {
+        color: white;
       }
 
       .sign-in-container {

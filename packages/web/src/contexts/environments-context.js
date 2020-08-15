@@ -1,10 +1,20 @@
-import { html, createContext, useState, component, useEffect } from '../lib/index.js';
-import { getEnvironments, rejectReasonSignedOut, rejectReasonInvalidJson } from '../helpers/environments.js';
-import { useInterval } from '../hooks/use-interval.js';
+import { html, createContext, useState, component, useEffect, useContext, useCallback } from '../lib/index.js';
+import { getEnvironments } from '../helpers/environments.js';
+import { getMetadata } from '../helpers/metadata.js';
+import { ChromiumContext } from '../contexts/chromium-context.js';
+import { getJsonFromUrl, rejectReasonSignedOut, rejectReasonInvalidJson, closeActiveBrowser } from '../helpers/get-json-from-url-v2.js';
+import { urls } from '../constants.js';
+import { getUserEmailFromCookies, getUserRoleFromEmail } from '../helpers/auth.js';
+import { provideIdentity } from '../helpers/analytics.js';
 
 export const EnvironmentsContext = createContext({
+  userRole: 'unknown',
   status: 'loading',
   environments: [],
+  metadata: undefined,
+  signIn: () => {},
+  abortSignIn: () => {},
+  isSigningIn: false,
 });
 
 customElements.define('sb-environments-provider-internal', EnvironmentsContext.Provider);
@@ -12,10 +22,75 @@ customElements.define('sb-environments-provider-internal', EnvironmentsContext.P
 function EnvironmentsProvider() {
   const [environments, setEnvironments] = useState([]);
   const [status, setStatus] = useState('loading'); // 'loading' | 'signed-out' | 'loaded' | 'error'
+  const [userRole, setUserRole] = useState('unknown'); // 'unknown' | 'guest' | 'member' | 'admin'
+  const chromiumContext = useContext(ChromiumContext);
+  const [metadata, setMetadata] = useState();
+  const [isSigningIn, setisSigningIn] = useState(false);
 
+  // Sign in method
+  const signIn = useCallback(async () => {
+    setisSigningIn(true);
+    const metadata = await getJsonFromUrl({ exec: chromiumContext.exec, url: urls.getMetadataEndpoint, humanAuth: true, onCookies: handleCookies });
+    if (metadata) {
+      console.log('[environments-context] signed in with metadata', metadata);
+      setMetadata(metadata);
+
+      await loadEnvironments({ exec: chromiumContext.exec });
+      setisSigningIn(false);
+    } else {
+      console.log('[environments-context] sign in failed');
+      setStatus('signed-out');
+    }
+  }, [chromiumContext.exec]);
+
+  const abortSignIn = useCallback(async () => {
+    await closeActiveBrowser();
+  }, []);
+
+  // Try load metadata and environments
   useEffect(async () => {
+    if (chromiumContext.status !== 'installed') return;
+
+    const metadata = await loadMetadata({ exec: chromiumContext.exec });
+    if (metadata) {
+      console.log('[environments-context] metadata ready', metadata);
+      await loadEnvironments({ exec: chromiumContext.exec });
+    } else {
+      console.log('[environments-context] load medata failed');
+    }
+  }, [chromiumContext.status]);
+
+  // Infer user role from cookie
+  const handleCookies = useCallback(async (cookies) => {
+    const email = getUserEmailFromCookies(cookies);
+    const role = await getUserRoleFromEmail(email);
+    provideIdentity(email);
+
+    setUserRole(role);
+  });
+
+  const loadMetadata = useCallback(async ({ exec }) => {
     try {
-      const environments = await getEnvironments();
+      const metadata = await getMetadata({ exec, onCookies: handleCookies });
+      setMetadata(metadata);
+      return metadata;
+    } catch (e) {
+      switch (e) {
+        case rejectReasonSignedOut:
+          console.log('[environments-context] not signed in');
+          setStatus('signed-out');
+          break;
+        case rejectReasonInvalidJson:
+          console.log('[environments-context] parse environments json failed');
+          setStatus('error');
+          break;
+      }
+    }
+  }, []);
+
+  const loadEnvironments = useCallback(async ({ exec }) => {
+    try {
+      const environments = await getEnvironments({ exec });
       if (Array.isArray(environments)) {
         setEnvironments(environments);
         setStatus('loaded');
@@ -37,33 +112,14 @@ function EnvironmentsProvider() {
     }
   }, []);
 
-  // try refresh environments every 60 seconds. Avoid updating states or unstable network connection may affect UI
-  useInterval(
-    async () => {
-      try {
-        const environments = await getEnvironments();
-        if (Array.isArray(environments)) {
-          setEnvironments(environments);
-        } else {
-          console.log('[environments-context] parse environments json is not an array');
-        }
-      } catch (e) {
-        switch (e) {
-          case rejectReasonSignedOut:
-            console.log('[environments-context] not signed in');
-            break;
-          case rejectReasonInvalidJson:
-            console.log('[environments-context] parse environments json failed');
-            break;
-        }
-      }
-    },
-    status === 'loaded' ? 60 * 1000 : null
-  );
-
   const contextValue = {
     status,
     environments,
+    metadata,
+    signIn,
+    abortSignIn,
+    userRole,
+    isSigningIn,
   };
 
   return html`

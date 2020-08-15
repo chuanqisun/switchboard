@@ -4,7 +4,8 @@ import { getChromiumInstallPath, getChromiumRevision } from '../helpers/chromium
 
 export const ChromiumContext = createContext({
   status: 'checking',
-  execPath: '',
+  exec: '',
+  downloadProgress: 0,
 });
 
 customElements.define('sb-chromium-provider-internal', ChromiumContext.Provider);
@@ -28,7 +29,6 @@ function ChromiumProvider() {
         if (percent < 1) {
           setStatus('downloading');
           setDownloadProgress(Math.round(100 * percent));
-          console.log('[chromium] ' + percent);
         }
 
         if (percent === 1) {
@@ -36,7 +36,7 @@ function ChromiumProvider() {
           console.log('[chromium] downloading 100%');
         }
       },
-    }).then(exec => {
+    }).then((exec) => {
       setStatus('installed');
       console.log('[chromium] installed in ' + exec);
       setExec(exec);

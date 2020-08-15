@@ -1,6 +1,6 @@
 {
   "name": "switchboard",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Instanly launch multiple Dynamics demo environments",
   "private": true,
   "main": "main.js",
@@ -15,12 +15,13 @@
   "author": "Chuanqi Sun",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^7.1.11",
-    "electron-builder": "^22.3.2"
+    "@switchboard/web": "file:../web",
+    "electron": "^9.2.0",
+    "electron-builder": "^22.8.0"
   },
   "dependencies": {
-    "download-chromium": "^2.2.0",
-    "puppeteer-core": "^2.1.0"
+    "download-chromium": "^2.2.1",
+    "puppeteer-core": "^5.2.1"
   },
   "build": {
     "artifactName": "${name}-${version}.${ext}",
