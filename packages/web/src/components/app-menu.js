@@ -221,7 +221,7 @@ function AppMenu() {
       new MenuItem({
         label: 'Sign out',
         click: async () => {
-          await signOut();
+          await signOut({ exec: chromiumContext.exec });
           reloadWindow();
         },
       })

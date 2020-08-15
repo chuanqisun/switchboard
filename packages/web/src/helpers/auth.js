@@ -1,9 +1,8 @@
 const { BrowserWindow, screen, getCurrentWindow, session } = require('electron').remote;
+const puppeteer = require('puppeteer-core');
+
 import { adminUsers, urls } from '../constants.js';
 import { sessionDataDir } from './session.js';
-
-const signInBlockerUrlPrefix = 'https://login.microsoftonline.com';
-const signInSuccessUrlPrefix = 'https://microsoft.sharepoint.com';
 
 export async function getUserRoleFromEmail(email) {
   if (email === 'guest') {
@@ -37,9 +36,17 @@ export function getUserEmailFromCookies(cookies) {
   }
 }
 
-export async function signOut() {
+export async function signOut({ exec }) {
   const fs = require('fs');
 
-  fs.rmdirSync(sessionDataDir, { recursive: true });
+  try {
+    fs.rmdirSync(sessionDataDir, { recursive: true });
+  } catch (error) {
+    console.log('[auth] fs sign-out failed. Attemp pupeeter sign-out', error);
+    const browser = await puppeteer.launch({ headless: true, userDataDir: sessionDataDir, executablePath: exec });
+    const page = (await browser.pages())[0];
+    await page.goto(urls.getMetadataEndpoint);
+    await page._client.send('Network.clearBrowserCookies');
+  }
   console.log('[auth] signed out. User dir purged');
 }

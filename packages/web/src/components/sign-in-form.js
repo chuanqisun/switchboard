@@ -27,9 +27,9 @@ function SignInForm() {
 
   const handleRetry = useCallback(async () => {
     await environmentsContext.abortSignIn();
-    await signOut();
+    await signOut({ exec });
     reloadWindow();
-  }, [environmentsContext]);
+  }, [environmentsContext, exec]);
 
   return html`
     <div class="sign-in-container main__pre-sign-in-container${environmentsContext.status === 'signed-out' ? ' sign-in-container--active' : ''}">
