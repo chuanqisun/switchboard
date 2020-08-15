@@ -15,6 +15,8 @@ function ChromiumProvider() {
   const [downloadProgress, setDownloadProgress] = useState(0); // 0 - 100
   const [exec, setExec] = useState('');
 
+  console.log('ss', status);
+
   useEffect(() => {
     // version comes from latest pupeeter release: https://github.com/puppeteer/puppeteer/releases
     const revision = getChromiumRevision();
@@ -29,7 +31,6 @@ function ChromiumProvider() {
         if (percent < 1) {
           setStatus('downloading');
           setDownloadProgress(Math.round(100 * percent));
-          console.log('[chromium] ' + percent);
         }
 
         if (percent === 1) {
