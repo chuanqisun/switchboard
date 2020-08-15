@@ -1,8 +1,8 @@
 import { html, createContext, useState, component, useEffect, useContext, useCallback } from '../lib/index.js';
-import { getEnvironments, rejectReasonSignedOut, rejectReasonInvalidJson } from '../helpers/environments.js';
+import { getEnvironments } from '../helpers/environments.js';
 import { getMetadata } from '../helpers/metadata.js';
 import { ChromiumContext } from '../contexts/chromium-context.js';
-import { getJsonFromUrl } from '../helpers/get-json-from-url-v2.js';
+import { getJsonFromUrl, rejectReasonSignedOut, rejectReasonInvalidJson, closeActiveBrowser } from '../helpers/get-json-from-url-v2.js';
 import { urls } from '../constants.js';
 import { getUserEmailFromCookies, getUserRoleFromEmail } from '../helpers/auth.js';
 import { provideIdentity } from '../helpers/analytics.js';
@@ -13,6 +13,8 @@ export const EnvironmentsContext = createContext({
   environments: [],
   metadata: undefined,
   signIn: () => {},
+  abortSignIn: () => {},
+  isSigningIn: false,
 });
 
 customElements.define('sb-environments-provider-internal', EnvironmentsContext.Provider);
@@ -23,20 +25,27 @@ function EnvironmentsProvider() {
   const [userRole, setUserRole] = useState('unknown'); // 'unknown' | 'guest' | 'member' | 'admin'
   const chromiumContext = useContext(ChromiumContext);
   const [metadata, setMetadata] = useState();
+  const [isSigningIn, setisSigningIn] = useState(false);
 
   // Sign in method
   const signIn = useCallback(async () => {
+    setisSigningIn(true);
     const metadata = await getJsonFromUrl({ exec: chromiumContext.exec, url: urls.getMetadataEndpoint, humanAuth: true, onCookies: handleCookies });
     if (metadata) {
       console.log('[environments-context] signed in with metadata', metadata);
       setMetadata(metadata);
 
       await loadEnvironments({ exec: chromiumContext.exec });
+      setisSigningIn(false);
     } else {
       console.log('[environments-context] sign in failed');
       setStatus('signed-out');
     }
   }, [chromiumContext.exec]);
+
+  const abortSignIn = useCallback(async () => {
+    await closeActiveBrowser();
+  }, []);
 
   // Try load metadata and environments
   useEffect(async () => {
@@ -108,7 +117,9 @@ function EnvironmentsProvider() {
     environments,
     metadata,
     signIn,
+    abortSignIn,
     userRole,
+    isSigningIn,
   };
 
   return html`

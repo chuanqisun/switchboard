@@ -12,9 +12,8 @@
   --shadow-2: 0 3.2px 7.2px 0 rgba(0, 0, 0, 0.132), 0 0.6px 1.8px 0 rgba(0, 0, 0, 0.108);
   --shadow-3: 0 6.4px 14.4px 0 rgba(0, 0, 0, 0.132), 0 1.2px 3.6px 0 rgba(0, 0, 0, 0.108);
   --gradient-app-background: linear-gradient(var(--color-primary-light) 0%, var(--color-primary-dark) 100%) 100% 100%;
-  --gradient-menu-bar: linear-gradient(var(--color-primary-light) 0%, var(--color-primary-light) 100%) 100% 100%;
   --menu-bar-height: 4rem;
-  --app-background-offset-post-signin: var(--app-header-height) + var(--menu-bar-height);
+  --title-bar-height: 1.875rem;
   --z-app-header: 2;
   --z-toolbar: 1;
 }
@@ -38,9 +37,7 @@ body {
   height: 100%;
   display: flex;
   flex-direction: column;
-  background: var(--gradient-menu-bar), var(--gradient-app-background);
-  background-size: 100% calc(var(--app-background-offset-post-signin)), 100% calc(100% - var(--app-header-height) - var(--menu-bar-height));
-  background-position: top left, top calc(var(--app-header-height) + var(--menu-bar-height)) left;
+  background: var(--gradient-app-background);
   background-repeat: no-repeat, no-repeat;
   overflow: hidden;
 }

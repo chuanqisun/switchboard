@@ -43,7 +43,6 @@ function TitleBar() {
         --title-bar-text-color: #ccc;
         --title-bar-text-color-strong: white;
         --title-bar-destructive-background: #d0062a;
-        --title-bar-height: 1.875rem;
         --title-bar-window-action-width: 2.875rem;
 
         color: var(--title-bar-text-color);

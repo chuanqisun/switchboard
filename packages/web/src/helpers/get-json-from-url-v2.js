@@ -5,8 +5,18 @@ const signInBlockerUrlPrefix = 'https://login.microsoftonline.com';
 export const rejectReasonSignedOut = 'signed-out';
 export const rejectReasonInvalidJson = 'invalid-json';
 
+let activeBrowser = null;
+
+export async function closeActiveBrowser() {
+  if (activeBrowser) {
+    await activeBrowser.close();
+    activeBrowser = null;
+  }
+}
+
 export async function getJsonFromUrl({ exec, url, humanAuth, onCookies }) {
   const browser = await puppeteer.launch({ headless: false, defaultViewport: null, executablePath: exec, userDataDir: sessionDataDir });
+  activeBrowser = browser;
   const page = (await browser.pages())[0];
   await page.goto(url);
 

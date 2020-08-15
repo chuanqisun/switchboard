@@ -19,6 +19,7 @@ function ViewCarousel({ dataLeft, dataRight, dataSelected }) {
         display: flex;
         flex-direction: column;
         position: relative;
+        margin-top: var(--menu-bar-height);
       }
 
       .item {

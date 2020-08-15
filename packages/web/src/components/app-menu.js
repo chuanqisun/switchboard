@@ -18,6 +18,7 @@ import { reloadWindow } from '../helpers/window.js';
 import { useFocusVisible } from '../hooks/use-focus-visible.js';
 import { component, html, useContext, useEffect, useState } from '../lib/index.js';
 import { useVersionSummary } from '../hooks/use-version-summary.js';
+import { useMemo } from '../../node_modules_unmanaged/haunted/web.js';
 
 function AppMenu() {
   const { FocusVisibleStyle } = useFocusVisible();
@@ -27,6 +28,8 @@ function AppMenu() {
   const [adminEnvironmentCRM, setadminEnvironmentCRM] = useState(null);
   const [adminEnvironmentMarketing, setAdminEnvironmentMarketing] = useState(null);
   const { versionSummary } = useVersionSummary();
+
+  const isMetadataAvailable = useMemo(() => !!environmentsContext.metadata, [environmentsContext.metadata]);
 
   useEffect(async () => {
     const { isUpdatedRequired } = versionSummary;
@@ -118,6 +121,7 @@ function AppMenu() {
       );
 
     !isUpdatedRequired &&
+      isMetadataAvailable &&
       menu.append(
         new MenuItem({
           label: 'Check for updates',

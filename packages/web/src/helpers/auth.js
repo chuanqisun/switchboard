@@ -41,4 +41,5 @@ export async function signOut() {
   const fs = require('fs');
 
   fs.rmdirSync(sessionDataDir, { recursive: true });
+  console.log('[auth] signed out. User dir purged');
 }
