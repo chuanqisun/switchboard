@@ -36,7 +36,7 @@ function SignInForm() {
       ${environmentsContext.isSigningIn
         ? html` <div class="sign-in-message">
             <p>Sign in with your work account in the popped-up window.</p>
-            <p>Something went wrong? <button class="button button--inline" @click=${handleRetry}>Click here to retry</button></p>
+            <p>Something went wrong? <button class="button button--inline" @click=${handleRetry}>Try again here</button>.</p>
           </div>`
         : html`<button class="button button--primary button--extra-wide button--sign-in" @click=${handleSignIn}>Sign in</button>`}
     </div>
