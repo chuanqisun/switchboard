@@ -2,7 +2,7 @@ import { html, component, useEffect, useContext } from '../lib/index.js';
 import { useFocusVisible } from '../hooks/use-focus-visible.js';
 import { EnvironmentsContext } from '../contexts/environments-context.js';
 import { urls } from '../constants.js';
-import { getJsonFromUrl } from '../helpers/get-json-from-url-v2.js';
+import { reloadWindow } from '../helpers/window.js';
 
 import { ChromiumContext } from '../contexts/chromium-context.js';
 
@@ -20,14 +20,8 @@ function SignInForm() {
   }, [environmentsContext.status]);
 
   const onSignIn = async () => {
-    const result = await getJsonFromUrl({
-      exec,
-      url: 'https://microsoft.sharepoint.com/teams/Live.Drive.Repeat2/Shared%20Documents/General/Environments/environments-v2.txt',
-    });
-
-    console.log(result);
-    // await signIn();
-    // reloadWindow();
+    await environmentsContext.signIn({ exec });
+    reloadWindow();
   };
 
   return html`
