@@ -6,6 +6,26 @@ const signInStrategies = {
   fraudProtection: 'dfp',
 };
 
+export async function msftSignIn({ exec }) {
+  const { app } = require('electron').remote;
+  const path = require('path');
+  const userDataPath = app.getPath('userData');
+  const userDataDir = path.join(userDataPath, 'chrome-session');
+
+  const browser = await puppeteer.launch({ headless: false, defaultViewport: null, executablePath: exec, userDataDir });
+  const page = (await browser.pages())[0];
+  await page.goto('https://microsoft.sharepoint.com/teams/Live.Drive.Repeat2/Shared%20Documents/General/Environments/environments-v2.txt');
+
+  const result = await page.evaluate(() => {
+    const string = document.querySelector('pre').innerText;
+    const resultObject = JSON.parse(string);
+    return resultObject;
+  });
+
+  console.log(result);
+  browser.close();
+}
+
 /**
  *
  * automation strategy:

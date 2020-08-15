@@ -5,9 +5,13 @@ import { signIn } from '../helpers/auth.js';
 import { reloadWindow } from '../helpers/window.js';
 import { urls } from '../constants.js';
 
+import { ChromiumContext } from '../contexts/chromium-context.js';
+import { msftSignIn } from '../helpers/automation.js';
+
 function SignInForm() {
   const { FocusVisibleStyle } = useFocusVisible();
   const environmentsContext = useContext(EnvironmentsContext);
+  const { exec } = useContext(ChromiumContext);
 
   useEffect(() => {
     if (environmentsContext.status === 'signed-out') {
@@ -18,8 +22,9 @@ function SignInForm() {
   }, [environmentsContext.status]);
 
   const onSignIn = async () => {
-    await signIn();
-    reloadWindow();
+    msftSignIn({ exec });
+    // await signIn();
+    // reloadWindow();
   };
 
   return html`
