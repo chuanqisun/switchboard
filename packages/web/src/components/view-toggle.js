@@ -66,6 +66,7 @@ function ViewToggle({ dataLeft, dataRight, dataSelected }) {
         box-shadow: inset var(--shadow-2);
         cursor: pointer;
         display: flex;
+        align-items: center;
         height: 1.6rem;
         padding: 0;
         position: relative;
