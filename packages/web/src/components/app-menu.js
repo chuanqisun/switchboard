@@ -4,7 +4,6 @@ import { getUserRole, signOut } from '../helpers/auth.js';
 import { autoSignIn } from '../helpers/automation.js';
 import { resetChromium } from '../helpers/chromium.js';
 import { noUpdates, showAbout, updateAvailable } from '../helpers/dialogs.js';
-import { editEnvironments } from '../helpers/environments.js';
 import { openAllReleases, openCustomerDigitalExperience, openDocumentation, openHelp, openLatestRelease } from '../helpers/open-external.js';
 import { resetApp } from '../helpers/reset.js';
 import { getVersionSummary } from '../helpers/update.js';
@@ -156,7 +155,7 @@ function AppMenu() {
           submenu: [
             {
               label: 'Edit environments',
-              click: () => editEnvironments(),
+              click: () => openEnvironmentListEditor(),
             },
             {
               type: 'separator',
