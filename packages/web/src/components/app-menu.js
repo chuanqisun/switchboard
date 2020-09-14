@@ -30,23 +30,19 @@ function AppMenu() {
 
   useEffect(() => {
     if (environmentsContext.status === 'loaded') {
-      const qualifiedCRMEnvironment = environmentsContext.environments.find(environment => environment.appId === 'sales-trial');
+      const qualifiedCRMEnvironment = environmentsContext.environments.find((environment) => environment.appId === 'sales-trial');
       if (qualifiedCRMEnvironment) {
         setadminEnvironmentCRM(qualifiedCRMEnvironment);
       }
-      const qualifiedMarketingEnvironment = environmentsContext.environments.find(environment => environment.appId === 'marketing-trial');
+      const qualifiedMarketingEnvironment = environmentsContext.environments.find((environment) => environment.appId === 'marketing-trial');
       if (qualifiedMarketingEnvironment) {
         setAdminEnvironmentMarketing(qualifiedMarketingEnvironment);
       }
     }
   }, [environmentsContext.status]);
 
-  const manageAllEnvironments = () => {
-    signInEnvironment({ ...adminEnvironmentCRM, url: urls.manageEnvironments });
-  };
-
   const manageTrials = () => {
-    signInEnvironment({ ...adminEnvironmentCRM, url: urls.manageInstances });
+    signInEnvironment({ ...adminEnvironmentCRM, url: urls.manageEnvironments });
   };
 
   const createTrialMarketing = () => {
@@ -61,7 +57,7 @@ function AppMenu() {
     signInEnvironment({ ...adminEnvironmentCRM, url: urls.changeTrialUserPassword });
   };
 
-  const signInEnvironment = async environment => {
+  const signInEnvironment = async (environment) => {
     const { url, username, password, signInStrategy } = environment;
     const { exec } = chromiumContext;
 
@@ -137,7 +133,8 @@ function AppMenu() {
             click: () => resetChromium(),
           },
           {
-            label: 'Reset Switchboard', click: () => resetApp(),
+            label: 'Reset Switchboard',
+            click: () => resetApp(),
           },
           {
             type: 'separator',
@@ -170,11 +167,6 @@ function AppMenu() {
             },
             {
               type: 'separator',
-            },
-            {
-              label: 'Manage all environments',
-              enabled: !!adminEnvironmentCRM,
-              click: () => manageAllEnvironments(),
             },
             {
               label: 'Manage trials',
@@ -227,11 +219,7 @@ function AppMenu() {
   return html`
     <button class="menu-button" id="main-menu" @click=${handleMainMenuClick}>
       <span>Menu</span>
-      ${isUpdateIndicatorVisible
-      ? html`
-            <span class="menu-button__update-indicator">🎁</span>
-          `
-      : null}
+      ${isUpdateIndicatorVisible ? html` <span class="menu-button__update-indicator">🎁</span> ` : null}
     </button>
 
     <style>

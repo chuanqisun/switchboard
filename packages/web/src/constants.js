@@ -13,7 +13,6 @@ export const urls = {
   latestRelease: 'https://github.com/chuanqisun/switchboard/releases/latest',
   assetsRoot: 'https://switchboard-assets.netlify.com',
   manageEnvironments: 'https://admin.powerplatform.microsoft.com/environments',
-  manageInstances: 'https://port.crm.dynamics.com/G/Instances/InstancePicker.aspx',
   createTrialCRM: 'https://port.crm.dynamics.com/G/TrialInstances/TrialInstancePicker.aspx',
   createTrialMarketing:
     'https://port.crm.dynamics.com/G/Setup/ConfigureNewEmailTrialInstance.aspx?country=US&lang=en-US&skipConfigure=False&isSmb=True&userScenarioRole=SmbMarketing',
