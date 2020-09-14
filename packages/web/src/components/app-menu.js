@@ -4,7 +4,14 @@ import { getUserRole, signOut } from '../helpers/auth.js';
 import { autoSignIn } from '../helpers/automation.js';
 import { resetChromium } from '../helpers/chromium.js';
 import { noUpdates, showAbout, updateAvailable } from '../helpers/dialogs.js';
-import { openAllReleases, openCustomerDigitalExperience, openDocumentation, openHelp, openLatestRelease } from '../helpers/open-external.js';
+import {
+  openAllReleases,
+  openCustomerDigitalExperience,
+  openDocumentation,
+  openHelp,
+  openLatestRelease,
+  openEnvironmentListEditor,
+} from '../helpers/open-external.js';
 import { resetApp } from '../helpers/reset.js';
 import { getVersionSummary } from '../helpers/update.js';
 import { deleteUserSettings } from '../helpers/user-settings.js';
