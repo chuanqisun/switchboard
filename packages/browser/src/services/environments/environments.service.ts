@@ -1,7 +1,6 @@
-import { BehaviorSubject } from "rxjs";
-import { filter, map, tap } from "rxjs/operators";
+import { filter } from "rxjs/operators";
 import { AuthService } from "../auth/auth.service";
-import { GraphService } from "../graph/graph.service";
+import { ProxyService } from "../proxy/proxy.service";
 export interface Environment {
   url: string;
   username: string;
@@ -9,12 +8,10 @@ export interface Environment {
 }
 
 export class EnvironmentsService {
-  constructor(private graphService: GraphService, private authService: AuthService) {
+  constructor(private proxyService: ProxyService, private authService: AuthService) {
     this.authService.authTokenSubject.pipe(filter((token) => token !== null && token.length > 0)).subscribe(async (token) => {
-      const environmentsOData = await this.graphService.get(
-        "https://graph.microsoft.com/v1.0/groups/da3b2d71-1ea2-48e2-af0e-cc54e80c1a85/drive/root:/General/Environments/environments-v2.txt",
-        token!
-      );
+      debugger;
+      const environmentsOData = await this.proxyService.get(".netlify/functions/get-environments", token!);
 
       console.dir(environmentsOData);
     });

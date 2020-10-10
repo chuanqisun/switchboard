@@ -1,6 +1,4 @@
-import { AuthService } from "../auth/auth.service";
-
-export class GraphService {
+export class ProxyService {
   constructor() {}
 
   async get(endpoint: string, token: string) {
@@ -14,7 +12,7 @@ export class GraphService {
       headers: headers,
     };
 
-    console.log("request made to Graph API at: " + new Date().toString());
+    console.log("request made to Serverless endpoint at: " + new Date().toString());
 
     return fetch(endpoint, options)
       .then((response) => response.json())
