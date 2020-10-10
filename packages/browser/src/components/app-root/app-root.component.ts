@@ -1,19 +1,25 @@
 import { html, render } from "lit-html";
-import { defineElement } from "../../utils/define-element";
+import { AuthService } from "../../services/auth/auth.service";
+import { di } from "../../utils/di";
 
 import "./app-root.component.css";
 
-@defineElement("app-root")
-export class AppRoot extends HTMLElement {
-  constructor() {
-    super();
-  }
+export class AppRootComponent extends HTMLElement {
+  authService = di.getSingleton(AuthService);
 
   connectedCallback() {
     this.update();
+
+    this.authService.authStateSubject.subscribe(() => this.update());
   }
 
   update() {
-    render(html` <h1>Hello Switchboard 3</h1> `, this);
+    render(
+      html`
+        <account-info></account-info>
+        ${this.authService.authStateSubject.value === "signed-in" ? html`<environment-list></environment-list>` : ""}
+      `,
+      this
+    );
   }
 }
