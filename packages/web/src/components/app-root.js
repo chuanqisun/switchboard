@@ -34,11 +34,10 @@ function AppRootInternal() {
 
   return html`
     <sb-title-bar></sb-title-bar>
+    <sb-menu-bar></sb-menu-bar>
     <sb-loading-indicator></sb-loading-indicator>
     <main class="main">
       <sb-sign-in-form></sb-sign-in-form>
-
-      <sb-menu-bar></sb-menu-bar>
 
       <sb-view-carousel data-left="Favorites" data-right="All" data-selected="${carouselContext.selected}">
         <sb-scroll-area slot="Favorites">

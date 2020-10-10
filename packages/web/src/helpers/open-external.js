@@ -25,7 +25,7 @@ export function openCustomerDigitalExperience() {
   shell.openExternal(urls.cdxDemos);
 }
 
-export function openEnvironmentListEditor() {
+export function openEnvironmentsFile() {
   const { shell } = require('electron').remote;
   shell.openExternal(urls.editEnvironmentsEndpoint);
 }

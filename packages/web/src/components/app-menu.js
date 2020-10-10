@@ -1,6 +1,6 @@
 import { urls } from '../constants.js';
 import { ChromiumContext, EnvironmentsContext } from '../contexts/index.js';
-import { getUserRole, signOut } from '../helpers/auth.js';
+import { signOut } from '../helpers/auth.js';
 import { autoSignIn } from '../helpers/automation.js';
 import { resetChromium } from '../helpers/chromium.js';
 import { noUpdates, showAbout, updateAvailable } from '../helpers/dialogs.js';
@@ -10,14 +10,15 @@ import {
   openDocumentation,
   openHelp,
   openLatestRelease,
-  openEnvironmentListEditor,
+  openEnvironmentsFile,
 } from '../helpers/open-external.js';
 import { resetApp } from '../helpers/reset.js';
-import { getVersionSummary } from '../helpers/update.js';
 import { deleteUserSettings } from '../helpers/user-settings.js';
 import { reloadWindow } from '../helpers/window.js';
 import { useFocusVisible } from '../hooks/use-focus-visible.js';
 import { component, html, useContext, useEffect, useState } from '../lib/index.js';
+import { useVersionSummary } from '../hooks/use-version-summary.js';
+import { useMemo } from '../../node_modules_unmanaged/haunted/web.js';
 
 function AppMenu() {
   const { FocusVisibleStyle } = useFocusVisible();
@@ -26,13 +27,16 @@ function AppMenu() {
   const chromiumContext = useContext(ChromiumContext);
   const [adminEnvironmentCRM, setadminEnvironmentCRM] = useState(null);
   const [adminEnvironmentMarketing, setAdminEnvironmentMarketing] = useState(null);
+  const { versionSummary } = useVersionSummary();
+
+  const isMetadataAvailable = useMemo(() => !!environmentsContext.metadata, [environmentsContext.metadata]);
 
   useEffect(async () => {
-    const { isUpdatedRequired } = await getVersionSummary();
+    const { isUpdatedRequired } = versionSummary;
     if (isUpdatedRequired) {
       setIsUpdateIndicatorVisible(true);
     }
-  }, []);
+  }, [versionSummary]);
 
   useEffect(() => {
     if (environmentsContext.status === 'loaded') {
@@ -85,8 +89,8 @@ function AppMenu() {
     const { Menu, MenuItem } = require('electron').remote;
     const menu = new Menu();
 
-    const { isUpdatedRequired, isUpdateAvailable, currentVersion, latestVersion } = await getVersionSummary();
-    const userRole = await getUserRole();
+    const { isUpdatedRequired, isUpdateAvailable, currentVersion, latestVersion } = versionSummary;
+    const userRole = environmentsContext.userRole;
 
     menu.append(
       new MenuItem({
@@ -113,6 +117,7 @@ function AppMenu() {
       );
 
     !isUpdatedRequired &&
+      isMetadataAvailable &&
       menu.append(
         new MenuItem({
           label: 'Check for updates',
@@ -162,7 +167,7 @@ function AppMenu() {
           submenu: [
             {
               label: 'Edit environments',
-              click: () => openEnvironmentListEditor(),
+              click: () => openEnvironmentsFile(),
             },
             {
               type: 'separator',
@@ -207,7 +212,7 @@ function AppMenu() {
       new MenuItem({
         label: 'Sign out',
         click: async () => {
-          await signOut();
+          await signOut({ exec: chromiumContext.exec });
           reloadWindow();
         },
       })

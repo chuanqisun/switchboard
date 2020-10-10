@@ -1,11 +1,14 @@
 import { urls } from '../constants.js';
-import { getJsonFromUrl } from './get-json-from-url.js';
+import { getJsonFromUrl } from './get-json-from-url-v2.js';
 
-const cachedMetadataPromise = getJsonFromUrl(urls.getMetadataEndpoint).catch(e => {
-  console.log('[metadata] get metadata failed. Error reason: ');
-  console.dir(e);
-});
+let cachedMetadataPromise;
 
-export async function getMetadata() {
-  return cachedMetadataPromise;
+export async function getMetadata({ exec, onCookies }) {
+  if (cachedMetadataPromise) {
+    return cachedMetadataPromise;
+  } else {
+    const metadata = await getJsonFromUrl({ exec, url: urls.getMetadataEndpoint, onCookies });
+    cachedMetadataPromise = metadata;
+    return metadata;
+  }
 }

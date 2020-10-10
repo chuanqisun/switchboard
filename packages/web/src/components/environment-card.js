@@ -36,9 +36,9 @@ function EnvironmentCard({ environment, focusable, animationDelay }) {
     }
   };
 
-  const getDecoratorDisplayText = key => (badgeTooltips.has(key) ? badgeTooltips.get(key)[0] : key.toLocaleUpperCase());
+  const getDecoratorDisplayText = (key) => (badgeTooltips.has(key) ? badgeTooltips.get(key)[0] : key.toLocaleUpperCase());
 
-  const getDecoratorTooltip = key => (badgeTooltips.has(key) ? badgeTooltips.get(key)[1] : '');
+  const getDecoratorTooltip = (key) => (badgeTooltips.has(key) ? badgeTooltips.get(key)[1] : '');
 
   const onAnimationEnd = () => {
     setIsLaunching(false);
@@ -47,7 +47,7 @@ function EnvironmentCard({ environment, focusable, animationDelay }) {
   return html`
     ${Star}
     <div class="environment-card${environment.primary ? ` environment-card--${environment.primary}` : ''}">
-      <button class="main-action" @click=${e => launchEnvironment(e, environment)} tabindex="${focusable ? 0 : -1}">
+      <button class="main-action" @click=${(e) => launchEnvironment(e, environment)} tabindex="${focusable ? 0 : -1}">
         <img class="main-action__icon" src="${urls.assetsRoot}/product-icons/${environment.appIcon}" />
         <span class="main-action__app-name"
           >${environment.appName}
@@ -57,11 +57,7 @@ function EnvironmentCard({ environment, focusable, animationDelay }) {
                   >${environment.decorators.map(
                     (decorator, index) =>
                       html`
-                        ${index > 0
-                          ? html`
-                              <span>·</span>
-                            `
-                          : null}
+                        ${index > 0 ? html` <span>·</span> ` : null}
                         <span class="main-action__badge" title="${getDecoratorTooltip(decorator)}">${getDecoratorDisplayText(decorator)}</span>
                       `
                   )}</sup

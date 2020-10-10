@@ -1,32 +1,31 @@
 import { html, component, useEffect, useContext, useState } from '../lib/index.js';
 import { EnvironmentsContext, ChromiumContext } from '../contexts/index.js';
 import { urls } from '../constants.js';
+import { useMemo } from '../../node_modules_unmanaged/haunted/web.js';
 
 function LoadingIndicator() {
   const environmentsContext = useContext(EnvironmentsContext);
   const chromiumContext = useContext(ChromiumContext);
 
-  const [loadingMessage, setLoadingMessage] = useState(null); // null means no message to show
-
-  useEffect(() => {
-    if (environmentsContext.status === 'loading') {
-      setLoadingMessage('Loading environments…');
-    } else if (environmentsContext.status === 'signed-out') {
-      setLoadingMessage(null);
-    } else if (environmentsContext.status === 'error') {
-      setLoadingMessage('Sorry, something went wrong. Please close and open the app to try again.');
-    } else if (environmentsContext.status === 'loaded') {
-      if (chromiumContext.status === 'checking') {
-        setLoadingMessage('Checking browser version…');
-      } else if (chromiumContext.status === 'downloading') {
-        setLoadingMessage(`Downloading Chromium browser… ${chromiumContext.downloadProgress}%`);
-      } else if (chromiumContext.status === 'installing') {
-        setLoadingMessage('Installing Chromium browser…');
-      } else if (chromiumContext.status === 'installed') {
-        setLoadingMessage(null);
+  const loadingMessage = useMemo(() => {
+    if (chromiumContext.status === 'checking') {
+      return 'Checking browser version…';
+    } else if (chromiumContext.status === 'downloading') {
+      return `Downloading Chromium browser… ${chromiumContext.downloadProgress}%`;
+    } else if (chromiumContext.status === 'installing') {
+      return 'Installing Chromium browser…';
+    } else if (chromiumContext.status === 'installed') {
+      if (environmentsContext.status === 'loading') {
+        return 'Loading environments…';
+      } else if (environmentsContext.status === 'signed-out') {
+        return null;
+      } else if (environmentsContext.status === 'error') {
+        return 'Sorry, something went wrong. Please close and open the app to try again.';
+      } else if (environmentsContext.status === 'loaded') {
+        return null;
       }
     }
-  }, [environmentsContext.status, chromiumContext.status, chromiumContext.downloadProgress]);
+  }, [environmentsContext, chromiumContext]);
 
   return html`
     <div id="loading-indicator" class="loading-indicator${loadingMessage === null ? '' : ' active'}">
