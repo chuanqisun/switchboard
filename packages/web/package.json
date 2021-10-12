@@ -10,7 +10,7 @@
   "license": "MIT",
   "devDependencies": {
     "@microsoft/applicationinsights-web": "^2.5.7",
-    "electron": "^9.2.0",
+    "electron": "^11.5.0",
     "haunted": "^4.7.0",
     "lit-html": "^1.2.1"
   }
