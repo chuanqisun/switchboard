@@ -16,7 +16,7 @@
   "license": "MIT",
   "devDependencies": {
     "@switchboard/web": "file:../web",
-    "electron": "^9.2.0",
+    "electron": "^15.5.5",
     "electron-builder": "^22.8.0"
   },
   "dependencies": {
